@@ -1,0 +1,54 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    color: #4d5564; 
+}
+
+/*********************************************
+                LAYOUT
+**********************************************/
+body {
+    color: #4d5564;
+}
+
+footer {
+    background-color: #dadde1;
+    font-size: 2rem;
+}
+
+nav {
+    background-color: #dadde1;
+}
+
+.navbar-brand {
+    font-family: 'Permanent Marker', cursive, sans-serif;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.navbar-light .navbar-brand,
+.navbar-light .navbar-nav .active>.nav-link,
+.navbar-light .navbar-nav .nav-link.active,
+.navbar-light .navbar-nav .nav-link.show,
+.navbar-light .navbar-nav .show>.nav-link {
+    color: #334466;
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) { 
+    .navbar-brand {
+        margin-right: 350px;
+    }
+}
+@media (min-width: 768px) { 
+    .navbar-brand {
+        margin-right: 200px;
+    }
+}
+
+/*********************************************
+                HOME PAGE
+**********************************************/
+
+
+
+
