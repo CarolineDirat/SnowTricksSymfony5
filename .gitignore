@@ -18,3 +18,8 @@ phpstan.neon.dist
 php-cs-fixer.phar
 .php_cs.dist
 .php_cs.cache
+
+###> squizlabs/php_codesniffer ###
+/.phpcs-cache
+/phpcs.xml
+###< squizlabs/php_codesniffer ###
