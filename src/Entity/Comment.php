@@ -26,7 +26,7 @@ class Comment
     /**
      * @ORM\Column(type="datetime_immutable", name="created_at")
      */
-    private ?DateTimeImmutable $createdAt;
+    private DateTimeImmutable $createdAt;
 
     /**
      * @ORM\OneToOne(targetEntity=User::class, inversedBy="comment", cascade={"persist", "remove"})
@@ -39,6 +39,11 @@ class Comment
      * @ORM\JoinColumn(nullable=false)
      */
     private ?Trick $trick;
+
+    public function __construct()
+    {
+        $this->createdAt = new DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {

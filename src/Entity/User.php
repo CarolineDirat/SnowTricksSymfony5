@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
@@ -39,7 +40,7 @@ class User implements UserInterface
     private ?string $password;
 
     /**
-     * @ORM\Column(type="string", length=200)
+     * @ORM\Column(type="string", length=200, unique=true)
      */
     private ?string $email;
 
@@ -57,6 +58,11 @@ class User implements UserInterface
      * @ORM\OneToOne(targetEntity=Comment::class, mappedBy="user", cascade={"persist", "remove"})
      */
     private ?Comment $comment;
+
+    public function __construct()
+    {
+        $this->createdAt = new DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
