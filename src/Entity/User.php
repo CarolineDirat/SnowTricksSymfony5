@@ -3,7 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -16,43 +18,45 @@ class User implements UserInterface
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
-    private $username;
+    private ?string $username;
 
     /**
      * @ORM\Column(type="json")
+     * 
+     * @var ?array[string] roles
      */
-    private $roles = [];
+    private ?array $roles = [];
 
     /**
-     * @var string The hashed password
+     * @var ?string The hashed password
      * @ORM\Column(type="string")
      */
-    private $password;
+    private ?string $password;
 
     /**
      * @ORM\Column(type="string", length=200)
      */
-    private $email;
+    private ?string $email;
 
     /**
-     * @ORM\Column(type="datetime_immutable")
+     * @ORM\Column(type="datetime_immutable", name="created_at")
      */
-    private $createdAt;
+    private ?DateTimeImmutable $createdAt;
 
     /**
      * @ORM\Column(type="uuid_binary")
      */
-    private $uuid;
+    private ?Uuid $uuid;
 
     /**
      * @ORM\OneToOne(targetEntity=Comment::class, mappedBy="user", cascade={"persist", "remove"})
      */
-    private $comment;
+    private ?Comment $comment;
 
     public function getId(): ?int
     {
@@ -113,15 +117,16 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function getSalt()
+    public function getSalt(): ?string
     {
         // not needed when using the "bcrypt" algorithm in security.yaml
+        return null;
     }
 
     /**
      * @see UserInterface
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
@@ -151,12 +156,12 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getUuid()
+    public function getUuid(): Uuid
     {
         return $this->uuid;
     }
 
-    public function setUuid($uuid): self
+    public function setUuid(Uuid $uuid): self
     {
         $this->uuid = $uuid;
 

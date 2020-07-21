@@ -15,23 +15,23 @@ class Picture
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $filename;
+    private ?string $filename;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
-    private $alt;
+    private ?string $alt;
 
     /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="pictures")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $trick;
+    private ?Trick $trick;
 
     public function getId(): ?int
     {

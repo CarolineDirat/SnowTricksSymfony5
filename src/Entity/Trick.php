@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Group;
-use Ramsey\Uuid\UuidInterface;
+use Ramsey\Uuid\Uuid;
 
 /**
  * @ORM\Entity(repositoryClass=TrickRepository::class)
@@ -26,7 +26,7 @@ class Trick
     /**
      * @ORM\Column(type="uuid_binary")
      */
-    private ?UuidInterface $uuid;
+    private ?Uuid $uuid;
 
     /**
      * @ORM\Column(type="string", length=200)
@@ -56,23 +56,23 @@ class Trick
     /**
      * @ORM\OneToMany(targetEntity=Picture::class, mappedBy="trick", orphanRemoval=true)
      */
-    private $pictures;
+    private ?Collection $pictures;
 
     /**
      * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick", orphanRemoval=true)
      */
-    private $videos;
+    private ?Collection $videos;
 
     /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick", orphanRemoval=true)
      */
-    private $comments;
+    private ?Collection $comments;
 
     /**
      * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="tricks")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $groupTrick;
+    private ?Group $groupTrick;
 
     public function __construct()
     {
@@ -86,12 +86,12 @@ class Trick
         return $this->id;
     }
 
-    public function getUuid() : ?UuidInterface
+    public function getUuid() : ?Uuid
     {
         return $this->uuid;
     }
 
-    public function setUuid(UuidInterface $uuid): self
+    public function setUuid(Uuid $uuid): self
     {
         $this->uuid = $uuid;
 

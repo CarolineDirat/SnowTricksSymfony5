@@ -15,22 +15,22 @@ class Video
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $code;
+    private ?string $code;
 
     /**
      * @ORM\Column(type="string", length=45)
      */
-    private $service;
+    private ?string $service;
 
     /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="videos")
      */
-    private $trick;
+    private ?Trick $trick;
 
     public function getId(): ?int
     {
