@@ -3,14 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\GroupRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=GroupRepository::class)
  * @ORM\Table(name="`group`")
- * @UniqueEntity("name")
  */
 class Group
 {
@@ -23,10 +22,18 @@ class Group
 
     /**
      * @ORM\Column(type="string", length=100, unique=true)
-     * @Assert/Unique
-     * @Assert/NotBlank
      */
     private ?string $name = null;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="groupTrick")
+     */
+    private $tricks;
+
+    public function __construct()
+    {
+        $this->tricks = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -41,6 +48,37 @@ class Group
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Trick[]
+     */
+    public function getTricks(): ?Collection
+    {
+        return $this->tricks;
+    }
+
+    public function addTrick(Trick $trick): self
+    {
+        if (!$this->tricks->contains($trick)) {
+            $this->tricks[] = $trick;
+            $trick->setGroupTrick($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTrick(Trick $trick): self
+    {
+        if ($this->tricks->contains($trick)) {
+            $this->tricks->removeElement($trick);
+            // set the owning side to null (unless already changed)
+            if ($trick->getGroupTrick() === $this) {
+                $trick->setGroupTrick(null);
+            }
+        }
 
         return $this;
     }
