@@ -59,60 +59,60 @@ nav {
     color: #4d5564;
 }
 
-@media (max-width: 1800px) { 
+@media (max-width: 1800px) {
     #home-banner h1 {
        left: 500px;
     }
 }
 
-@media (max-width: 1500px) { 
+@media (max-width: 1500px) {
     #home-banner h1 {
        left: 400px;
     }
 }
 
-@media (max-width: 1250px) { 
+@media (max-width: 1250px) {
     #home-banner h1 {
        left: 290px;
     }
 }
 
-@media (max-width: 990px) { 
+@media (max-width: 990px) {
     #home-banner h1 {
        top: 270px;
        left: 180px;
     }
 }
 
-@media (max-width: 850px) { 
+@media (max-width: 850px) {
     #home-banner h1 {
        top: 270px;
        left: 100px;
     }
 }
 
-@media (max-width: 768px) { 
+@media (max-width: 768px) {
     #home-banner h1 {
        top: 200px;
        left: 120px;
     }
 }
 
-@media (max-width: 720px) { 
+@media (max-width: 720px) {
     #home-banner h1 {
         left: 100px;
         width: 300px;
     }
 }
 
-@media (max-width: 600px) { 
+@media (max-width: 600px) {
     #home-banner h1 {
         left: 60px;
         width: 300px;
     }
 }
 
-@media (max-width: 576px) { 
+@media (max-width: 576px) {
     #home-banner h1 {
         top: 180px;
         left: 30px;
@@ -120,7 +120,7 @@ nav {
     }     
 }
 
-@media (max-width: 400px) { 
+@media (max-width: 400px) {
     #home-banner h1 {
        top: 100px;
        left: 20px;
