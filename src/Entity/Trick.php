@@ -54,12 +54,6 @@ class Trick
     private ?DateTimeImmutable $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="tricks")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private ?Group $groupTrick;
-
-    /**
      * @ORM\OneToMany(targetEntity=Picture::class, mappedBy="trick", orphanRemoval=true)
      */
     private $pictures;
@@ -154,18 +148,6 @@ class Trick
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    public function getGroupTrick(): ?Group
-    {
-        return $this->groupTrick;
-    }
-
-    public function setGroupTrick(?Group $groupTrick): self
-    {
-        $this->groupTrick = $groupTrick;
 
         return $this;
     }
