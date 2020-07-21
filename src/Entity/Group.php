@@ -18,12 +18,12 @@ class Group
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private ?int $id = null;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=100, unique=true)
      */
-    private ?string $name = null;
+    private ?string $name;
 
     /**
      * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="groupTrick")
