@@ -28,7 +28,7 @@ class Group
     /**
      * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="groupTrick")
      */
-    private $tricks;
+    private ?Collection $tricks;
 
     public function __construct()
     {
