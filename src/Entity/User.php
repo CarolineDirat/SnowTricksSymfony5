@@ -49,6 +49,11 @@ class User implements UserInterface
      */
     private $uuid;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Comment::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $comment;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -154,6 +159,23 @@ class User implements UserInterface
     public function setUuid($uuid): self
     {
         $this->uuid = $uuid;
+
+        return $this;
+    }
+
+    public function getComment(): ?Comment
+    {
+        return $this->comment;
+    }
+
+    public function setComment(Comment $comment): self
+    {
+        $this->comment = $comment;
+
+        // set the owning side of the relation if necessary
+        if ($comment->getUser() !== $this) {
+            $comment->setUser($this);
+        }
 
         return $this;
     }
