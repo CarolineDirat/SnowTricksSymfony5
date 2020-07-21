@@ -1,14 +1,12 @@
 body {
     font-family: 'Roboto', sans-serif;
-    color: #4d5564; 
+    color: #334466; 
+    margin-top: 60px;
 }
 
 /*********************************************
                 LAYOUT
 **********************************************/
-body {
-    color: #4d5564;
-}
 
 footer {
     background-color: #dadde1;
@@ -19,7 +17,7 @@ nav {
     background-color: #dadde1;
 }
 
-.navbar-brand {
+.navbar-brand, h1 {
     font-family: 'Permanent Marker', cursive, sans-serif;
     font-weight: bold;
     font-size: 1.5rem;
@@ -33,7 +31,6 @@ nav {
     color: #334466;
 }
 
-/* Large devices (desktops, 992px and up) */
 @media (min-width: 992px) { 
     .navbar-brand {
         margin-right: 350px;
@@ -49,6 +46,84 @@ nav {
                 HOME PAGE
 **********************************************/
 
+.img-fluid {
+    width: 100%;
+}
 
+#home-banner h1 {
+    position: absolute;
+    z-index: 10;
+    top: 350px;
+    left: 600px;
+    width: 350px;
+    color: #4d5564;
+}
 
+@media (max-width: 1800px) { 
+    #home-banner h1 {
+       left: 500px;
+    }
+}
 
+@media (max-width: 1500px) { 
+    #home-banner h1 {
+       left: 400px;
+    }
+}
+
+@media (max-width: 1250px) { 
+    #home-banner h1 {
+       left: 290px;
+    }
+}
+
+@media (max-width: 990px) { 
+    #home-banner h1 {
+       top: 270px;
+       left: 180px;
+    }
+}
+
+@media (max-width: 850px) { 
+    #home-banner h1 {
+       top: 270px;
+       left: 100px;
+    }
+}
+
+@media (max-width: 768px) { 
+    #home-banner h1 {
+       top: 200px;
+       left: 120px;
+    }
+}
+
+@media (max-width: 720px) { 
+    #home-banner h1 {
+        left: 100px;
+        width: 300px;
+    }
+}
+
+@media (max-width: 600px) { 
+    #home-banner h1 {
+        left: 60px;
+        width: 300px;
+    }
+}
+
+@media (max-width: 576px) { 
+    #home-banner h1 {
+        top: 180px;
+        left: 30px;
+        font-size: 1.2rem;
+    }     
+}
+
+@media (max-width: 400px) { 
+    #home-banner h1 {
+       top: 100px;
+       left: 20px;
+       font-size: 1.1rem;
+    }     
+}
