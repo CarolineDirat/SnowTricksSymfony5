@@ -108,6 +108,9 @@
     "monolog/monolog": {
         "version": "2.1.0"
     },
+    "neilime/php-css-lint": {
+        "version": "v2.2.0"
+    },
     "nikic/php-parser": {
         "version": "v4.6.0"
     },

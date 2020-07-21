@@ -9,6 +9,7 @@
     <arg name="extensions" value="php"/>
 
     <rule ref="PSR2"/>
+    <rule ref="PSR12.Files.OpenTag"/>
 
     <file>bin/</file>
     <file>config/</file>
