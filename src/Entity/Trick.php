@@ -7,6 +7,7 @@ use DateTime;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Group;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * @ORM\Entity(repositoryClass=TrickRepository::class)
@@ -23,7 +24,7 @@ class Trick
     /**
      * @ORM\Column(type="uuid_binary")
      */
-    private $uuid;
+    private ?UuidInterface $uuid;
 
     /**
      * @ORM\Column(type="string", length=200)
@@ -41,12 +42,12 @@ class Trick
     private ?string $slug;
 
     /**
-     * @ORM\Column(type="datetime_immutable")
+     * @ORM\Column(name="created_at",type="datetime_immutable")
      */
     private ?DateTimeImmutable $createdAt;
 
     /**
-     * @ORM\Column(type="datetime_immutable")
+     * @ORM\Column(name="updated_at", type="datetime_immutable")
      */
     private ?DateTimeImmutable $updatedAt;
 
@@ -61,12 +62,12 @@ class Trick
         return $this->id;
     }
 
-    public function getUuid()
+    public function getUuid() : ?UuidInterface
     {
         return $this->uuid;
     }
 
-    public function setUuid($uuid): self
+    public function setUuid(UuidInterface $uuid): self
     {
         $this->uuid = $uuid;
 
