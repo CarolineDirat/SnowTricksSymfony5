@@ -68,6 +68,12 @@ class Trick
      */
     private $comments;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="tricks")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $groupTrick;
+
     public function __construct()
     {
         $this->pictures = new ArrayCollection();
@@ -241,6 +247,18 @@ class Trick
                 $comment->setTrick(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getGroupTrick(): ?Group
+    {
+        return $this->groupTrick;
+    }
+
+    public function setGroupTrick(?Group $groupTrick): self
+    {
+        $this->groupTrick = $groupTrick;
 
         return $this;
     }
