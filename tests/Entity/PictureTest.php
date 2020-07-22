@@ -11,7 +11,7 @@ class PictureTest extends TestCase
     public function testFilename(): void
     {
         $picture = new Picture();
-        $filename = "default.jpg";
+        $filename = 'default.jpg';
         $picture->setFilename($filename);
         $this->assertEquals($filename, $picture->getFilename());
     }
@@ -19,7 +19,7 @@ class PictureTest extends TestCase
     public function testAlt(): void
     {
         $picture = new Picture();
-        $alt = "picture description";
+        $alt = 'picture description';
         $picture->setAlt($alt);
         $this->assertEquals($alt, $picture->getAlt());
     }

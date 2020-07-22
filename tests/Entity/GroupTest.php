@@ -11,8 +11,8 @@ class GroupTest extends TestCase
 {
     public function testName(): void
     {
-        $group = new Group;
-        $name = "Flip";
+        $group = new Group();
+        $name = 'Flip';
         $group->setName($name);
         $this->assertEquals($name, $group->getName());
     }
@@ -23,7 +23,7 @@ class GroupTest extends TestCase
         $this->assertInstanceOf(ArrayCollection::class, $group->getTricks());
 
         $trick = new Trick();
-        $trick->setName("Cork");
+        $trick->setName('Cork');
         $group->addTrick($trick);
         $this->assertTrue(in_array($trick, $group->getTricks()->toArray(), true));
 

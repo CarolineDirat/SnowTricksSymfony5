@@ -13,7 +13,7 @@ class CommentTest extends TestCase
     public function testContent(): void
     {
         $comment = new Comment();
-        $content = "Je suis un commentaire.";
+        $content = 'Je suis un commentaire.';
         $comment->setContent($content);
         $this->assertEquals($content, $comment->getContent());
     }
@@ -31,7 +31,7 @@ class CommentTest extends TestCase
         $comment = new Comment();
         $user = new User();
         $comment->setUser($user);
-        $this->assertInstanceOf(User::class, $comment->getUser(), "user property must be an instance of User");
+        $this->assertInstanceOf(User::class, $comment->getUser(), 'user property must be an instance of User');
     }
 
     public function testTrick(): void
@@ -39,6 +39,6 @@ class CommentTest extends TestCase
         $comment = new Comment();
         $trick = new Trick();
         $comment->setTrick($trick);
-        $this->assertInstanceOf(Trick::class, $comment->getTrick(), "trick property must be an instance of Trick");
+        $this->assertInstanceOf(Trick::class, $comment->getTrick(), 'trick property must be an instance of Trick');
     }
 }

@@ -15,7 +15,7 @@ class UserTest extends TestCase
     public function testUsername(): void
     {
         $user = new User();
-        $username = "toto87";
+        $username = 'toto87';
         $user->setUsername($username);
         $this->assertEquals($username, $user->getUsername());
     }
@@ -35,7 +35,7 @@ class UserTest extends TestCase
     public function testPassword(): void
     {
         $user = new User();
-        $password = password_hash("password", PASSWORD_BCRYPT);
+        $password = password_hash('password', PASSWORD_BCRYPT);
         $user->setPassword($password);
         $this->assertEquals($password, $user->getPassword());
     }
@@ -43,7 +43,7 @@ class UserTest extends TestCase
     public function testEmail(): void
     {
         $user = new User();
-        $email = "email.test@domain.com";
+        $email = 'email.test@domain.com';
         $user->setEmail($email);
         $this->assertEquals($email, $user->getEmail());
     }
@@ -61,7 +61,7 @@ class UserTest extends TestCase
         $user = new User();
         $uuid = Uuid::uuid4();
         $this->assertInstanceOf(UuidInterface::class, $uuid);
-        
+
         $user->setUuid($uuid);
         $this->assertEquals($uuid, $user->getUuid());
     }
@@ -72,13 +72,11 @@ class UserTest extends TestCase
         $this->assertInstanceOf(ArrayCollection::class, $user->getComments());
 
         $comment = new Comment();
-        $comment->setContent("Je suis un commentaire.");
+        $comment->setContent('Je suis un commentaire.');
         $user->addComment($comment);
         $this->assertTrue(in_array($comment, $user->getComments()->toArray(), true));
 
         $user->removeComment($comment);
         $this->assertFalse(in_array($comment, $user->getComments()->toArray(), true));
     }
-
-
 }

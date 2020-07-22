@@ -21,7 +21,7 @@ class TrickTest extends TestCase
         $trick = new Trick();
         $uuid = Uuid::uuid4();
         $this->assertInstanceOf(UuidInterface::class, $uuid);
-        
+
         $trick->setUuid($uuid);
         $this->assertEquals($uuid, $trick->getUuid());
     }
@@ -29,24 +29,24 @@ class TrickTest extends TestCase
     public function testName(): void
     {
         $trick = new Trick();
-        $name = "Indy";
+        $name = 'Indy';
         $trick->setName($name);
-        $this->assertEquals("Indy", $trick->getName());
+        $this->assertEquals('Indy', $trick->getName());
     }
 
     public function testDescription(): void
     {
         $trick = new Trick();
-        $description = "trick description";
+        $description = 'trick description';
         $trick->setDescription($description);
-        $this->assertEquals("trick description", $trick->getDescription());
+        $this->assertEquals('trick description', $trick->getDescription());
     }
 
     public function testSlug(): void
     {
         $trick = new Trick();
         $slugger = new AsciiSlugger();
-        $slug = $slugger->slug("trick title to slug");
+        $slug = $slugger->slug('trick title to slug');
         $trick->setSlug($slug);
         $this->assertEquals($slug, $trick->getSlug());
     }
@@ -77,7 +77,7 @@ class TrickTest extends TestCase
         $this->assertInstanceOf(ArrayCollection::class, $trick->getPictures());
 
         $picture = new Picture();
-        $picture->setAlt("picture description");
+        $picture->setAlt('picture description');
         $trick->addPicture($picture);
         $this->assertTrue(in_array($picture, $trick->getPictures()->toArray(), true));
 
@@ -91,7 +91,7 @@ class TrickTest extends TestCase
         $this->assertInstanceOf(ArrayCollection::class, $trick->getVideos());
 
         $video = new Video();
-        $video->setCode("LKJFQDJQ12421DQ6D");
+        $video->setCode('LKJFQDJQ12421DQ6D');
         $trick->addVideo($video);
         $this->assertTrue(in_array($video, $trick->getVideos()->toArray(), true));
 
@@ -105,7 +105,7 @@ class TrickTest extends TestCase
         $this->assertInstanceOf(ArrayCollection::class, $trick->getComments());
 
         $comment = new Comment();
-        $comment->setContent("I am a comment.");
+        $comment->setContent('I am a comment.');
         $trick->addComment($comment);
         $this->assertTrue(in_array($comment, $trick->getComments()->toArray(), true));
 
