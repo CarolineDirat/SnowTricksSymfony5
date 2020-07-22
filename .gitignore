@@ -23,3 +23,5 @@ php-cs-fixer.phar
 /.phpcs-cache
 /phpcs.xml
 ###< squizlabs/php_codesniffer ###
+
+.vscode
