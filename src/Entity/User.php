@@ -5,8 +5,10 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use DateTime;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -52,16 +54,17 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="uuid_binary")
      */
-    private ?Uuid $uuid;
+    private ?UuidInterface $uuid;
 
     /**
-     * @ORM\OneToOne(targetEntity=Comment::class, mappedBy="user", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="user", orphanRemoval=true)
      */
-    private ?Comment $comment;
+    private ?Collection $comments;
 
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -162,30 +165,44 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getUuid(): Uuid
+    public function getUuid(): ?UuidInterface
     {
         return $this->uuid;
     }
 
-    public function setUuid(Uuid $uuid): self
+    public function setUuid(UuidInterface $uuid): self
     {
         $this->uuid = $uuid;
 
         return $this;
     }
 
-    public function getComment(): ?Comment
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): ?Collection
     {
-        return $this->comment;
+        return $this->comments;
     }
 
-    public function setComment(Comment $comment): self
+    public function addComment(Comment $comment): self
     {
-        $this->comment = $comment;
-
-        // set the owning side of the relation if necessary
-        if ($comment->getUser() !== $this) {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
             $comment->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getUser() === $this) {
+                $comment->setUser(null);
+            }
         }
 
         return $this;
