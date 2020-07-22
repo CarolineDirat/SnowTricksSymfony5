@@ -9,7 +9,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Group;
-use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
 
 /**
  * @ORM\Entity(repositoryClass=TrickRepository::class)
@@ -25,8 +26,10 @@ class Trick
 
     /**
      * @ORM\Column(type="uuid_binary")
+     * @ORM\GeneratedValue(strategy="CUSTOM")
+     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      */
-    private ?Uuid $uuid;
+    private ?UuidInterface $uuid;
 
     /**
      * @ORM\Column(type="string", length=200, unique=true)
@@ -88,12 +91,12 @@ class Trick
         return $this->id;
     }
 
-    public function getUuid() : ?Uuid
+    public function getUuid() : ?UuidInterface
     {
         return $this->uuid;
     }
 
-    public function setUuid(Uuid $uuid): self
+    public function setUuid(UuidInterface $uuid): self
     {
         $this->uuid = $uuid;
 
