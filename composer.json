@@ -43,6 +43,8 @@
     },
     "require-dev": {
         "dama/doctrine-test-bundle": "^6.3",
+        "doctrine/doctrine-fixtures-bundle": "^3.3",
+        "fzaninotto/faker": "^1.9",
         "neilime/php-css-lint": "^2.2",
         "phpstan/phpstan": "^0.12.33",
         "squizlabs/php_codesniffer": "*",

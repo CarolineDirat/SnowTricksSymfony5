@@ -56,7 +56,12 @@ class Video
 
     public function setService(string $service): self
     {
-        $this->service = $service;
+        if (in_array(strtolower($service), ['youtube', 'vimeo', 'dailymotion'])) {
+            $this->service = $service;
+
+            return $this;
+        }
+        $this->service = 'unknown';
 
         return $this;
     }

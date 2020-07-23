@@ -8,7 +8,6 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Group;
 use Ramsey\Uuid\UuidInterface;
 
 /**
@@ -54,17 +53,17 @@ class Trick
     private DateTimeImmutable $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Picture::class, mappedBy="trick", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Picture::class, mappedBy="trick", orphanRemoval=true, cascade={"persist","remove"})
      */
     private ?Collection $pictures;
 
     /**
-     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Video::class, mappedBy="trick", orphanRemoval=true, cascade={"persist","remove"})
      */
     private ?Collection $videos;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick", orphanRemoval=true, cascade={"persist","remove"})
      */
     private ?Collection $comments;
 
@@ -88,7 +87,7 @@ class Trick
         return $this->id;
     }
 
-    public function getUuid() : ?UuidInterface
+    public function getUuid(): ?UuidInterface
     {
         return $this->uuid;
     }

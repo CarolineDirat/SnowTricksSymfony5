@@ -57,7 +57,7 @@ class User implements UserInterface
     private ?UuidInterface $uuid;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="user", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="user", orphanRemoval=true, cascade={"persist", "remove"})
      */
     private ?Collection $comments;
 
