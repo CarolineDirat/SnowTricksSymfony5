@@ -257,7 +257,7 @@ class Trick
         return $this->groupTrick;
     }
 
-    public function setGroupTrick(Group $groupTrick): self
+    public function setGroupTrick(?Group $groupTrick): self
     {
         $this->groupTrick = $groupTrick;
 
