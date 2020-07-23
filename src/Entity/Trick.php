@@ -8,7 +8,6 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Group;
 use Ramsey\Uuid\UuidInterface;
 
 /**
@@ -88,7 +87,7 @@ class Trick
         return $this->id;
     }
 
-    public function getUuid() : ?UuidInterface
+    public function getUuid(): ?UuidInterface
     {
         return $this->uuid;
     }
@@ -258,7 +257,7 @@ class Trick
         return $this->groupTrick;
     }
 
-    public function setGroupTrick(?Group $groupTrick): self
+    public function setGroupTrick(Group $groupTrick): self
     {
         $this->groupTrick = $groupTrick;
 

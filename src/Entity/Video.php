@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Repository\VideoRepository;
 use Doctrine\ORM\Mapping as ORM;
-use InvalidArgumentException;
 
 /**
  * @ORM\Entity(repositoryClass=VideoRepository::class)
@@ -65,8 +64,6 @@ class Video
         $this->service = 'unknown';
 
         return $this;
-        
-        
     }
 
     public function getTrick(): ?Trick

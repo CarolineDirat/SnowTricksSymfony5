@@ -25,15 +25,15 @@ class AppFixtures extends Fixture
     {
         $this->passwordEncoder = $passwordEncoder;
     }
-    
+
     public function load(ObjectManager $manager): void // @phpstan-ignore-line
     {
         $faker = Factory::create();
-        $slugger= new AsciiSlugger();
-        
+        $slugger = new AsciiSlugger();
+
         $groups = [];
         $groupsName = ['Grab', 'Rotation', 'Flip', 'Rotation désaxée', 'Slide', 'One foot', 'Old school', 'Autre'];
-        foreach ($groupsName as $name){
+        foreach ($groupsName as $name) {
             $group = new Group();
             $group->setName($name);
             $manager->persist($group);
@@ -41,12 +41,12 @@ class AppFixtures extends Fixture
         }
         // create 2 Users
         $users = [];
-        for ($i=0; $i < 2; $i++) { 
+        for ($i = 0; $i < 2; ++$i) {
             $user = new User();
-            $user->setUsername('user' . ($i+1));
+            $user->setUsername('user'.($i + 1));
             $user->setRoles(['ROLE_USER']);
             $user->setPassword($this->passwordEncoder->encodePassword($user, 'password'));
-            $user->setEmail('user' . ($i+1) .'@domain.com');
+            $user->setEmail('user'.($i + 1).'@domain.com');
             $user->setCreatedAt(DateTimeImmutable::createFromMutable($faker->dateTimeThisMonth('now', 'Europe/Paris')));
             $user->setUuid(Uuid::uuid4());
             $users[] = $user;
@@ -63,11 +63,11 @@ class AppFixtures extends Fixture
         $indy->setGroupTrick($groups[0]);
         // comments
         $comments = [];
-        for ($i=0; $i < 12; $i++) { 
+        for ($i = 0; $i < 12; ++$i) {
             $comment = new Comment();
             $comment->setContent($faker->text(200));
-            $comment->setCreatedAt((new DateTimeImmutable('2020-08-08'))->add(new DateInterval('PT' . $i . 'H')));
-            if(0 === ($i % 2) ) {
+            $comment->setCreatedAt((new DateTimeImmutable('2020-08-08'))->add(new DateInterval('PT'.$i.'H')));
+            if (0 === ($i % 2)) {
                 $users[0]->addComment($comment);
                 $comment->setUser($users[0]);
                 $manager->persist($users[0]);
@@ -82,10 +82,10 @@ class AppFixtures extends Fixture
             $indy->addComment($comment);
         }
         // Images
-        for ($i=1; $i <= 7 ; $i++) { 
+        for ($i = 1; $i <= 7; ++$i) {
             $picture = new Picture();
             $picture->setFilename('indy-'.$i);
-            if ($i<4) {
+            if ($i < 4) {
                 $picture->setAlt($faker->realText(40));
             }
             $indy->addPicture($picture);
@@ -105,7 +105,7 @@ class AppFixtures extends Fixture
             $video->setService($service);
             $indy->addVideo($video);
         }
-        $manager->persist($indy);        
+        $manager->persist($indy);
         $manager->flush();
     }
 }
