@@ -73,6 +73,11 @@ class Trick
      */
     private ?Group $groupTrick;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Picture::class, cascade={"persist", "remove"})
+     */
+    private ?Picture $firstPicture;
+
     public function __construct()
     {
         $this->pictures = new ArrayCollection();
@@ -262,5 +267,29 @@ class Trick
         $this->groupTrick = $groupTrick;
 
         return $this;
+    }
+
+    public function getFirstPicture(): ?Picture
+    {
+        return $this->firstPicture;
+    }
+
+    public function setFirstPicture(?Picture $firstPicture): self
+    {
+        // $firstPicture must be one of $this->pictures
+        $check = false;
+        foreach ($this->pictures as $picture) {
+            if ($picture->getFileName() === $firstPicture->getFilename()) {
+                $check = true;
+            }
+        }
+        if (true === $check) {
+            $this->firstPicture = $firstPicture;
+
+            return $this;
+        }
+        $this->firstPicture = null;
+
+        return $this;        
     }
 }

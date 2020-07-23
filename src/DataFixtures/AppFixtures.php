@@ -82,6 +82,7 @@ class AppFixtures extends Fixture
             $indy->addComment($comment);
         }
         // Images
+        $pictures = [];
         for ($i = 1; $i <= 7; ++$i) {
             $picture = new Picture();
             $picture->setFilename('indy-'.$i);
@@ -89,7 +90,9 @@ class AppFixtures extends Fixture
                 $picture->setAlt($faker->realText(40));
             }
             $indy->addPicture($picture);
+            $pictures[] = $picture;
         }
+        $indy->setFirstPicture($pictures[3]);
         // Videos
         $videosData = [
             '6QsLhWzXGu0' => 'YouTube',

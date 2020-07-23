@@ -120,4 +120,14 @@ class TrickTest extends TestCase
         $trick->setGroupTrick($group);
         $this->assertEquals($group, $trick->getGroupTrick());
     }
+
+    public function testFirstPicture(): void
+    {
+        $trick = new Trick();
+        $picture = new Picture();
+        $picture->setFilename('indy-1.jpg');
+        $trick->addPicture($picture);
+        $trick->setFirstPicture($picture);
+        $this->assertEquals($picture, $trick->getFirstPicture());
+    }
 }
