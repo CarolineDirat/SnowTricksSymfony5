@@ -5,9 +5,7 @@
     <meta name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>
-      {% block title %}
-        Welcome!
-      {% endblock %}
+      {% block title %}Welcome!{% endblock %}
     </title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet"
@@ -21,6 +19,7 @@
     {% block stylesheets %}
     {% endblock %}
   </head>
+
   <body>
     <nav class="navbar navbar-expand-md fixed-top navbar-light">
         <div class="container">
@@ -34,7 +33,6 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <a class="navbar-brand" href="{{ path("home") }}">SNOWTRICKS</a>
-
             <div class="collapse navbar-collapse" id="navbarToggler">
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                 <li class="nav-item active">
@@ -53,8 +51,10 @@
             </div>
         </div>
     </nav>
+
     {% block body %}
     {% endblock %}
+
     <!-- Footer -->
     <footer class="footer mt-auto d-block d-md-none">
       <div class="container">
@@ -70,7 +70,6 @@
       </div>
     </footer>
 
-
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -84,6 +83,7 @@
       crossorigin="anonymous"></script>
     <!-- Custom Fonts -->
     <script src="https://kit.fontawesome.com/628682d090.js" crossorigin="anonymous"></script>
+
     {% block javascripts %}
     {% endblock %}
   </body>
