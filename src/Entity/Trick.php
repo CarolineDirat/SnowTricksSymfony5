@@ -76,7 +76,7 @@ class Trick
     /**
      * @ORM\OneToOne(targetEntity=Picture::class, cascade={"persist", "remove"})
      */
-    private ?Picture $firstPicture;
+    private ?Picture $firstPicture = null;
 
     public function __construct()
     {
@@ -279,6 +279,7 @@ class Trick
         // $firstPicture must be one of $this->pictures
         $check = false;
         foreach ($this->pictures as $picture) {
+            // filename is unique in picture table
             if ($picture->getFileName() === $firstPicture->getFilename()) {
                 $check = true;
             }
