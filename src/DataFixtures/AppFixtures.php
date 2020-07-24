@@ -85,7 +85,7 @@ class AppFixtures extends Fixture
         $pictures = [];
         for ($i = 1; $i <= 7; ++$i) {
             $picture = new Picture();
-            $picture->setFilename('indy-'.$i);
+            $picture->setFilename('indy-'. $i . '.jpg');
             if ($i < 4) {
                 $picture->setAlt($faker->realText(40));
             }
