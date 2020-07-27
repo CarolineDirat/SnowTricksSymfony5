@@ -75,6 +75,8 @@ class Trick
 
     /**
      * @ORM\OneToOne(targetEntity=Picture::class, cascade={"persist", "remove"})
+     * @ORM\joinColumn(onDelete="SET NULL")
+     * 
      */
     private ?Picture $firstPicture = null;
 
