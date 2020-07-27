@@ -21,6 +21,11 @@ nav {
     background-color: #dadde1;
 }
 
+.badge-primary {
+    background-color: #334466;
+    font-size: 150%;
+}
+
 .btn.btn-primary {
     background-color: #5a8bc0;
     border-color: #5a8bc0;

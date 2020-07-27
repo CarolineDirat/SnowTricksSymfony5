@@ -68,8 +68,25 @@
 				</div>
 			</div>
 		</div>
-		<div class="row d-flex">
+		<div class="row">
 			<h2 class="col-md-12 text-center">{{ trick.name }}</h2>
+			<div class="text-justify">
+				{{ trick.description }}
+			</div>
+			<div class="col-sm-12 text-center">
+				<p class="badge badge-primary mt-4 mr-4 text-uppercase">
+					{{ trick.groupTrick.name }}
+				</p>
+				<p>
+					Créé le <span class="font-weight-bold">{{ trick.createdAt|date('d/m/Y') }}</span>, et modifié le <span class="font-weight-bold">{{ trick.updatedAt|date('d/m/Y') }}</span>
+				</p>
+			</div>
+			<hr/>
+		</div>
+		<div>
+			{% for comment in trick.comments %}
+				
+			{% endfor %}
 		</div>
 	</div>
 {% endblock %}
