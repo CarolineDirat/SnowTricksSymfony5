@@ -52,6 +52,9 @@ class AppFixtures extends Fixture
             $users[] = $user;
             $manager->persist($user);
         }
+        // put a profile picture on one user
+        $users[1]->setProfile('squirrel.jpg');
+        $manager->persist( $users[1]);
         // Indy Trick without pictures and video1
         $indy = new Trick();
         $indy->setUuid(Uuid::uuid4());
