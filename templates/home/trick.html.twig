@@ -5,9 +5,9 @@
 {% endblock %}
 
 {% block body %}
-    <div id="trick-read" class="container">
-        <div class="row d-flex">
-			<h1 class="col-12 text-center">{{ trick.name }}</h1>
+	<div id="trick-read" class="container">
+		<div class="row d-flex">
+			<h1 class="col-sm-12 text-center">{{ trick.name }}</h1>
 			{% set path = 'uploads/images/original/' %}
 			{% set firstPicture = path ~ 'default.jpg' %}
 			{% if trick.firstPicture %}
@@ -15,5 +15,32 @@
 			{% endif %}
 			<img src="{{ asset(firstPicture) }}" class="img-fluid" alt="{{ trick.firstPicture.alt }} Image de présentation de Snowtricks"/>
 		</div>
-    </div>
+		<div class="row d-flex">
+			<h2 class="col-sm-12 text-center">{{ trick.name }}</h2>
+			<div class=".d-none .d-sm-block col-sm-12 col-lg-7 col-xl-5 text-center">
+				{% for picture in trick.pictures %}
+					<img src="{{ asset('uploads/images/200/' ~ picture.filename) }}" alt="{{ picture.alt }} , photo pour illustrer le trick de snowboard {{ trick.name }}" class="img-thumbnail rounded"/>
+				{% endfor %}
+			</div>
+			<div class=".d-none .d-sm-block col-sm-12 col-lg-5 col-xl-7 text-center">
+				{% for video in trick.videos %}
+					{% if video.service|lower == 'youtube' %}
+						<iframe width="280" height="157" src="https://www.youtube.com/embed/{{ video.code }}" title="Vidéo pour illustrer le trick de snowboard {{ trick.name }}">Vidéo pour illustrer le trick de snowboard</iframe>
+					{% elseif video.service|lower == 'vimeo' %}
+						<iframe width="280" height="157" src="https://player.vimeo.com/video/{{ video.code }}" title="Vidéo pour illustrer le trick de snowboard {{ trick.name }}"></iframe>
+					{% elseif video.service|lower == 'dailymotion' %}
+						<iframe width="280" height="157" src="https://www.dailymotion.com/embed/video/{{ video.code }}" title="Vidéo pour illustrer le trick de snowboard {{ trick.name }}"></iframe>
+					{% endif %}
+				{% endfor %}
+			</div>
+			<h2 class="col-sm-12 text-center">{{ trick.name }}</h2>
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	<script>
+		document.cookie = "SameSite=none; Secure";
+		document.cookie = "sameSite=none; secure";
+	</script>
 {% endblock %}
