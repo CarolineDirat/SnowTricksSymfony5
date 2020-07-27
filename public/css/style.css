@@ -21,6 +21,21 @@ nav {
     background-color: #dadde1;
 }
 
+.btn.btn-primary {
+    background-color: #5a8bc0;
+    border-color: #5a8bc0;
+}
+
+.btn.btn-primary:hover {
+    background-color: #2576c3;
+    border-color: #2576c3;
+}
+
+.btn-primary.focus, .btn-primary:focus {
+    border-color: #83add8;
+    box-shadow: 0 0 0 .2rem rgba(131, 173, 216, 0.5);
+}
+
 .navbar-brand, h1, h2 {
     font-family: 'Permanent Marker', cursive, sans-serif;
     font-weight: bold;

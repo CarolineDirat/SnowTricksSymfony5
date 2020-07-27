@@ -16,13 +16,14 @@
 			<img src="{{ asset(firstPicture) }}" class="img-fluid" alt="{{ trick.firstPicture.alt }} Image de présentation de Snowtricks"/>
 		</div>
 		<div class="row d-flex">
-			<h2 class="col-sm-12 text-center">{{ trick.name }}</h2>
-			<div class=".d-none .d-sm-block col-sm-12 col-lg-7 col-xl-5 text-center">
+			{# width > 540 px #}
+			<h2 class="d-none d-md-block col-sm-12 text-center">{{ trick.name }}</h2>
+			<div class="d-none d-md-block col-sm-12 col-md-8 col-lg-7 col-xl-5 text-center">
 				{% for picture in trick.pictures %}
 					<img src="{{ asset('uploads/images/200/' ~ picture.filename) }}" alt="{{ picture.alt }} , photo pour illustrer le trick de snowboard {{ trick.name }}" class="img-thumbnail rounded"/>
 				{% endfor %}
 			</div>
-			<div class=".d-none .d-sm-block col-sm-12 col-lg-5 col-xl-7 text-center">
+			<div class="d-none d-md-block col-sm-12 col-md-4 col-lg-5 col-xl-7 text-center">
 				{% for video in trick.videos %}
 					{% if video.service|lower == 'youtube' %}
 						<iframe width="280" height="157" src="https://www.youtube.com/embed/{{ video.code }}" title="Vidéo pour illustrer le trick de snowboard {{ trick.name }}">Vidéo pour illustrer le trick de snowboard</iframe>
@@ -33,7 +34,40 @@
 					{% endif %}
 				{% endfor %}
 			</div>
-			<h2 class="col-sm-12 text-center">{{ trick.name }}</h2>
+			{# width < 540px #}
+			<div class="d-block d-md-none col-12 text-center mt-5">
+				<p>
+					<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapsePictures" aria-expanded="false" aria-controls="collapsePictures">
+						Photos
+					</button>
+				</p>
+				<div class="collapse" id="collapsePictures">
+					{% for picture in trick.pictures %}
+						<img src="{{ asset('uploads/images/200/' ~ picture.filename) }}" alt="{{ picture.alt }} , photo pour illustrer le trick de snowboard {{ trick.name }}" class="img-thumbnail rounded"/>
+					{% endfor %}
+				</div>
+			</div>
+			<div class="d-block d-md-none col-12 text-center">
+				<p>
+					<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseVideos" aria-expanded="false" aria-controls="collapseVideos">
+						Vidéos
+					</button>
+				</p>
+				<div class="collapse" id="collapseVideos">
+					{% for video in trick.videos %}
+						{% if video.service|lower == 'youtube' %}
+							<iframe width="280" height="157" src="https://www.youtube.com/embed/{{ video.code }}" title="Vidéo pour illustrer le trick de snowboard {{ trick.name }}">Vidéo pour illustrer le trick de snowboard</iframe>
+						{% elseif video.service|lower == 'vimeo' %}
+							<iframe width="280" height="157" src="https://player.vimeo.com/video/{{ video.code }}" title="Vidéo pour illustrer le trick de snowboard {{ trick.name }}"></iframe>
+						{% elseif video.service|lower == 'dailymotion' %}
+							<iframe width="280" height="157" src="https://www.dailymotion.com/embed/video/{{ video.code }}" title="Vidéo pour illustrer le trick de snowboard {{ trick.name }}"></iframe>
+						{% endif %}
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+		<div class="row d-flex">
+			<h2 class="col-md-12 text-center">{{ trick.name }}</h2>
 		</div>
 	</div>
 {% endblock %}
