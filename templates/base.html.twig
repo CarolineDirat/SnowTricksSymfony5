@@ -22,7 +22,7 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-expand-md fixed-top navbar-light">
+    {% block nav %}<nav class="navbar navbar-expand-md fixed-top navbar-light">{% endblock %}
         <div class="container">
             <button class="navbar-toggler"
                 type="button"
@@ -67,7 +67,6 @@
               <i class="fas fa-sign-in-alt"></i>
           </div>
         </div>
-        
       </div>
     </footer>
 

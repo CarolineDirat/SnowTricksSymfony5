@@ -41,6 +41,10 @@ nav {
     font-weight: bold;
 }
 
+.navbar-dark {
+    background-color: #334466;    
+}
+
 .navbar-light .navbar-brand,
 .navbar-light .navbar-nav .active>.nav-link,
 .navbar-light .navbar-nav .nav-link.active,
@@ -62,6 +66,12 @@ nav {
 @media (max-width: 992px) { 
     .navbar-brand {
         margin-right: 200px;
+    }
+}
+
+@media (max-width: 767px) { 
+    .navbar-brand {
+        margin-right: 5px;
     }
 }
 
