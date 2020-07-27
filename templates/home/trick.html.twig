@@ -7,7 +7,7 @@
 {% block nav %}<nav class="navbar navbar-expand-md fixed-top navbar-dark">{% endblock %}
 
 {% block body %}
-	<div id="trick-read" class="container">
+	<section id="trick-read" class="container">
 		<div class="row d-flex">
 			<h1 class="col-sm-12 text-center">{{ trick.name }}</h1>
 			{% set path = 'uploads/images/original/' %}
@@ -83,13 +83,34 @@
 			</div>
 			<hr/>
 		</div>
-		<div>
-			{% for comment in trick.comments %}
-				
-				
+		<div class="row">
+			{% for comment in comments %}
+				{% if loop.index <= nb %}
+					<div class="card">
+						<div class="row no-gutters">
+							{% set filename = comment.user.profile ? comment.user.profile : 'default.jpg' %}
+							<div class="col-1 col-sm-1 ">
+								<img src="{{ asset('uploads/images/profile/' ~ filename) }}" class="card-img" alt="Image de profil de {{ comment.user.username }}">
+							</div>
+							<div class="col-11 col-sm-11">
+								<div class="card-body">
+									<h5 class="card-title font-weight-bold">{{ comment.user.username }}</h5>
+									<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+									<p class="card-text"><small class="text-muted">Posté le {{ comment.createdAt|date('d/m/Y H:i:s') }}</small></p>
+								</div>
+							</div>
+						</div>
+					</div>
+				{% endif %}
 			{% endfor %}
+			{% if comments|length > nb %}
+				<div class="text-center">
+					<a role="button" class="btn btn-primary" href="{{ path('trick', {uuid: trick.uuid, slug: trick.slug, nb: (nb+5)}) }}">Voir plus</a>
+				</div>
+			{% endif %}
 		</div>
-	</div>
+		
+	</section>
 {% endblock %}
 
 {% block javascripts %}
