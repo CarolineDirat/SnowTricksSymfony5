@@ -20,12 +20,12 @@
 		<div class="row d-flex">
 			{# width > 540 px #}
 			<h2 class="d-none d-md-block col-sm-12 text-center">{{ trick.name }}</h2>
-			<div class="d-none d-md-block col-sm-12 col-md-8 col-lg-7 col-xl-5 text-center">
+			<div class="d-none d-md-block col-sm-12 col-md-7 col-xl-5 text-center">
 				{% for picture in trick.pictures %}
 					<img src="{{ asset('uploads/images/200/' ~ picture.filename) }}" alt="{{ picture.alt }} , photo pour illustrer le trick de snowboard {{ trick.name }}" class="img-thumbnail rounded"/>
 				{% endfor %}
 			</div>
-			<div class="d-none d-md-block col-sm-12 col-md-4 col-lg-5 col-xl-7 text-center">
+			<div class="d-none d-md-block col-sm-12 col-md-5 col-xl-7 text-center">
 				{% for video in trick.videos %}
 					{% if video.service|lower == 'youtube' %}
 						<iframe width="280" height="157" src="https://www.youtube.com/embed/{{ video.code }}" title="Vidéo pour illustrer le trick de snowboard {{ trick.name }}">Vidéo pour illustrer le trick de snowboard</iframe>
@@ -70,10 +70,10 @@
 		</div>
 		<div class="row">
 			<h2 class="col-md-12 text-center">{{ trick.name }}</h2>
-			<div class="text-justify">
+			<div class="text-justify px-4">
 				{{ trick.description }}
 			</div>
-			<div class="col-sm-12 text-center">
+			<div class="col-sm-12 text-center mb-5">
 				<p class="badge badge-primary mt-4 mr-4 text-uppercase">
 					{{ trick.groupTrick.name }}
 				</p>
@@ -83,10 +83,9 @@
 			</div>
 			<hr/>
 		</div>
-		<div class="row">
+		<div id="comments" class="row">
 			{% for comment in comments %}
-				{% if loop.index <= nb %}
-					<div class="card">
+					<div class="card col-12 col-sm-12 {{ loop.index <= nb ? '' : 'd-none' }}">
 						<div class="row no-gutters">
 							{% set filename = comment.user.profile ? comment.user.profile : 'default.jpg' %}
 							<div class="col-1 col-sm-1 ">
@@ -95,27 +94,20 @@
 							<div class="col-11 col-sm-11">
 								<div class="card-body">
 									<h5 class="card-title font-weight-bold">{{ comment.user.username }}</h5>
-									<p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-									<p class="card-text"><small class="text-muted">Posté le {{ comment.createdAt|date('d/m/Y H:i:s') }}</small></p>
+									<p class="card-text">{{ comment.content }}</p>
+									<p class="card-text"><small class="text-muted">Posté le {{ comment.createdAt|date('d/m/Y') }} à {{ comment.createdAt|date('H:i:s') }}</small></p>
 								</div>
 							</div>
 						</div>
 					</div>
-				{% endif %}
 			{% endfor %}
-			{% if comments|length > nb %}
-				<div class="text-center">
-					<a role="button" class="btn btn-primary" href="{{ path('trick', {uuid: trick.uuid, slug: trick.slug, nb: (nb+5)}) }}">Voir plus</a>
-				</div>
-			{% endif %}
+			<div id="load-more" class="col-sm-12 text-center">
+				<button class="btn btn-primary m-4">Voir plus</button>
+			</div>
 		</div>
-		
 	</section>
 {% endblock %}
 
 {% block javascripts %}
-	<script>
-		document.cookie = "SameSite=none; Secure";
-		document.cookie = "sameSite=none; secure";
-	</script>
+	<script src="{{ asset('js/script.js') }}"></script>
 {% endblock %}

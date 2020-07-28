@@ -29,7 +29,7 @@ class HomeController extends AbstractController
      *
      * @Route("/trick/{uuid}/{slug}/{nb}", name="trick")
      */
-    public function readTrick(Trick $trick, Request $request, int $nb = 5): Response
+    public function readTrick(Trick $trick, int $nb = 5): Response
     {
         // reverse comments and define file name of profile picture of its user 
         $comments = array_reverse($trick->getComments()->toArray());       
