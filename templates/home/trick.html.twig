@@ -27,13 +27,7 @@
 			</div>
 			<div class="d-none d-md-block col-sm-12 col-md-5 col-xl-7 text-center">
 				{% for video in trick.videos %}
-					{% if video.service|lower == 'youtube' %}
-						<iframe width="280" height="157" src="https://www.youtube.com/embed/{{ video.code }}" title="Vidéo pour illustrer le trick de snowboard {{ trick.name }}">Vidéo pour illustrer le trick de snowboard</iframe>
-					{% elseif video.service|lower == 'vimeo' %}
-						<iframe width="280" height="157" src="https://player.vimeo.com/video/{{ video.code }}" title="Vidéo pour illustrer le trick de snowboard {{ trick.name }}"></iframe>
-					{% elseif video.service|lower == 'dailymotion' %}
-						<iframe width="280" height="157" src="https://www.dailymotion.com/embed/video/{{ video.code }}" title="Vidéo pour illustrer le trick de snowboard {{ trick.name }}"></iframe>
-					{% endif %}
+					{{ include('fragments/_iframe.html.twig') }}
 				{% endfor %}
 			</div>
 			{# width < 540px #}
@@ -57,13 +51,7 @@
 				</p>
 				<div class="collapse" id="collapseVideos">
 					{% for video in trick.videos %}
-						{% if video.service|lower == 'youtube' %}
-							<iframe width="280" height="157" src="https://www.youtube.com/embed/{{ video.code }}" title="Vidéo pour illustrer le trick de snowboard {{ trick.name }}">Vidéo pour illustrer le trick de snowboard</iframe>
-						{% elseif video.service|lower == 'vimeo' %}
-							<iframe width="280" height="157" src="https://player.vimeo.com/video/{{ video.code }}" title="Vidéo pour illustrer le trick de snowboard {{ trick.name }}"></iframe>
-						{% elseif video.service|lower == 'dailymotion' %}
-							<iframe width="280" height="157" src="https://www.dailymotion.com/embed/video/{{ video.code }}" title="Vidéo pour illustrer le trick de snowboard {{ trick.name }}"></iframe>
-						{% endif %}
+						{{ include('fragments/_iframe.html.twig') }}
 					{% endfor %}
 				</div>
 			</div>
