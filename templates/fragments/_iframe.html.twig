@@ -6,4 +6,4 @@
     {% set address = 'www.dailymotion.com/embed/video/' %}
 {% endif %}
 
-<iframe width="280" height="157" src="https://{{ address }}{{ video.code }}" title="Vidéo pour illustrer le trick de snowboard {{ trick.name }}"></iframe>
+<iframe width="{{ width }}" height="{{ height }}" src="https://{{ address }}{{ video.code }}" title="Vidéo pour illustrer le trick de snowboard {{ trick.name }}"></iframe>

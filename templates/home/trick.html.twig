@@ -27,7 +27,7 @@
 			</div>
 			<div class="d-none d-md-block col-sm-12 col-md-5 col-xl-7 text-center">
 				{% for video in trick.videos %}
-					{{ include('fragments/_iframe.html.twig') }}
+					{{ include('fragments/_iframe.html.twig', {width: 280, height: 157}) }}
 				{% endfor %}
 			</div>
 			{# width < 540px #}
@@ -39,7 +39,7 @@
 				</p>
 				<div class="collapse" id="collapsePictures">
 					{% for picture in trick.pictures %}
-						<img src="{{ asset('uploads/images/200/' ~ picture.filename) }}" alt="{{ picture.alt }} , photo pour illustrer le trick de snowboard {{ trick.name }}" class="img-thumbnail rounded"/>
+						<img src="{{ asset('uploads/images/540/' ~ picture.filename) }}" alt="{{ picture.alt }} , photo pour illustrer le trick de snowboard {{ trick.name }}" class="img-thumbnail rounded"/>
 					{% endfor %}
 				</div>
 			</div>
@@ -51,7 +51,7 @@
 				</p>
 				<div class="collapse" id="collapseVideos">
 					{% for video in trick.videos %}
-						{{ include('fragments/_iframe.html.twig') }}
+						{{ include('fragments/_iframe.html.twig', {width: 280, height: 157}) }}
 					{% endfor %}
 				</div>
 			</div>
