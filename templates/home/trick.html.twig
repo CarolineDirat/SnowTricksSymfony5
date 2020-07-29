@@ -8,6 +8,7 @@
 
 {% block body %}
 	<section id="trick-read" class="container">
+		{# trick name and first picture #}
 		<div class="row d-flex">
 			<h1 class="col-sm-12 text-center">{{ trick.name }}</h1>
 			{% set path = 'uploads/images/original/' %}
@@ -17,6 +18,7 @@
 			{% endif %}
 			<img src="{{ asset(firstPicture) }}" class="img-fluid" alt="{{ trick.firstPicture.alt }} Image de présentation de Snowtricks"/>
 		</div>
+		{# pictures and videos #}
 		<div class="row d-flex">
 			{# width > 540 px #}
 			<h2 class="d-none d-md-block col-sm-12 text-center">{{ trick.name }}</h2>
@@ -56,6 +58,7 @@
 				</div>
 			</div>
 		</div>
+		{# trick descriptio #}
 		<div class="row">
 			<h2 class="col-md-12 text-center">{{ trick.name }}</h2>
 			<div class="text-justify px-4">
@@ -71,23 +74,24 @@
 			</div>
 			<hr/>
 		</div>
+		{# comments #}
 		<div id="comments" class="row">
 			{% for comment in comments %}
-					<div class="card col-12 col-sm-12">
-						<div class="row no-gutters">
-							{% set filename = comment.user.profile ? comment.user.profile : 'default.jpg' %}
-							<div class="col-2 col-lg-1 pt-3">
-								<img src="{{ asset('uploads/images/profile/' ~ filename) }}" class="card-img" alt="Image de profil de {{ comment.user.username }}">
-							</div>
-							<div class="col-10 col-lg-11">
-								<div class="card-body">
-									<h5 class="card-title font-weight-bold">{{ comment.user.username }}</h5>
-									<p class="card-text">{{ comment.content }}</p>
-									<p class="card-text"><small class="text-muted">Posté le {{ comment.createdAt|date('d/m/Y') }} à {{ comment.createdAt|date('H:i:s') }}</small></p>
-								</div>
+				<div class="card col-12 col-sm-12">
+					<div class="row no-gutters">
+						{% set filename = comment.user.profile ? comment.user.profile : 'default.jpg' %}
+						<div class="col-2 col-lg-1 pt-3">
+							<img src="{{ asset('uploads/images/profile/' ~ filename) }}" class="card-img" alt="Image de profil de {{ comment.user.username }}">
+						</div>
+						<div class="col-10 col-lg-11">
+							<div class="card-body">
+								<h5 class="card-title font-weight-bold">{{ comment.user.username }}</h5>
+								<p class="card-text">{{ comment.content }}</p>
+								<p class="card-text"><small class="text-muted">Posté le {{ comment.createdAt|date('d/m/Y') }} à {{ comment.createdAt|date('H:i:s') }}</small></p>
 							</div>
 						</div>
 					</div>
+				</div>
 			{% endfor %}
 		</div>
 		<div class="row">
