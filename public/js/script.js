@@ -64,14 +64,21 @@ $(function () {
     $('#load-more').click(function(e) {
         e.preventDefault();
         let url = load.attr('href') + "/" + $('div.card').length;
-        console.log(url);
         let req = new XMLHttpRequest();
         req.onreadystatechange = function() {
             if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
                 let data = JSON.parse(this.responseText);
-                $.each(data, function (index, comment) {
-                    displayComment(comment);
-                });
+                // if no more comments
+                if (data.length == 0) {
+                    // then delete "load-more" button on trick page
+                    $('#load-more').slideUp('slow', 'linear');
+                    $('#comments').animate({'margin-bottom': '100px'}, '3000', 'linear');                    
+                } else {
+                    // else add comments on trick page
+                    $.each(data, function (index, comment) {
+                        displayComment(comment);
+                    });
+                }
             }
         };
         req.open("GET", url, true);
