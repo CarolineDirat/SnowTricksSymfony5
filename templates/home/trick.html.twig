@@ -85,13 +85,13 @@
 		</div>
 		<div id="comments" class="row">
 			{% for comment in comments %}
-					<div class="card col-12 col-sm-12 {{ loop.index <= nb ? '' : 'd-none' }}">
+					<div class="card col-12 col-sm-12">
 						<div class="row no-gutters">
 							{% set filename = comment.user.profile ? comment.user.profile : 'default.jpg' %}
-							<div class="col-1 col-sm-1 ">
+							<div class="col-2 col-lg-1 pt-3">
 								<img src="{{ asset('uploads/images/profile/' ~ filename) }}" class="card-img" alt="Image de profil de {{ comment.user.username }}">
 							</div>
-							<div class="col-11 col-sm-11">
+							<div class="col-10 col-lg-11">
 								<div class="card-body">
 									<h5 class="card-title font-weight-bold">{{ comment.user.username }}</h5>
 									<p class="card-text">{{ comment.content }}</p>
@@ -101,8 +101,10 @@
 						</div>
 					</div>
 			{% endfor %}
-			<div id="load-more" class="col-sm-12 text-center">
-				<button class="btn btn-primary m-4">Voir plus</button>
+		</div>
+		<div class="row">
+			<div class="col-sm-12 text-center">
+				<a id="load-more" role="button" href="{{ path('load-more-comments', {uuid: trick.uuid, slug: trick.slug}) }}" class="btn btn-primary m-4">Voir plus</a>
 			</div>
 		</div>
 	</section>
