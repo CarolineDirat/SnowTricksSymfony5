@@ -69,7 +69,7 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < 12; ++$i) {
             $comment = new Comment();
             $comment->setContent($faker->text(200));
-            $comment->setCreatedAt((new DateTimeImmutable('2020-08-08'))->add(new DateInterval('PT'.$i.'H')));
+            $comment->setCreatedAt((new DateTimeImmutable('2020-08-08 12:10:55'))->add(new DateInterval('PT'.$i.'H')));
             if (0 === ($i % 2)) {
                 $users[0]->addComment($comment);
                 $comment->setUser($users[0]);
