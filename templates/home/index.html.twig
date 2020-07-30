@@ -11,7 +11,7 @@
 			<h1 class="col-6 col-sm-6">Site collaboratif pour apprendre des Tricks.</h1>
 		</div>
 		<div class="row">
-			<p><a href="{{ path('trick', {uuid: trick.uuid, slug: trick.slug}) }}">{{ trick.name }}</p>
+			<p><a href="{{ path('display_trick', {uuid: trick.uuid, slug: trick.slug}) }}">{{ trick.name }}</p>
 		</div>
 	</div>
 {% endblock %}

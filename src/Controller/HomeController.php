@@ -29,22 +29,20 @@ class HomeController extends AbstractController
     /**
      * Display the page of a trick.
      *
-     * @Route("/trick/{slug}/{uuid}", name="trick")
+     * @Route("/trick/{slug}/{uuid}", name="display_trick")
      */
-    public function readTrick(Trick $trick, string $slug): Response
+    public function displayTrick(Trick $trick, string $slug, CommentRepository $commentRepository): Response
     {        
-        if ($slug != $trick->getSlug()) {
-            return $this->redirectToRoute('trick', [
+        if ($slug !== $trick->getSlug()) {
+            return $this->redirectToRoute('display_trick', [
                 'slug' => $trick->getSlug(), 
                 'uuid' => $trick->getUuid(),
             ]);
         }
-        // get first 5 comments, from most recent oldest 
-        $comments = array_slice(array_reverse($trick->getComments()->toArray()), 0, 5);
         
         return $this->render('home/trick.html.twig', [
             'trick' => $trick,
-            'comments' => $comments,
+            'comments' => $commentRepository->getLastComments($trick, 5),
         ]);
     }
 
@@ -53,26 +51,22 @@ class HomeController extends AbstractController
      *
      * @Route("/trick/{slug}", name="trick_slug")
      */
-    public function readTrickBySlug(string $slug, TrickRepository $trickRepository): Response
-    {        
-        $trick = $trickRepository->findOneBySlug($slug);
-         if (empty($trick)) {
-            throw $this->createNotFoundException('Le trick "' . $slug . '" n\'existe pas');
-         }
-        
-        // get first 5 comments, from most recent oldest 
-        $comments = array_slice(array_reverse($trick->getComments()->toArray()), 0, 5);
-        
-        return $this->render('home/trick.html.twig', [
-            'trick' => $trick,
-            'comments' => $comments,
+    public function redirectBySlug(Trick $trick): Response
+    {                     
+        return $this->redirectToRoute('display_trick', [
+            'slug' => $trick->getSlug(),
+            'uuid' => $trick->getUuid(),
         ]);
     }
 
     /**
      * load more comments
      *
-     * @Route("/trick/{slug}/{uuid}/voir-plus/{offset<\d+>}", name="load-more-comments", methods={"GET"})
+     * @Route(
+     *      "/trick/{slug}/{uuid}/voir-plus/{offset<\d+>}", 
+     *      name="load-more-comments", 
+     *      methods={"GET"}
+     * )
      */
     public function loadMoreComments(Trick $trick, int $offset = 5, CommentRepository $commentRepository): JsonResponse
     {
