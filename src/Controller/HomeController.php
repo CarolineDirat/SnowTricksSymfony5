@@ -70,8 +70,8 @@ class HomeController extends AbstractController
      */
     public function loadMoreComments(Trick $trick, int $offset = 5, CommentRepository $commentRepository): JsonResponse
     {
-        $comments = $commentRepository->getPaginatedComments($trick, $offset, 5);
-        
+        $comments = $commentRepository->getArrayPaginatedComments($trick, $offset, 5);
+
         return $this->json(
             $comments,
             200,

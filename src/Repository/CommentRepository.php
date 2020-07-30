@@ -29,7 +29,7 @@ class CommentRepository extends ServiceEntityRepository
      * get $limit comments from $offset
      *
      */
-    public function getPaginatedComments(Trick $trick, int $offset, int $limit): array
+    public function getArrayPaginatedComments(Trick $trick, int $offset, int $limit): array
     {
         $comments = $this
                 ->createQueryBuilder('c')
@@ -44,21 +44,24 @@ class CommentRepository extends ServiceEntityRepository
                 ->getArrayResult()
         ;
 
-        return $this->deleteSensitiveData($comments);
+        return $this->keepOnlyUserSecuredData($comments);
     }
 
-    public function deleteSensitiveData(array $comments): array
+    public function keepOnlyUserSecuredData(array $comments): array
     {
-        $sensitiveDataToDelete = ['id', 'roles', 'password', 'email', 'uuid', 'createdAt'];
-        
-        for ($i=0; $i < count($comments) ; $i++) {
-            foreach ($sensitiveDataToDelete as $value) {
-                unset($comments[$i]['user'][$value]);
-            } 
-        }
+        $securedDataUser = ['username' => '', 'profile' => ''];
+        for ($i=0; $i < count($comments); $i++) {
+            $comments[$i]['user'] = array_intersect_ukey($comments[$i]['user'], $securedDataUser, function($key1, $key2): int {
+                if ($key1 === $key2) {
+                    return 0;
+                }
+                return -1;
+            });
+        }        
 
         return $comments;
     }
+
 
     // /**
     //  * @return Comment[] Returns an array of Comment objects
