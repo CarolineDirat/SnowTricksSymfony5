@@ -20,10 +20,10 @@ class HomeController extends AbstractController
      */
     public function index(TrickRepository $trickRepo): Response
     {
-        // temporary code
-        $tricks = $trickRepo->findAll(); // There is actually only one trick on database
+        // There is actually only one trick on database
+        $tricks = $trickRepo->findAll(); // temporary code
         
-        return $this->render('home/index.html.twig', ['trick' => $tricks[0]]);
+        return $this->render('home/index.html.twig', ['trick' => $tricks[0]]); // temporary code
     }
 
     /**
@@ -32,8 +32,29 @@ class HomeController extends AbstractController
      * @Route("/trick/{slug}/{uuid}", name="trick")
      */
     public function readTrick(Trick $trick): Response
-    {
-        // reverse comments and define file name of profile picture of its user 
+    {        
+        // get first 5 comments, from most recent oldest 
+        $comments = array_slice(array_reverse($trick->getComments()->toArray()), 0, 5);
+        
+        return $this->render('home/trick.html.twig', [
+            'trick' => $trick,
+            'comments' => $comments,
+        ]);
+    }
+
+    /**
+     * Display the page of a trick from slug only
+     *
+     * @Route("/trick/{slug}", name="trick_slug")
+     */
+    public function readTrickBySlug(string $slug, TrickRepository $trickRepository): Response
+    {        
+        $trick = $trickRepository->findOneBySlug($slug);
+         if (empty($trick)) {
+            throw $this->createNotFoundException('Le trick "' . $slug . '" n\'existe pas');
+         }
+        
+        // get first 5 comments, from most recent oldest 
         $comments = array_slice(array_reverse($trick->getComments()->toArray()), 0, 5);
         
         return $this->render('home/trick.html.twig', [
@@ -50,7 +71,7 @@ class HomeController extends AbstractController
     public function loadMoreComments(Trick $trick, int $offset = 5, CommentRepository $commentRepository): JsonResponse
     {
         $comments = $commentRepository->getPaginatedComments($trick, $offset, 5);
-        $comments = $this->deleteSensitiveData($comments);
+        $comments = $this->deleteUserSensitiveData($comments);
         
         return $this->json(
             $comments,
@@ -59,7 +80,7 @@ class HomeController extends AbstractController
         );
     }
 
-    public function deleteSensitiveData(array $comments): array
+    public function deleteUserSensitiveData(array $comments): array
     {
         for ($i=0; $i < 5 ; $i++) { 
             unset($comments[$i]['user']['id']);

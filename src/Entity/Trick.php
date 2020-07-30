@@ -132,7 +132,7 @@ class Trick
 
     public function getSlug(): ?string
     {
-        return $this->slug;
+        return strToLower($this->slug);
     }
 
     public function setSlug(string $slug): self

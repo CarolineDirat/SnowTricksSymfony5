@@ -60,7 +60,7 @@ class AppFixtures extends Fixture
         $indy->setUuid(Uuid::uuid4());
         $indy->setName('Indy');
         $indy->setDescription($faker->paragraphs(10, true));
-        $indy->setSlug($slugger->slug($indy->getName()));
+        $indy->setSlug(strtolower($slugger->slug($indy->getName())));
         $indy->setCreatedAt(DateTimeImmutable::createFromMutable($faker->dateTimeThisMonth('now', 'Europe/Paris')));
         $indy->setUpdatedAt($indy->getCreatedAt()->add(new DateInterval('P2D')));
         $indy->setGroupTrick($groups[0]);
