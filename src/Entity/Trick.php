@@ -76,7 +76,6 @@ class Trick
     /**
      * @ORM\OneToOne(targetEntity=Picture::class, cascade={"persist", "remove"})
      * @ORM\joinColumn(onDelete="SET NULL")
-     * 
      */
     private ?Picture $firstPicture = null;
 
@@ -132,7 +131,7 @@ class Trick
 
     public function getSlug(): ?string
     {
-        return strToLower($this->slug);
+        return strtolower($this->slug);
     }
 
     public function setSlug(string $slug): self
@@ -293,6 +292,6 @@ class Trick
         }
         $this->firstPicture = null;
 
-        return $this;        
+        return $this;
     }
 }

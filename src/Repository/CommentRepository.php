@@ -26,15 +26,14 @@ class CommentRepository extends ServiceEntityRepository
     }
 
     /**
-     * get $limit comments from $offset
-     *
+     * get $limit comments from $offset.
      */
     public function getArrayPaginatedComments(Trick $trick, int $offset, int $limit): array
     {
         $comments = $this
                 ->createQueryBuilder('c')
                 ->addSelect('user')
-                ->leftJoin('c.user', 'user' )
+                ->leftJoin('c.user', 'user')
                 ->where('c.trick = :trick')
                 ->setParameter('trick', $trick)
                 ->setFirstResult($offset)
@@ -50,18 +49,18 @@ class CommentRepository extends ServiceEntityRepository
     public function keepOnlyUserSecuredData(array $comments): array
     {
         $securedDataUser = ['username' => '', 'profile' => ''];
-        for ($i=0; $i < count($comments); $i++) {
-            $comments[$i]['user'] = array_intersect_ukey($comments[$i]['user'], $securedDataUser, function($key1, $key2): int {
+        for ($i = 0; $i < count($comments); ++$i) {
+            $comments[$i]['user'] = array_intersect_ukey($comments[$i]['user'], $securedDataUser, function ($key1, $key2): int {
                 if ($key1 === $key2) {
                     return 0;
                 }
+
                 return -1;
             });
-        }        
+        }
 
         return $comments;
     }
-
 
     // /**
     //  * @return Comment[] Returns an array of Comment objects

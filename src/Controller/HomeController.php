@@ -7,7 +7,6 @@ use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -22,7 +21,7 @@ class HomeController extends AbstractController
     {
         // There is actually only one trick on database
         $tricks = $trickRepo->findAll(); // temporary code
-        
+
         return $this->render('home/index.html.twig', ['trick' => $tricks[0]]); // temporary code
     }
 
@@ -32,14 +31,14 @@ class HomeController extends AbstractController
      * @Route("/trick/{slug}/{uuid}", name="display_trick")
      */
     public function displayTrick(Trick $trick, string $slug, CommentRepository $commentRepository): Response
-    {        
+    {
         if ($slug !== $trick->getSlug()) {
             return $this->redirectToRoute('display_trick', [
-                'slug' => $trick->getSlug(), 
+                'slug' => $trick->getSlug(),
                 'uuid' => $trick->getUuid(),
             ]);
         }
-        
+
         return $this->render('home/trick.html.twig', [
             'trick' => $trick,
             'comments' => $commentRepository->getLastComments($trick, 5),
@@ -47,12 +46,12 @@ class HomeController extends AbstractController
     }
 
     /**
-     * Display the page of a trick from slug only
+     * Display the page of a trick from slug only.
      *
      * @Route("/trick/{slug}", name="trick_slug")
      */
     public function redirectBySlug(Trick $trick): Response
-    {                     
+    {
         return $this->redirectToRoute('display_trick', [
             'slug' => $trick->getSlug(),
             'uuid' => $trick->getUuid(),
@@ -60,11 +59,11 @@ class HomeController extends AbstractController
     }
 
     /**
-     * load more comments
+     * load more comments.
      *
      * @Route(
-     *      "/trick/{slug}/{uuid}/voir-plus/{offset<\d+>}", 
-     *      name="load-more-comments", 
+     *      "/trick/{slug}/{uuid}/voir-plus/{offset<\d+>}",
+     *      name="load-more-comments",
      *      methods={"GET"}
      * )
      */

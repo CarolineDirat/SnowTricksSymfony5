@@ -54,7 +54,7 @@ class AppFixtures extends Fixture
         }
         // put a profile picture on one user
         $users[1]->setProfile('squirrel.jpg');
-        $manager->persist( $users[1]);
+        $manager->persist($users[1]);
         // Indy Trick without pictures and video1
         $indy = new Trick();
         $indy->setUuid(Uuid::uuid4());
@@ -88,7 +88,7 @@ class AppFixtures extends Fixture
         $pictures = [];
         for ($i = 1; $i <= 7; ++$i) {
             $picture = new Picture();
-            $picture->setFilename('indy-'. $i . '.jpg');
+            $picture->setFilename('indy-'.$i.'.jpg');
             if ($i < 4) {
                 $picture->setAlt($faker->realText(40));
             }
