@@ -79,4 +79,12 @@ class UserTest extends TestCase
         $user->removeComment($comment);
         $this->assertFalse(in_array($comment, $user->getComments()->toArray(), true));
     }
+
+    public function testProfile(): void
+    {
+        $user = new User();
+        $profile = 'filename.jpg';
+        $user->setProfile($profile);
+        $this->assertEquals($profile, $user->getProfile());
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Comment;
+use App\Entity\Trick;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -17,6 +18,48 @@ class CommentRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Comment::class);
+    }
+
+    public function getLastComments(Trick $trick, int $number): array
+    {
+        return array_slice(array_reverse($trick->getComments()->toArray()), 0, $number);
+    }
+
+    /**
+     * get $limit comments from $offset.
+     */
+    public function getArrayPaginatedComments(Trick $trick, int $offset, int $limit): array
+    {
+        $comments = $this
+                ->createQueryBuilder('c')
+                ->addSelect('user')
+                ->leftJoin('c.user', 'user')
+                ->where('c.trick = :trick')
+                ->setParameter('trick', $trick)
+                ->setFirstResult($offset)
+                ->setMaxResults($limit)
+                ->orderBy('c.createdAt', 'DESC')
+                ->getQuery()
+                ->getArrayResult()
+        ;
+
+        return $this->keepOnlyUserSecuredData($comments);
+    }
+
+    public function keepOnlyUserSecuredData(array $comments): array
+    {
+        $securedDataUser = ['username' => '', 'profile' => ''];
+        for ($i = 0; $i < count($comments); ++$i) {
+            $comments[$i]['user'] = array_intersect_ukey($comments[$i]['user'], $securedDataUser, function ($key1, $key2): int {
+                if ($key1 === $key2) {
+                    return 0;
+                }
+
+                return -1;
+            });
+        }
+
+        return $comments;
     }
 
     // /**

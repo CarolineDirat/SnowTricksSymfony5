@@ -1,0 +1,107 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	{{ trick.name }}
+{% endblock %}
+
+{% block nav %}<nav class="navbar navbar-expand-md fixed-top navbar-dark">{% endblock %}
+
+{% block body %}
+	<section id="trick-read" class="container">
+		{# trick name and first picture #}
+		<div class="row d-flex">
+			<h1 class="col-sm-12 text-center">{{ trick.name }}</h1>
+			{% set path = 'uploads/images/original/' %}
+			{% set firstPicture = path ~ 'default.jpg' %}
+			{% if trick.firstPicture %}
+				{% set firstPicture = path ~ trick.firstPicture.filename %}
+			{% endif %}
+			<img src="{{ asset(firstPicture) }}" class="img-fluid" alt="{{ trick.firstPicture.alt }} Image de présentation de Snowtricks"/>
+		</div>
+		{# pictures and videos #}
+		<div class="row d-flex">
+			{# width > 540 px #}
+			<h2 class="d-none d-md-block col-sm-12 text-center">{{ trick.name }}</h2>
+			<div class="d-none d-md-block col-sm-12 col-md-7 col-xl-5 text-center">
+				{% for picture in trick.pictures %}
+					<img src="{{ asset('uploads/images/200/' ~ picture.filename) }}" alt="{{ picture.alt }} , photo pour illustrer le trick de snowboard {{ trick.name }}" class="img-thumbnail rounded"/>
+				{% endfor %}
+			</div>
+			<div class="d-none d-md-block col-sm-12 col-md-5 col-xl-7 text-center">
+				{% for video in trick.videos %}
+					{{ include('fragments/_iframe.html.twig', {width: 280, height: 157}) }}
+				{% endfor %}
+			</div>
+			{# width < 540px #}
+			<div class="d-block d-md-none col-12 text-center mt-5">
+				<p>
+					<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapsePictures" aria-expanded="false" aria-controls="collapsePictures">
+						Photos
+					</button>
+				</p>
+				<div class="collapse" id="collapsePictures">
+					{% for picture in trick.pictures %}
+						<img src="{{ asset('uploads/images/540/' ~ picture.filename) }}" alt="{{ picture.alt }} , photo pour illustrer le trick de snowboard {{ trick.name }}" class="img-thumbnail rounded"/>
+					{% endfor %}
+				</div>
+			</div>
+			<div class="d-block d-md-none col-12 text-center">
+				<p>
+					<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseVideos" aria-expanded="false" aria-controls="collapseVideos">
+						Vidéos
+					</button>
+				</p>
+				<div class="collapse" id="collapseVideos">
+					{% for video in trick.videos %}
+						{{ include('fragments/_iframe.html.twig', {width: 280, height: 157}) }}
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+		{# trick descriptio #}
+		<div class="row">
+			<h2 class="col-md-12 text-center">{{ trick.name }}</h2>
+			<div class="text-justify px-4">
+				{{ trick.description }}
+			</div>
+			<div class="col-sm-12 text-center mb-5">
+				<p class="badge badge-primary mt-4 mr-4 text-uppercase">
+					{{ trick.groupTrick.name }}
+				</p>
+				<p>
+					Créé le <span class="font-weight-bold">{{ trick.createdAt|date('d/m/Y') }}</span>, et modifié le <span class="font-weight-bold">{{ trick.updatedAt|date('d/m/Y') }}</span>
+				</p>
+			</div>
+			<hr/>
+		</div>
+		{# comments #}
+		<div id="comments" class="row">
+			{% for comment in comments %}
+				<div class="card col-12 col-sm-12">
+					<div class="row no-gutters">
+						{% set filename = comment.user.profile ? comment.user.profile : 'default.jpg' %}
+						<div class="col-2 col-lg-1 pt-3">
+							<img src="{{ asset('uploads/images/profile/' ~ filename) }}" class="card-img" alt="Image de profil de {{ comment.user.username }}">
+						</div>
+						<div class="col-10 col-lg-11">
+							<div class="card-body">
+								<h5 class="card-title font-weight-bold">{{ comment.user.username }}</h5>
+								<p class="card-text">{{ comment.content }}</p>
+								<p class="card-text"><small class="text-muted">Posté le {{ comment.createdAt|date('d/m/Y') }} à {{ comment.createdAt|date('H:i:s') }}</small></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+		<div class="row">
+			<div class="col-sm-12 text-center">
+				<a id="load-more" role="button" href="{{ path('load-more-comments', {uuid: trick.uuid, slug: trick.slug}) }}" class="btn btn-primary m-4">Voir plus</a>
+			</div>
+		</div>
+	</section>
+{% endblock %}
+
+{% block javascripts %}
+	<script src="{{ asset('js/script.js') }}"></script>
+{% endblock %}

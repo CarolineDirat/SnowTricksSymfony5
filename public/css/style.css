@@ -13,14 +13,41 @@ footer {
     font-size: 2rem;
 }
 
+iframe, img {
+    margin: 5px;
+}
+
 nav {
     background-color: #dadde1;
 }
 
-.navbar-brand, h1 {
+.badge-primary {
+    background-color: #334466;
+    font-size: 150%;
+}
+
+.btn.btn-primary {
+    background-color: #5a8bc0;
+    border-color: #5a8bc0;
+}
+
+.btn.btn-primary:hover {
+    background-color: #2576c3;
+    border-color: #2576c3;
+}
+
+.btn-primary.focus, .btn-primary:focus {
+    border-color: #83add8;
+    box-shadow: 0 0 0 .2rem rgba(131, 173, 216, 0.5);
+}
+
+.navbar-brand, h1, h2 {
     font-family: 'Permanent Marker', cursive, sans-serif;
     font-weight: bold;
-    font-size: 1.5rem;
+}
+
+.navbar-dark {
+    background-color: #334466;    
 }
 
 .navbar-light .navbar-brand,
@@ -31,14 +58,25 @@ nav {
     color: #4d5564;
 }
 
-@media (min-width: 992px) { 
+.navbar-brand {
+    margin-right: 600px;
+}
+
+@media (max-width: 1200px) { 
     .navbar-brand {
-        margin-right: 350px;
+        margin-right: 400px;
     }
 }
-@media (min-width: 768px) { 
+
+@media (max-width: 992px) { 
     .navbar-brand {
         margin-right: 200px;
+    }
+}
+
+@media (max-width: 767px) { 
+    .navbar-brand {
+        margin-right: 5px;
     }
 }
 
@@ -57,6 +95,7 @@ nav {
     left: 600px;
     width: 350px;
     color: #4d5564;
+    font-size: 1.5rem;
 }
 
 @media (max-width: 1800px) {
@@ -126,4 +165,19 @@ nav {
        left: 20px;
        font-size: 1.1rem;
     }     
+}
+
+/*********************************************
+                TRICK PAGE
+**********************************************/
+#trick-read h1 {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    font-size: 3em;
+}
+
+#trick-read h2 {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    font-size: 2em;
 }

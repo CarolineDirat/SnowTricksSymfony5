@@ -61,6 +61,13 @@ class User implements UserInterface
      */
     private ?Collection $comments;
 
+    /**
+     * name of the profile picture file in public/uploads/images/profile.
+     *
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private ?string $profile;
+
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
@@ -204,6 +211,18 @@ class User implements UserInterface
                 $comment->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getProfile(): ?string
+    {
+        return $this->profile;
+    }
+
+    public function setProfile(?string $profile): self
+    {
+        $this->profile = $profile;
 
         return $this;
     }

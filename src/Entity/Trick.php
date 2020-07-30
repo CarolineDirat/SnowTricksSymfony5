@@ -73,6 +73,12 @@ class Trick
      */
     private ?Group $groupTrick;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Picture::class, cascade={"persist", "remove"})
+     * @ORM\joinColumn(onDelete="SET NULL")
+     */
+    private ?Picture $firstPicture = null;
+
     public function __construct()
     {
         $this->pictures = new ArrayCollection();
@@ -125,7 +131,7 @@ class Trick
 
     public function getSlug(): ?string
     {
-        return $this->slug;
+        return strtolower($this->slug);
     }
 
     public function setSlug(string $slug): self
@@ -260,6 +266,31 @@ class Trick
     public function setGroupTrick(?Group $groupTrick): self
     {
         $this->groupTrick = $groupTrick;
+
+        return $this;
+    }
+
+    public function getFirstPicture(): ?Picture
+    {
+        return $this->firstPicture;
+    }
+
+    public function setFirstPicture(?Picture $firstPicture): self
+    {
+        // $firstPicture must be one of $this->pictures
+        $check = false;
+        foreach ($this->pictures as $picture) {
+            // filename is unique in picture table
+            if ($picture->getFileName() === $firstPicture->getFilename()) {
+                $check = true;
+            }
+        }
+        if (true === $check) {
+            $this->firstPicture = $firstPicture;
+
+            return $this;
+        }
+        $this->firstPicture = null;
 
         return $this;
     }

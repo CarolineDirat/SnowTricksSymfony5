@@ -52,12 +52,15 @@ class AppFixtures extends Fixture
             $users[] = $user;
             $manager->persist($user);
         }
+        // put a profile picture on one user
+        $users[1]->setProfile('squirrel.jpg');
+        $manager->persist($users[1]);
         // Indy Trick without pictures and video1
         $indy = new Trick();
         $indy->setUuid(Uuid::uuid4());
         $indy->setName('Indy');
-        $indy->setDescription($faker->paragraphs(4, true));
-        $indy->setSlug($slugger->slug($indy->getName()));
+        $indy->setDescription($faker->paragraphs(10, true));
+        $indy->setSlug(strtolower($slugger->slug($indy->getName())));
         $indy->setCreatedAt(DateTimeImmutable::createFromMutable($faker->dateTimeThisMonth('now', 'Europe/Paris')));
         $indy->setUpdatedAt($indy->getCreatedAt()->add(new DateInterval('P2D')));
         $indy->setGroupTrick($groups[0]);
@@ -66,7 +69,7 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < 12; ++$i) {
             $comment = new Comment();
             $comment->setContent($faker->text(200));
-            $comment->setCreatedAt((new DateTimeImmutable('2020-08-08'))->add(new DateInterval('PT'.$i.'H')));
+            $comment->setCreatedAt((new DateTimeImmutable('2020-08-08 12:10:55'))->add(new DateInterval('PT'.$i.'H')));
             if (0 === ($i % 2)) {
                 $users[0]->addComment($comment);
                 $comment->setUser($users[0]);
@@ -82,14 +85,17 @@ class AppFixtures extends Fixture
             $indy->addComment($comment);
         }
         // Images
+        $pictures = [];
         for ($i = 1; $i <= 7; ++$i) {
             $picture = new Picture();
-            $picture->setFilename('indy-'.$i);
+            $picture->setFilename('indy-'.$i.'.jpg');
             if ($i < 4) {
                 $picture->setAlt($faker->realText(40));
             }
             $indy->addPicture($picture);
+            $pictures[] = $picture;
         }
+        $indy->setFirstPicture($pictures[3]);
         // Videos
         $videosData = [
             '6QsLhWzXGu0' => 'YouTube',
