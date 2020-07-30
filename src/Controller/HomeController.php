@@ -31,8 +31,14 @@ class HomeController extends AbstractController
      *
      * @Route("/trick/{slug}/{uuid}", name="trick")
      */
-    public function readTrick(Trick $trick): Response
+    public function readTrick(Trick $trick, string $slug): Response
     {        
+        if ($slug != $trick->getSlug()) {
+            return $this->redirectToRoute('trick', [
+                'slug' => $trick->getSlug(), 
+                'uuid' => $trick->getUuid(),
+            ]);
+        }
         // get first 5 comments, from most recent oldest 
         $comments = array_slice(array_reverse($trick->getComments()->toArray()), 0, 5);
         
