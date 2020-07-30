@@ -31,7 +31,7 @@ class CommentRepository extends ServiceEntityRepository
      */
     public function getPaginatedComments(Trick $trick, int $offset, int $limit): array
     {
-        return $this
+        $comments = $this
                 ->createQueryBuilder('c')
                 ->addSelect('user')
                 ->leftJoin('c.user', 'user' )
@@ -43,6 +43,21 @@ class CommentRepository extends ServiceEntityRepository
                 ->getQuery()
                 ->getArrayResult()
         ;
+
+        return $this->deleteSensitiveData($comments);
+    }
+
+    public function deleteSensitiveData(array $comments): array
+    {
+        $sensitiveDataToDelete = ['id', 'roles', 'password', 'email', 'uuid', 'createdAt'];
+        
+        for ($i=0; $i < count($comments) ; $i++) {
+            foreach ($sensitiveDataToDelete as $value) {
+                unset($comments[$i]['user'][$value]);
+            } 
+        }
+
+        return $comments;
     }
 
     // /**

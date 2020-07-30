@@ -71,26 +71,11 @@ class HomeController extends AbstractController
     public function loadMoreComments(Trick $trick, int $offset = 5, CommentRepository $commentRepository): JsonResponse
     {
         $comments = $commentRepository->getPaginatedComments($trick, $offset, 5);
-        $comments = $this->deleteUserSensitiveData($comments);
         
         return $this->json(
             $comments,
             200,
             ['Content-Type' => 'application/json']
         );
-    }
-
-    public function deleteUserSensitiveData(array $comments): array
-    {
-        for ($i=0; $i < 5 ; $i++) { 
-            unset($comments[$i]['user']['id']);
-            unset($comments[$i]['user']['roles']);
-            unset($comments[$i]['user']['password']);
-            unset($comments[$i]['user']['email']);
-            unset($comments[$i]['user']['uuid']);
-            unset($comments[$i]['user']['createdAt']);
-        }
-
-        return $comments;
     }
 }
