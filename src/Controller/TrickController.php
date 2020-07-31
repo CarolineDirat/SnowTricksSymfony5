@@ -53,7 +53,7 @@ class TrickController extends AbstractController
      *      methods={"GET"}
      * )
      */
-    public function loadMoreComments(Trick $trick, int $offset = 5, CommentRepository $commentRepository): JsonResponse
+    public function loadMoreComments(Trick $trick, CommentRepository $commentRepository, int $offset = 5): JsonResponse
     {
         $comments = $commentRepository->getArrayPaginatedComments($trick, $offset, 5);
 
