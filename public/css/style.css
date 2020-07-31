@@ -27,6 +27,22 @@ nav {
   font-size: 150%;
 }
 
+.btn.btn-outline-primary {
+  color: #346;
+  border-color: #346;
+}
+
+.btn.btn-outline-primary:hover {
+  color: #346;
+  border-color: #346;
+  background-color: #dadde1;
+}
+
+.btn-outline-primary.focus,
+.btn-outline-primary:focus {
+    box-shadow: 0 0 0 0.2rem rgba(153,170,204,.5);
+}
+
 .btn.btn-primary {
   background-color: #5a8bc0;
   border-color: #5a8bc0;
@@ -169,6 +185,14 @@ h2 {
     left: 20px;
     font-size: 1.1rem;
   }
+}
+
+#trick-list .card-img-top {
+  max-width: 210px;
+}
+  
+#trick-list .div-card-img {
+  height: 200px;
 }
 
 /*********************************************

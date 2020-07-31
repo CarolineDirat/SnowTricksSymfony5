@@ -14,10 +14,10 @@ class HomeController extends AbstractController
      *
      * @Route("/", name="home")
      */
-    public function index(TrickRepository $trickRepo): Response
+    public function index(TrickRepository $trickRepository): Response
     {
-        $tricks = $trickRepo->findAll(); // temporary code
+        $tricks = $trickRepository->findPaginatedTricks(0,8);
 
-        return $this->render('home/index.html.twig', ['trick' => $tricks[0]]); // temporary code
+        return $this->render('home/index.html.twig', ['tricks' => $tricks]);
     }
 }

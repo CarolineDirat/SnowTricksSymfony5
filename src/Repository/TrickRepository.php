@@ -18,6 +18,30 @@ class TrickRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Trick::class);
     }
+    
+    /**
+     * findPaginatedTricks
+     * Find $limits tricks from $offset, with only it's name, uuid, slug and firstPicture
+     * 
+     * @param int $offset   position of first Trick
+     * @param int $limit    number of tricks
+     * 
+     * @return Trick[]
+     */
+    public function findPaginatedTricks(int $offset, int $limit): array
+    {
+        return $this
+            ->getEntityManager()
+            ->createQuery(
+                'SELECT t
+                FROM App\Entity\Trick t
+                ORDER BY t.name ASC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getResult();
+        ;
+
+    }
 
     // /**
     //  * @return Trick[] Returns an array of Trick objects
