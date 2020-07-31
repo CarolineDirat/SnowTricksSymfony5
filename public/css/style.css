@@ -1,5 +1,5 @@
 body {
-  font-family:'Roboto', sans-serif;
+  font-family: 'Roboto', sans-serif;
   color: #346;
   margin-top: 60px;
 }
@@ -40,7 +40,7 @@ nav {
 .btn-primary.focus,
 .btn-primary:focus {
   border-color: #83add8;
-  box-shadow: 0 0 0 .2rem rgba(131, 173, 216, 0.5);
+  box-shadow: 0 0 0 0.2rem rgba(131, 173, 216, 0.5);
 }
 
 .navbar-brand,
@@ -50,37 +50,37 @@ h2 {
   font-weight: bold;
 }
 
+.navbar-brand {
+   margin-right: 600px;
+}
+
 .navbar-dark {
-  background-color: #346;    
+  background-color: #346;
 }
 
 .navbar-light .navbar-brand,
 .navbar-light .navbar-nav .active > .nav-link,
 .navbar-light .navbar-nav .nav-link.active,
 .navbar-light .navbar-nav .nav-link.show,
-.navbar-light .navbar-nav .show>.nav-link {
+.navbar-light .navbar-nav .show > .nav-link {
   color: #4d5564;
 }
 
-.navbar-brand {
-   margin-right: 600px;
-}
-
-@media (max-width: 1200px) { 
+@media (max-width: 1200px) {
   .navbar-brand {
-      margin-right: 400px;
+    margin-right: 400px;
   }
 }
 
-@media (max-width: 992px) { 
+@media (max-width: 992px) {
   .navbar-brand {
-      margin-right: 200px;
+    margin-right: 200px;
   }
 }
 
-@media (max-width: 767px) { 
+@media (max-width: 767px) {
   .navbar-brand {
-      margin-right: 5px;
+    margin-right: 5px;
   }
 }
 
@@ -104,19 +104,19 @@ h2 {
 
 @media (max-width: 1800px) {
   #home-banner h1 {
-     left: 500px;
+    left: 500px;
   }
 }
 
 @media (max-width: 1500px) {
   #home-banner h1 {
-     left: 400px;
+    left: 400px;
   }
 }
 
 @media (max-width: 1250px) {
   #home-banner h1 {
-     left: 290px;
+    left: 290px;
   }
 }
 
@@ -160,7 +160,7 @@ h2 {
     top: 180px;
     left: 30px;
     font-size: 1.2rem;
-  }    
+  }
 }
 
 @media (max-width: 400px) {
