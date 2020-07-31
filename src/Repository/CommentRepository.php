@@ -51,8 +51,8 @@ class CommentRepository extends ServiceEntityRepository
         $securedDataUser = ['username' => '', 'profile' => ''];
         for ($i = 0; $i < count($comments); ++$i) {
             $comments[$i]['user'] = array_intersect_ukey(
-                $comments[$i]['user'], 
-                $securedDataUser, 
+                $comments[$i]['user'],
+                $securedDataUser,
                 function ($key1, $key2): int {
                     if ($key1 === $key2) {
                         return 0;
