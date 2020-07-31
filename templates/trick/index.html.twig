@@ -11,12 +11,8 @@
 		{# trick name and first picture #}
 		<div class="row d-flex">
 			<h1 class="col-sm-12 text-center">{{ trick.name }}</h1>
-			{% set path = 'uploads/images/original/' %}
-			{% set firstPicture = path ~ 'default.jpg' %}
-			{% if trick.firstPicture %}
-				{% set firstPicture = path ~ trick.firstPicture.filename %}
-			{% endif %}
-			<img src="{{ asset(firstPicture) }}" class="mx-auto" alt="{{ trick.firstPicture.alt }} Image de présentation de Snowtricks"/>
+			{% set firstPicture = trick.firstPicture ? trick.firstPicture.filename : ( trick.pictures ? trick.pictures[0] : 'default.jpg') %}
+			<img src="{{ asset('uploads/images/original/' ~ firstPicture) }}" class="mx-auto" alt="{{ trick.firstPicture.alt }} Image de présentation de Snowtricks"/>
 		</div>
 		{# pictures and videos #}
 		<div class="row d-flex">
