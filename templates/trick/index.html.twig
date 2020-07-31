@@ -11,7 +11,7 @@
 		{# trick name and first picture #}
 		<div class="row d-flex">
 			<h1 class="col-sm-12 text-center">{{ trick.name }}</h1>
-			{% set firstPicture = trick.firstPicture ? trick.firstPicture.filename : ( trick.pictures ? trick.pictures[0] : 'default.jpg') %}
+			{% set firstPicture = trick.firstPicture ? trick.firstPicture.filename : ( trick.pictures ? trick.pictures[0].filename : 'default.jpg') %}
 			<img src="{{ asset('uploads/images/original/' ~ firstPicture) }}" class="mx-auto" alt="{{ trick.firstPicture.alt }} Image de présentation de Snowtricks"/>
 		</div>
 		{# pictures and videos #}
@@ -54,7 +54,7 @@
 				</div>
 			</div>
 		</div>
-		{# trick descriptio #}
+		{# trick description #}
 		<div class="row">
 			<h2 class="col-md-12 text-center">{{ trick.name }}</h2>
 			<div class="text-justify px-4">
