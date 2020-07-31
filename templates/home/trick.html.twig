@@ -16,7 +16,7 @@
 			{% if trick.firstPicture %}
 				{% set firstPicture = path ~ trick.firstPicture.filename %}
 			{% endif %}
-			<img src="{{ asset(firstPicture) }}" class="img-fluid" alt="{{ trick.firstPicture.alt }} Image de présentation de Snowtricks"/>
+			<img src="{{ asset(firstPicture) }}" class="mx-auto" alt="{{ trick.firstPicture.alt }} Image de présentation de Snowtricks"/>
 		</div>
 		{# pictures and videos #}
 		<div class="row d-flex">
