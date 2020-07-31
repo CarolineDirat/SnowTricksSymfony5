@@ -21,7 +21,7 @@ $(function () {
         dateJS.setHours(hour-2);
 
         return dateJS; /** Sat [Aug=8] 08 2020 18:10:55 GMT+0200 (heure d’été d’Europe centrale) */
-    }
+    };
 
     /** function witch add zero on front of the month digit and the day digit, when it's lower than ten */
     var createDateToDisplay = function(dateJS) {
@@ -30,7 +30,7 @@ $(function () {
         let date = (day < 10 ? ('0' + day) : day) + '/' + (month < 10 ? ('0' + month) : month) + '/' + dateJS.getFullYear();
 
         return date;
-    }
+    };
 
     /** function witch build the HTML to display an additional comment. */
     var displayComment = function(comment) {
@@ -64,7 +64,7 @@ $(function () {
     /** more comments are loads by AJAX request when a user click on "load-more" button  */
     $('#load-more').click(function(e) {
         e.preventDefault();
-        let url = load.attr('href') + "/" + $('div.card').length;
+        let url = load.attr('href') + '/' + $('div.card').length;
         $.getJSON(url).done(function(data) {
             // if no more comments
             if (data.length === 0) {
