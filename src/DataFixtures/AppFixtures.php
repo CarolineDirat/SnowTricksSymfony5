@@ -57,10 +57,10 @@ class AppFixtures extends Fixture
         $users[1]->setProfile('squirrel.jpg');
         $manager->persist($users[1]);
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Indy Trick 
+        // Indy Trick
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         $name = 'Indy';
-        $description = "La main arrière vient graber la carre frontside entre les pieds. Sur un saut droit c’est un Indy Grab, sur un hip ou un quarter en front c’est un frontside indy ou frontside grab alors que sur un saut en back (3.6 back par exemple) ça sera un backside Indy.";
+        $description = 'La main arrière vient graber la carre frontside entre les pieds. Sur un saut droit c’est un Indy Grab, sur un hip ou un quarter en front c’est un frontside indy ou frontside grab alors que sur un saut en back (3.6 back par exemple) ça sera un backside Indy.';
         $group = $groups[0];
         $indy = $this->createTrickWithoutCommentsPicturesVideos($name, $description, $group, $faker, $slugger);
         // add 12 comments to Indy trick
@@ -79,10 +79,10 @@ class AppFixtures extends Fixture
         $this->addVideoToTrick($indy, $videosData);
         $manager->persist($indy);
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Canadian Bacon Trick 
+        // Canadian Bacon Trick
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         $name = 'Canadian Bacon';
-        $description = "La main arrière grab la carre front en passant la main derrière la jambe arrière.";
+        $description = 'La main arrière grab la carre front en passant la main derrière la jambe arrière.';
         $group = $groups[0];
         $canadianBacon = $this->createTrickWithoutCommentsPicturesVideos($name, $description, $group, $faker, $slugger);
         // add 12 comments to Indy trick
@@ -96,10 +96,10 @@ class AppFixtures extends Fixture
         $this->addVideoToTrick($canadianBacon, $videosData);
         $manager->persist($canadianBacon);
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Mute Trick 
+        // Mute Trick
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         $name = 'Mute';
-        $description = "Saisie de la carre frontside de la planche entre les deux pieds avec la main avant.";
+        $description = 'Saisie de la carre frontside de la planche entre les deux pieds avec la main avant.';
         $group = $groups[0];
         $mute = $this->createTrickWithoutCommentsPicturesVideos($name, $description, $group, $faker, $slugger);
         // add 12 comments to Indy trick
@@ -114,10 +114,10 @@ class AppFixtures extends Fixture
         $this->addVideoToTrick($mute, $videosData);
         $manager->persist($mute);
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Nose Grab 
+        // Nose Grab
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         $name = 'Nose Grab';
-        $description = "La main avant grab le nose de la board (la spatule avant).";
+        $description = 'La main avant grab le nose de la board (la spatule avant).';
         $group = $groups[0];
         $noseGrab = $this->createTrickWithoutCommentsPicturesVideos($name, $description, $group, $faker, $slugger);
         // add 12 comments to Indy trick
@@ -133,23 +133,23 @@ class AppFixtures extends Fixture
         ];
         $this->addVideoToTrick($noseGrab, $videosData);
         $manager->persist($noseGrab);
-         /////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Mac Twist
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         $name = 'Mac Twist';
-        $description = "Flip agrémentés d'une vrille.
+        $description = 'Flip agrémentés d\'une vrille.
         Un grand classique des rotations tête en bas qui se fait en backside, sur un mur backside de pipe. 
-        Le Mc Twist est généralement fait en japan, un grab très tweaké (action d'accentuer un grab en se contorsionnant).
+        Le Mc Twist est généralement fait en japan, un grab très tweaké (action d\'accentuer un grab en se contorsionnant).
         https://www.futura-sciences.com/sante/questions-reponses/sport-lexique-snowboard-10-termes-mieux-comprendre-8422/
-        Rien à voir avec un menu d'une enseigne de restauration rapide. Le Mc Twist est une rotation verticale avec une vrille. 
+        Rien à voir avec un menu d\'une enseigne de restauration rapide. Le Mc Twist est une rotation verticale avec une vrille. 
         Les champions réalisent des « double Mc Twist » tout en y ajoutant des rotations horizontales.
         Double Mc Twist 1260 :
         https://www.mennenfrance.fr/article/les-figures-de-snowboard-les-plus-spectaculaires_a473/1
-        Le Mc Twist est un flip (rotation verticale) agrémenté d'une vrille. 
+        Le Mc Twist est un flip (rotation verticale) agrémenté d\'une vrille. 
         Un saut très périlleux réservé aux professionnels. 
-        Le champion précoce Shaun White s'est illustré par un Double Mc Twist 1260 lors de sa session de Half-Pipe aux Jeux Olympiques de Vancouver en 2010. 
-        Nul doute que c'est cette figure qui lui a valu de remporter la médaille d'or.
-        ";
+        Le champion précoce Shaun White s\'est illustré par un Double Mc Twist 1260 lors de sa session de Half-Pipe aux Jeux Olympiques de Vancouver en 2010. 
+        Nul doute que c\'est cette figure qui lui a valu de remporter la médaille d\'or.
+        ';
         $group = $groups[2];
         $mcTwist = $this->createTrickWithoutCommentsPicturesVideos($name, $description, $group, $faker, $slugger);
         // add 12 comments to Indy trick
@@ -168,7 +168,7 @@ class AppFixtures extends Fixture
         // Backside rodeo
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         $name = 'Backside rodeo';
-        $description = "Une rotation tête en bas backside tournant dans le sens d'un backflip qui peut se faire aussi bien sur un kicker, un pipe ou un hip.";
+        $description = 'Une rotation tête en bas backside tournant dans le sens d\'un backflip qui peut se faire aussi bien sur un kicker, un pipe ou un hip.';
         $group = $groups[2];
         $backsideRodeo = $this->createTrickWithoutCommentsPicturesVideos($name, $description, $group, $faker, $slugger);
         // add 12 comments to Indy trick
@@ -186,8 +186,8 @@ class AppFixtures extends Fixture
         // Cork
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         $name = 'Cork';
-        $description = "Le diminutif de corkscrew qui signifie littéralement tire-bouchon et désignait les premières simples rotations têtes en bas en frontside. Désormais, on utilise le mot cork à toute les sauces pour qualifier les figures où le rider passe la tête en bas, peu importe le sens de rotation. Et dorénavant en compétition, on parle souvent de double cork, triple cork et certains riders vont jusqu'au quadruple cork !
-        Backside Triple Cork 1440 : en langage snowboard, un cork est une rotation horizontale plus ou moins désaxée, selon un mouvement d'épaules effectué juste au moment du saut. Le tout premier Triple Cork a été plaqué par Mark McMorris en 2011, lequel a récidivé lors des Winter X Games 2012... avant de se faire voler la vedette par Torstein Horgmo, lors de ce même championnat. Le Norvégien réalisa son propre Backside Triple Cork 1440 et obtint la note parfaite de 50/50.";
+        $description = 'Le diminutif de corkscrew qui signifie littéralement tire-bouchon et désignait les premières simples rotations têtes en bas en frontside. Désormais, on utilise le mot cork à toute les sauces pour qualifier les figures où le rider passe la tête en bas, peu importe le sens de rotation. Et dorénavant en compétition, on parle souvent de double cork, triple cork et certains riders vont jusqu\'au quadruple cork !
+        Backside Triple Cork 1440 : en langage snowboard, un cork est une rotation horizontale plus ou moins désaxée, selon un mouvement d\'épaules effectué juste au moment du saut. Le tout premier Triple Cork a été plaqué par Mark McMorris en 2011, lequel a récidivé lors des Winter X Games 2012... avant de se faire voler la vedette par Torstein Horgmo, lors de ce même championnat. Le Norvégien réalisa son propre Backside Triple Cork 1440 et obtint la note parfaite de 50/50.';
         $group = $groups[3];
         $cork = $this->createTrickWithoutCommentsPicturesVideos($name, $description, $group, $faker, $slugger);
         // add 12 comments to Indy trick
@@ -205,7 +205,7 @@ class AppFixtures extends Fixture
         // One Foot Grab
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         $name = 'One Foot Grab';
-        $description = "Le pied arrière est détaché de la fix, et la main avant grab la carre arrière un peu avant le nose de la board.";
+        $description = 'Le pied arrière est détaché de la fix, et la main avant grab la carre arrière un peu avant le nose de la board.';
         $group = $groups[5];
         $oneFootGrab = $this->createTrickWithoutCommentsPicturesVideos($name, $description, $group, $faker, $slugger);
         // add 12 comments to Indy trick
@@ -222,12 +222,12 @@ class AppFixtures extends Fixture
         // Backside air
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         $name = 'Backside air';
-        $description = "Le grab star du snowboard qui peut être fait d'autant de façon différentes qu'il y a de styles de riders. 
+        $description = 'Le grab star du snowboard qui peut être fait d\'autant de façon différentes qu\'il y a de styles de riders. 
         Il consiste à attraper la carre arrière entre les pieds, ou légèrement devant, et à pousser avec sa jambe arrière pour ramener la planche devant. 
-        C'est une figure phare en pipe ou sur un hip en backside. C'est généralement avec ce trick que les riders vont le plus haut.
+        C\'est une figure phare en pipe ou sur un hip en backside. C\'est généralement avec ce trick que les riders vont le plus haut.
         Les mauvaises langues prétendent qu’un backside air suffit à reconnaître ceux qui savent snowboarder. 
         Si c’est vrai, alors Nicolas Müller est le meilleur snowboardeur du monde.
-         Personne ne sait s’étirer aussi joliment, ne demeure aussi zen, n’est aussi provocant dans la jouissance.";
+         Personne ne sait s’étirer aussi joliment, ne demeure aussi zen, n’est aussi provocant dans la jouissance.';
         $group = $groups[6];
         $backsideAir = $this->createTrickWithoutCommentsPicturesVideos($name, $description, $group, $faker, $slugger);
         // add 12 comments to Indy trick
@@ -244,9 +244,9 @@ class AppFixtures extends Fixture
         // Method air
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
         $name = 'Method air';
-        $description = "Cette figure – qui consiste à attraper sa planche d'une main et le tourner perpendiculairement au sol – est un classique \"old school\". 
-        Il n'empêche qu'il est indémodable, avec de vrais ambassadeurs comme Jamie Lynn ou la star Terje Haakonsen. 
-        En 2007, ce dernier a même battu le record du monde du \"air\" le plus haut en s'élevant à 9,8 mètres au-dessus du kick (sommet d'un mur d'une rampe ou autre structure de saut).";
+        $description = 'Cette figure – qui consiste à attraper sa planche d\'une main et le tourner perpendiculairement au sol – est un classique \"old school\". 
+        Il n\'empêche qu\'il est indémodable, avec de vrais ambassadeurs comme Jamie Lynn ou la star Terje Haakonsen. 
+        En 2007, ce dernier a même battu le record du monde du "air" le plus haut en s\'élevant à 9,8 mètres au-dessus du kick (sommet d\'un mur d\'une rampe ou autre structure de saut).';
         $group = $groups[6];
         $methodAir = $this->createTrickWithoutCommentsPicturesVideos($name, $description, $group, $faker, $slugger);
         // add 12 comments to Indy trick
@@ -263,15 +263,10 @@ class AppFixtures extends Fixture
 
         $manager->flush();
     }
-    
+
     /**
      * createTrickWithoutCommentsPicturesVideos :
-     * create a trick without comments, pictures and videos neither
-     *
-     * @param  string $name
-     * @param  string $description
-     * @param  Group $group
-     * @return Trick
+     * create a trick without comments, pictures and videos neither.
      */
     public function createTrickWithoutCommentsPicturesVideos(
         string $name,
@@ -291,11 +286,9 @@ class AppFixtures extends Fixture
 
         return $trick;
     }
-    
+
     /**
-     * addCommentsToTrick : add $number comments to a trick entity, from 2 users in an array
-     *
-     * @return void
+     * addCommentsToTrick : add $number comments to a trick entity, from 2 users in an array.
      */
     public function addCommentsToTrick(
         int $number,
@@ -324,13 +317,11 @@ class AppFixtures extends Fixture
             $trick->addComment($comment);
         }
     }
-    
+
     /**
-     * addVideoToTrick
+     * addVideoToTrick.
      *
-     * @param  Trick $trick
-     * @param  array $videosData array = ['code' => 'service']
-     * @return void
+     * @param array $videosData array = ['code' => 'service']
      */
     public function addVideoToTrick(Trick $trick, array $videosData): void
     {
@@ -341,7 +332,7 @@ class AppFixtures extends Fixture
             $trick->addVideo($video);
         }
     }
-    
+
     public function addPicturesToTrick(Trick $trick, int $number, Generator $faker): void
     {
         $pictures = [];
