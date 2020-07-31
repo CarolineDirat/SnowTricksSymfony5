@@ -277,15 +277,13 @@ class Trick
 
     public function setFirstPicture(?Picture $firstPicture): self
     {
-        // $firstPicture must be one of $this->pictures
-        $check = false;
-        foreach ($this->pictures as $picture) {
-            // filename is unique in picture table
-            if ($picture->getFileName() === $firstPicture->getFilename()) {
-                $check = true;
-            }
+        // $firstPicture must be one of $this->pictures or null
+        if (empty($firstPicture)) {
+            $this->firstPicture = null;
+
+            return $this;
         }
-        if (true === $check) {
+        if ($this->hasPicture($firstPicture)) {
             $this->firstPicture = $firstPicture;
 
             return $this;
@@ -293,5 +291,15 @@ class Trick
         $this->firstPicture = null;
 
         return $this;
+    }
+
+    public function hasPicture(Picture $pictureToTest): bool
+    {
+        foreach ($this->pictures as $picture) {
+            if ($picture->getFileName() === $pictureToTest->getFilename()) {
+                return true; // filename is unique in picture table
+            }
+        }
+        return false;
     }
 }
