@@ -8,7 +8,7 @@ $(function () {
     //
     // **************************************************************************************************************
 
-    const load = $('#load-more');
+    const load = $('#load-more-comments');
 
     /** Create a Javascript Date from the string return in JSON data : 2020-08-08T18:10:55+00:00 */
     var createDateJS = function(dateString) {
@@ -62,14 +62,14 @@ $(function () {
     };
     
     /** more comments are loads by AJAX request when a user click on "load-more" button  */
-    $('#load-more').click(function(e) {
+    load.click(function(e) {
         e.preventDefault();
         let url = load.attr('href') + '/' + $('div.card').length;
         $.getJSON(url).done(function(data) {
             // if no more comments
             if (data.length === 0) {
                 // then delete "load-more" button on trick page
-                $('#load-more').fadeOut('slow', 'linear');
+                load.fadeOut('slow', 'linear');
                 $('#comments').animate({'margin-bottom': '100px'}, '3000', 'linear');                    
             } else {
                 // else add comments on trick page
