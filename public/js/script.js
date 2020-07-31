@@ -1,3 +1,5 @@
+/*eslint quotes: ["error", "single", { "avoidEscape": true }]*/
+
 $(function () {
 
     // **************************************************************************************************************
@@ -65,7 +67,7 @@ $(function () {
         let url = load.attr('href') + "/" + $('div.card').length;
         $.getJSON(url).done(function(data) {
             // if no more comments
-            if (data.length == 0) {
+            if (data.length === 0) {
                 // then delete "load-more" button on trick page
                 $('#load-more').fadeOut('slow', 'linear');
                 $('#comments').animate({'margin-bottom': '100px'}, '3000', 'linear');                    
