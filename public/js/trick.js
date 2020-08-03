@@ -42,7 +42,7 @@ $(function () {
         let time = dateJS.getHours() + ':' + dateJS.getMinutes() + ':' + dateJS.getSeconds();
 
         $('#comments').append('<div class="card comments col-12 col-sm-12"></div>');
-        $('div.card.comments:last').append('<div class="row no-gutters"></div>');
+        $('div.card.comments:last').append('<div class="row no-gutters"></div>').hide();
         
         let profileElement = document.createElement('div');
         $(profileElement).addClass('col-2 col-lg-1 pt-3');
@@ -59,6 +59,8 @@ $(function () {
             '<p class="card-text">' + comment.content + '</p>',
             '<p class="card-text"><small class="text-muted">Posté le ' + date + ' à ' + time + '</small></p>'
         );
+
+        $('div.card.comments:last').slideDown(1000);
     };
     
     /** more comments are loads by AJAX request when a user click on "load-more" button  */
