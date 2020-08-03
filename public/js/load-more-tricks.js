@@ -4,6 +4,18 @@ $(function () {
 
     // **************************************************************************************************************
     //
+    //                                             Display tricks             
+    //
+    // **************************************************************************************************************
+    $('#tricks-down a').click(function(e) {
+        e.preventDefault;
+        $('#tricks').removeClass('d-none');
+        $('#load-more-tricks').removeClass('d-none');
+        $('html,body').animate({scrollTop: $("#tricks").offset().top}, 'slow');
+    });
+
+    // **************************************************************************************************************
+    //
     //                                             LOAD MORE TRICKS BUTTON             
     //
     // **************************************************************************************************************
@@ -40,8 +52,8 @@ $(function () {
             // if no more comments
             if (data.length === 0) {
                 // then delete "load-more" button on trick page
-                loadTricks.fadeOut('slow', 'linear');
-                $('#tricks').animate({'margin-bottom': '100px'}, '4000', 'linear');                    
+                loadTricks.slideUp('slow', 'linear');
+                $('#tricks').animate({'margin-bottom': '100px'}, 'slow', 'linear');                    
             } else {
                 // else add comments on trick page
                 $.each(data, function (index, trick) {

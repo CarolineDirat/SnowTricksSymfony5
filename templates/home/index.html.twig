@@ -9,11 +9,14 @@
 		<div id="home-banner" class="row d-flex mb-5">
 			<img src="{{ asset('uploads/images/default2.jpg') }}" class="img-fluid" alt="Image de présentation de Snowtricks"/>
 			<h1 class="col-6 col-sm-6">Site collaboratif pour apprendre des Tricks.</h1>
+			<div id="tricks-down" class="col-12 text-right icon-fa-arrow-circle-down">
+				<a><i class="fas fa-arrow-circle-down"></i></a>
+			</div>
 		</div>
 		{#<div class="row">
 			<p><a href="{{ path('display_trick', {uuid: trick.uuid, slug: indy}) }}">{{ trick.name }}</p>
 		</div>#}
-		<div id="tricks" class="row">
+		<div id="tricks" class="row d-none">
 			{% for trick in tricks %}
 				<div class="col-sm-6 col-md-4 col-lg-3 my-2">
 					<div class="card tricks">
@@ -34,9 +37,9 @@
 				</div>
 			{% endfor %}
 		</div>
-		<div class="row">
+		<div class="row ">
 			<div class="col-sm-12 text-center">
-				<a id="load-more-tricks" role="button" href="{{ path('load-more-tricks') }}" class="btn btn-primary m-4">Voir plus</a>
+				<a id="load-more-tricks" role="button" href="{{ path('load-more-tricks') }}" class="btn btn-primary m-4 d-none">Voir plus</a>
 			</div>
 		</div>
 	</section>

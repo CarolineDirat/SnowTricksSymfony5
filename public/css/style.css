@@ -121,6 +121,21 @@ h2 {
   font-size: 1.5rem;
 }
 
+#tricks-down {
+  position: relative;
+  top: -55px;
+  right: 10px;
+}
+
+#tricks-down a {
+  text-decoration: none;
+}
+
+#tricks-down i {
+  font-size: 2rem;
+  color: #4d5564;
+}
+
 @media (max-width: 1800px) {
   #home-banner h1 {
     left: 500px;
@@ -188,6 +203,11 @@ h2 {
     left: 20px;
     font-size: 1.1rem;
   }
+}
+
+#load-more-tricks.btn.btn-primary {
+  background-color: #346;
+  border-color: #346;
 }
 
 #tricks .card-img-top {
