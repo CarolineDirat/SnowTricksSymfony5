@@ -28,7 +28,7 @@ $(function () {
 
         let containerCardTrick = $(document.createElement('div'));
         containerCardTrick.addClass('col-sm-6 col-md-4 col-lg-3 my-2');
-        containerCardTrick.append('<div class="card tricks"></div>');
+        containerCardTrick.append('<div class="card tricks"></div>').hide();
 
         let imageTrickContainer = $(document.createElement('div'));
         imageTrickContainer.addClass('div-card-img d-flex align-items-center justify-content-center');
@@ -42,6 +42,9 @@ $(function () {
         $('.card.tricks:last').append(imageTrickContainer);
         $('.card.tricks:last').append(cardBodyTrick);
         $('h2.card-title:last').append('<a href="/trick/'+ trick.slug + '/'+ trick.uuid +'" class="btn btn-outline-primary text-nowrap">'+ trick.name.toUpperCase() + '</a>')
+
+        containerCardTrick.slideDown(1000);
+
     };
 
     /** more tricks are loads by AJAX request when a user click on "load-more" button  */
