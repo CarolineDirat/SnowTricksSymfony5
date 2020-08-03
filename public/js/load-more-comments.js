@@ -69,8 +69,8 @@ $(function () {
             // if no more comments
             if (data.length === 0) {
                 // then delete "load-more" button on trick page
-                loadComments.fadeOut('slow', 'linear');
-                $('#comments').animate({'margin-bottom': '100px'}, '3000', 'linear');                    
+                loadComments.slideUp('slow', 'linear');
+                $('#comments').animate({'margin-bottom': '100px'}, 'slow', 'linear');  
             } else {
                 // else add comments on trick page
                 $.each(data, function (index, comment) {
