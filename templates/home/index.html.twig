@@ -13,14 +13,14 @@
 		{#<div class="row">
 			<p><a href="{{ path('display_trick', {uuid: trick.uuid, slug: indy}) }}">{{ trick.name }}</p>
 		</div>#}
-		<div id="trick-list" class="row">
+		<div id="tricks" class="row">
 			{% for trick in tricks %}
 				<div class="col-sm-6 col-md-4 col-lg-3 my-2">
-					<div class="card">
+					<div class="card tricks">
 						<div class="div-card-img d-flex align-items-center justify-content-center">
 							<img 
 							src="{{ asset('uploads/images/200/' ~ (trick.firstPicture ? trick.firstPicture.filename : (trick.pictures ? trick.pictures[0].filename : 'default.jpg'))) }}" 
-							class="card-img-top img-fluid"
+							class="card-img-top"
 							alt="Picture to illustrate {{ trick.name }} snowboard trick.">
 						</div>
 						<div class="card-body p-0 text-center">
@@ -34,6 +34,15 @@
 				</div>
 			{% endfor %}
 		</div>
+		<div class="row">
+			<div class="col-sm-12 text-center">
+				<a id="load-more-tricks" role="button" href="{{ path('load-more-tricks') }}" class="btn btn-primary m-4">Voir plus</a>
+			</div>
+		</div>
 	</section>
-	
 {% endblock %}
+
+{% block javascripts %}
+	<script src="{{ asset('js/load-more-tricks.js') }}"></script>
+{% endblock %}
+

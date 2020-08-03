@@ -103,6 +103,9 @@ h2 {
 /*********************************************
                 HOME PAGE
 **********************************************/
+.card-img-top {
+  width: auto;
+}
 
 .img-fluid {
   width: 100%;
@@ -187,11 +190,12 @@ h2 {
   }
 }
 
-#trick-list .card-img-top {
+#tricks .card-img-top {
   max-width: 210px;
+  max-height: 200px;
 }
   
-#trick-list .div-card-img {
+#tricks .div-card-img {
   height: 200px;
 }
 

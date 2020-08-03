@@ -21,14 +21,14 @@ class TrickRepository extends ServiceEntityRepository
     
     /**
      * findPaginatedTricks
-     * Find $limits tricks from $offset, with only it's name, uuid, slug and firstPicture
+     * Find $limits tricks from $offset
      * 
      * @param int $offset   position of first Trick
      * @param int $limit    number of tricks
      * 
      * @return Trick[]
      */
-    public function findPaginatedTricks(int $offset, int $limit): array
+    public function getPaginatedTricks(int $offset, int $limit): array
     {
         return $this
             ->getEntityManager()
@@ -41,6 +41,60 @@ class TrickRepository extends ServiceEntityRepository
             ->getResult();
         ;
 
+    }
+
+    /**
+     * getArrayPaginatedTricks
+     * Find $limits tricks from $offset
+     * 
+     * @param int $offset   position of first Trick
+     * @param int $limit    number of tricks
+     * 
+     * @return array
+     */
+    public function getArrayPaginatedTricks(int $offset, int $limit): array
+    {
+        $tricksWithPictures = $this->getArrayPaginatedTricksWithPictures($offset, $limit);
+        $tricksWithFirstPicture = $this->getArrayPaginatedTricksWithFirstPicture($offset, $limit);
+             
+        return $this->addPicturesToTricksWithFirstPictures($tricksWithPictures, $tricksWithFirstPicture);
+    }
+
+    public function getArrayPaginatedTricksWithFirstPicture(int $offset, int $limit) : array
+    {
+        return $this
+            ->createQueryBuilder('t')
+            ->addSelect('picture')
+            ->leftJoin('t.firstPicture', 'picture')
+            ->orderBy('t.name', 'ASC')
+            ->getQuery()
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getArrayResult()
+        ;
+    }
+
+    public function getArrayPaginatedTricksWithPictures(int $offset, int $limit) : array
+    {
+        $allTricksWithPictures = $this
+            ->createQueryBuilder('t')
+            ->addSelect('picture')
+            ->leftJoin('t.pictures', 'picture')
+            ->orderBy('t.name', 'ASC')
+            ->getQuery()           
+            ->getArrayResult()
+        ; // I don't know why but setFirstResult($offset) and setMaxResults($limit) doesn't work ...
+
+        return array_slice($allTricksWithPictures, $offset, $limit); // ... so I use array_slice
+    }
+
+    public function addPicturesToTricksWithFirstPictures(array $tricksWithPictures, array $tricksWithFirstPicture): array
+    {
+        foreach ($tricksWithFirstPicture as $key => $value) {
+            $tricksWithFirstPicture[$key]['pictures'] = $tricksWithPictures[$key]['pictures'];
+        }
+
+        return $tricksWithFirstPicture; // witch is now with pictures
     }
 
     // /**
