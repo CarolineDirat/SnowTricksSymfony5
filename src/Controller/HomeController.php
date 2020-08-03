@@ -23,6 +23,18 @@ class HomeController extends AbstractController
     }
 
     /**
+     * Display tricks.
+     *
+     * @Route("/tricks", name="tricks")
+     */
+    public function onlyTricks(TrickRepository $trickRepository): Response
+    {
+        $tricks = $trickRepository->getPaginatedTricks(0,8);
+
+        return $this->render('home/tricks.html.twig', ['tricks' => $tricks]);
+    }
+
+    /**
      * load more tricks.
      *
      * @Route(
