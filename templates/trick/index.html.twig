@@ -13,7 +13,12 @@
 			<h1 class="col-sm-12 text-center">{{ trick.name }}</h1>
 			{% set firstPicture = trick.firstPicture ? trick.firstPicture.filename : ( trick.pictures ? trick.pictures[0].filename : 'default.jpg') %}
 			{% set firstPictureAlt = trick.firstPicture ? trick.firstPicture.alt : null %}
-			<img src="{{ asset('uploads/images/original/' ~ firstPicture) }}" class="mx-auto" alt="{{ firstPicture ~ ', ' }} , photo pour illustrer le trick de snowboard {{ trick.name }}"/>
+			<picture>
+    			<source srcset="{{ asset('uploads/images/540/' ~ firstPicture) }}" media="(max-width: 578px)" type="image/jpg">
+				<source srcset="{{ asset('uploads/images/720/' ~ firstPicture) }}" media="(max-width: 720px)" type="image/jpg">
+				<source srcset="{{ asset('uploads/images/960/' ~ firstPicture) }}" media="(max-width: 960px)" type="image/jpg">
+				<img src="{{ asset('uploads/images/original/' ~ firstPicture) }}" class="mx-auto img-fluid" alt="{{ firstPicture ~ ', ' }} , photo pour illustrer le trick de snowboard {{ trick.name }}"/>
+			</picture>
 		</div>
 		{# pictures and videos #}
 		<div class="row d-flex">
@@ -36,7 +41,7 @@
 						Photos
 					</button>
 				</p>
-				<div class="collapse" id="collapsePictures">
+				<div class="collapse mb-4" id="collapsePictures">
 					{% for picture in trick.pictures %}
 						<img src="{{ asset('uploads/images/540/' ~ picture.filename) }}" alt="{{ picture.alt }} , photo pour illustrer le trick de snowboard {{ trick.name }}" class="img-thumbnail rounded"/>
 					{% endfor %}
