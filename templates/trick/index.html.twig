@@ -17,9 +17,9 @@
 				{% set firstPicture = trick.firstPicture ? trick.firstPicture.filename : ( trick.pictures ? trick.pictures[0].filename : 'default.jpg') %}
 				{% set firstPictureAlt = trick.firstPicture ? trick.firstPicture.alt : null %}
 				<picture class="col-sm-12 text-center">
-					<source srcset="{{ asset('uploads/images/540/' ~ firstPicture) }}" media="(max-width: 790px)" type="image/jpg">
-					<source srcset="{{ asset('uploads/images/720/' ~ firstPicture) }}" media="(max-width: 960px)" type="image/jpg">
-					<source srcset="{{ asset('uploads/images/960/' ~ firstPicture) }}" media="(max-width: 1200px)" type="image/jpg">
+					<source srcset="{{ asset('uploads/images/540/' ~ firstPicture) }}" media="(max-width: 578px)" type="image/jpg">
+					<source srcset="{{ asset('uploads/images/720/' ~ firstPicture) }}" media="(max-width: 800px)" type="image/jpg">
+					<source srcset="{{ asset('uploads/images/960/' ~ firstPicture) }}" media="(max-width: 1100px)" type="image/jpg">
 					<img src="{{ asset('uploads/images/original/' ~ firstPicture) }}" class="img-fluid" alt="{{ firstPicture ~ ', ' }} , photo pour illustrer le trick de snowboard {{ trick.name }}"/>
 				</picture>
 			</div>
