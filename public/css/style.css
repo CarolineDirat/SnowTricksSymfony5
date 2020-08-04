@@ -120,9 +120,13 @@ h2 {
   z-index: 10;
   top: 350px;
   left: 600px;
-  width: 350px;
+  width: 450px;
   color: #4d5564;
   font-size: 1.5rem;
+}
+
+#home-banner img {
+  width: 100%;
 }
 
 #load-more-tricks {
@@ -200,28 +204,35 @@ h2 {
   }
 }
 
-@media (max-width: 1800px) {
+@media (min-width: 1501px) {
   #home-banner h1 {
     left: 500px;
   }
 }
 
-@media (max-width: 1500px) {
+@media (max-width: 1650px) {
   #home-banner h1 {
     left: 400px;
   }
 }
 
-@media (max-width: 1250px) {
+@media (max-width: 1500px) {
   #home-banner h1 {
     left: 290px;
   }
 }
 
-@media (max-width: 990px) {
+@media (max-width: 1300px) {
+  #home-banner h1 {
+    left: 180px;
+  }
+}
+
+@media (max-width: 992px) {
   #home-banner h1 {
     top: 270px;
-    left: 180px;
+    width: 350px;
+    left: 150px;
   }
 }
 
@@ -263,9 +274,17 @@ h2 {
 
 @media (max-width: 400px) {
   #home-banner h1 {
-    top: 100px;
-    left: 20px;
+    top: 80px;
+    left: 15px;
     font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 300px) {
+  #home-banner h1 {
+    top: 70px;
+    left: 10px;
+    font-size: 1rem;
   }
 }
 
