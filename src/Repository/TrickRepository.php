@@ -38,7 +38,8 @@ class TrickRepository extends ServiceEntityRepository
                 ORDER BY t.name ASC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
-            ->getResult();
+            ->getResult()
+        ;
     }
 
     /**
