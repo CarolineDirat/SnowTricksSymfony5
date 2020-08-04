@@ -18,14 +18,14 @@ class TrickRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Trick::class);
     }
-    
+
     /**
      * findPaginatedTricks
-     * Find $limits tricks from $offset
-     * 
-     * @param int $offset   position of first Trick
-     * @param int $limit    number of tricks
-     * 
+     * Find $limits tricks from $offset.
+     *
+     * @param int $offset position of first Trick
+     * @param int $limit  number of tricks
+     *
      * @return Trick[]
      */
     public function getPaginatedTricks(int $offset, int $limit): array
@@ -39,28 +39,24 @@ class TrickRepository extends ServiceEntityRepository
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->getResult();
-        ;
-
     }
 
     /**
      * getArrayPaginatedTricks
-     * Find $limits tricks from $offset
-     * 
-     * @param int $offset   position of first Trick
-     * @param int $limit    number of tricks
-     * 
-     * @return array
+     * Find $limits tricks from $offset.
+     *
+     * @param int $offset position of first Trick
+     * @param int $limit  number of tricks
      */
     public function getArrayPaginatedTricks(int $offset, int $limit): array
     {
         $tricksWithPictures = $this->getArrayPaginatedTricksWithPictures($offset, $limit);
         $tricksWithFirstPicture = $this->getArrayPaginatedTricksWithFirstPicture($offset, $limit);
-             
+
         return $this->addPicturesToTricksWithFirstPictures($tricksWithPictures, $tricksWithFirstPicture);
     }
 
-    public function getArrayPaginatedTricksWithFirstPicture(int $offset, int $limit) : array
+    public function getArrayPaginatedTricksWithFirstPicture(int $offset, int $limit): array
     {
         return $this
             ->createQueryBuilder('t')
@@ -74,14 +70,14 @@ class TrickRepository extends ServiceEntityRepository
         ;
     }
 
-    public function getArrayPaginatedTricksWithPictures(int $offset, int $limit) : array
+    public function getArrayPaginatedTricksWithPictures(int $offset, int $limit): array
     {
         $allTricksWithPictures = $this
             ->createQueryBuilder('t')
             ->addSelect('picture')
             ->leftJoin('t.pictures', 'picture')
             ->orderBy('t.name', 'ASC')
-            ->getQuery()           
+            ->getQuery()
             ->getArrayResult()
         ; // I don't know why but setFirstResult($offset) and setMaxResults($limit) doesn't work ...
 

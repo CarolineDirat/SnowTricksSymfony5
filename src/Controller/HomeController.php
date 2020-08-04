@@ -17,7 +17,7 @@ class HomeController extends AbstractController
      */
     public function index(TrickRepository $trickRepository): Response
     {
-        $tricks = $trickRepository->getPaginatedTricks(0,8);
+        $tricks = $trickRepository->getPaginatedTricks(0, 8);
 
         return $this->render('home/index.html.twig', ['tricks' => $tricks]);
     }
@@ -29,7 +29,7 @@ class HomeController extends AbstractController
      */
     public function onlyTricks(TrickRepository $trickRepository): Response
     {
-        $tricks = $trickRepository->getPaginatedTricks(0,8);
+        $tricks = $trickRepository->getPaginatedTricks(0, 8);
 
         return $this->render('home/tricks.html.twig', ['tricks' => $tricks]);
     }

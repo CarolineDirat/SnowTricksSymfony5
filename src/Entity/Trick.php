@@ -300,6 +300,7 @@ class Trick
                 return true; // filename is unique in picture table
             }
         }
+
         return false;
     }
 }
