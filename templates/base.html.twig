@@ -36,18 +36,25 @@
             <a class="navbar-brand" href="{{ path("home") }}">SNOWTRICKS</a>
             <div class="collapse navbar-collapse" id="navbarToggler">
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                <li class="nav-item active">
-                    <a class="nav-link" href="{{ path("home") }}">Accueil</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path("tricks") }}">Tricks</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path("app_login") }}">Se connecter</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">S'inscrire</a>
-                </li>
+                  <li class="nav-item active">
+                      <a class="nav-link" href="{{ path("home") }}">Accueil</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="{{ path("tricks") }}">Tricks</a>
+                  </li>
+                  
+                  {% if app.user %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path("app_logout") }}">Se déconnecter</a>
+                    </li>
+                  {% else %}
+                    <li class="nav-item">
+                      <a class="nav-link" href="{{ path("app_login") }}">Se connecter</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#">S'inscrire</a>
+                    </li>
+                  {% endif %}
                 </ul>
             </div>
         </div>
