@@ -12,7 +12,7 @@ $(function () {
         $('#tricks').removeClass('d-none');
         $('#load-more-tricks').removeClass('d-none');
         $('#tricks-up').removeClass('d-none');
-        $('html,body').animate({scrollTop: $("#tricks").offset().top}, 'slow');
+        $('html,body').animate({scrollTop: $('#tricks').offset().top}, 'slow');
     });
 
     $('#tricks-up a').click(function(e) {
@@ -47,7 +47,7 @@ $(function () {
         $('#tricks').append(containerCardTrick);
         $('.card.tricks:last').append(imageTrickContainer);
         $('.card.tricks:last').append(cardBodyTrick);
-        $('h2.card-title:last').append('<a href="/trick/'+ trick.slug + '/'+ trick.uuid +'" class="btn btn-outline-primary text-nowrap">'+ trick.name.toUpperCase() + '</a>')
+        $('h2.card-title:last').append('<a href="/trick/'+ trick.slug + '/'+ trick.uuid +'" class="btn btn-outline-primary text-nowrap">'+ trick.name.toUpperCase() + '</a>');
 
         containerCardTrick.slideDown(1000);
 
