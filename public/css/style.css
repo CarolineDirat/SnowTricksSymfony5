@@ -115,10 +115,6 @@ h2 {
   width: auto;
 }
 
-.img-fluid {
-  width: 100%;
-}
-
 #home-banner h1 {
   position: absolute;
   z-index: 10;
@@ -203,7 +199,6 @@ h2 {
     bottom: 60px;
   }
 }
-
 
 @media (max-width: 1800px) {
   #home-banner h1 {
