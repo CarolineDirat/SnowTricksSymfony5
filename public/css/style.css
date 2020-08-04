@@ -75,8 +75,8 @@ nav {
 .btn-outline-primary:not(:disabled):not(.disabled).active,
 .btn-primary:not(:disabled):not(.disabled):active,
 .btn-primary:not(:disabled):not(.disabled).active {
-  background-color: #2576c3;
-  border-color: #2576c3;
+  background-color: #9ac;
+  border-color: #9ac;
 }
 
 .btn.btn-primary {
@@ -85,8 +85,8 @@ nav {
 }
 
 .btn.btn-primary:hover {
-  background-color: #5a8bc0;
-  border-color: #5a8bc0;
+  background-color: #2576c3;
+  border-color: #2576c3;
 }
 
 .btn-primary.focus,
@@ -94,6 +94,16 @@ nav {
  {
   border-color: #9ac;
   box-shadow: 0 0 0 0.2rem rgba(153, 170, 204, 0.5);
+}
+
+.btn-secondary {
+  background-color: #4d5564;
+  border-color: #4d5564;
+}
+
+.btn.btn-secondary:hover {
+  background-color: #000;
+  border-color: #000;
 }
 
 .navbar-brand,
@@ -158,9 +168,9 @@ h2 {
   width: 100%;
 }
 
-#load-more-tricks {
+#load-more-tricks,
+.add-trick-btn {
   position: relative;
-  top: 10px;
   z-index: 20;
 }
 

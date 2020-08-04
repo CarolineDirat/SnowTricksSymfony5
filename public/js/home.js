@@ -12,6 +12,7 @@ $(function () {
         $('#tricks').removeClass('d-none');
         $('#load-more-tricks').removeClass('d-none');
         $('#tricks-up').removeClass('d-none');
+        $('.add-trick-btn').removeClass('d-none');
         $('html,body').animate({scrollTop: $('#tricks').offset().top}, 'slow');
     });
 
@@ -49,6 +50,11 @@ $(function () {
         $('.card.tricks:last').append(cardBodyTrick);
         $('h2.card-title:last').append('<a href="/trick/'+ trick.slug + '/'+ trick.uuid +'" class="btn btn-outline-primary btn-sm text-nowrap">'+ trick.name.toUpperCase() + '</a>');
 
+        if ($('#tricks a.add-trick-btn').length) {
+            $('h2.card-title:last').append('<a href="#" class="btn btn-outline-primary btn-sm mr-1 ml-2"><i class="fas fa-pencil-alt"></i></a>');
+            $('h2.card-title:last').append('<a href="#" class="btn btn-outline-primary btn-sm"><i class="fas fa-trash-alt"></i></a>');
+        }
+
         containerCardTrick.slideDown(1000);
 
     };
@@ -61,12 +67,12 @@ $(function () {
             // if no more comments
             if (data.length === 0) {
                 // then delete "load-more" button on trick page
-                loadTricks.slideUp('slow', 'linear');
-                $('#tricks').animate({'margin-bottom': '100px'}, 'slow', 'linear');                    
+                loadTricks.hide('slow', 'linear');
             } else {
                 // else add comments on trick page
                 $.each(data, function (index, trick) {
                     displayTrick(trick);
+                    $('html,body').animate({scrollTop: $('#load-more-tricks').offset().top}, 'slow');
                 });
             }
         });

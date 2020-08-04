@@ -1,4 +1,9 @@
 <div id="tricks" class="row d-none">
+	{% if app.user %}
+		<div class="col-12 text-center my-4">
+			<a href="#" class="btn btn-secondary btn-lg add-trick-btn"> Ajouter un trick </a>
+		</div>
+	{% endif %}
 	{% for trick in tricks %}
 		<div class="col-sm-6 col-md-4 col-lg-3 my-2">
 			<div class="card tricks">
@@ -28,10 +33,14 @@
 	{% endfor %}
 </div>
 <div class="row">
-	<div class="col-sm-12 text-center mb-5">
-		<a id="load-more-tricks" role="button" href="{{ path('load-more-tricks') }}" class="btn btn-primary m-4 d-none">Voir plus</a>
+	<div class="col-12 text-center mb-5">
+		<a id="load-more-tricks" role="button" href="{{ path('load-more-tricks') }}" class="btn btn-primary mt-4 d-none">Voir plus de tricks</a>
+		{% if app.user %}
+			<a id="add-trick-btn" href="#" class="btn btn-secondary mt-4 add-trick-btn d-none"> Ajouter un trick </a>
+		{% endif %}
 	</div>
 </div>
+
 <div class="row">
 	<div id="tricks-up" class="col-sm-12 d-none text-right sticky-bottom">
 		<a>
