@@ -18,6 +18,7 @@
                     </div>
                 {% endif %}
 
+            {% if app.user is empty %}
                 <div class="mt-5 form-group">
                     <label for="inputUsername">Username</label>
                     <input type="text" class="form-control" value="{{ last_username }}" name="username" id="inputUsername" class="form-control" required autofocus>
@@ -49,6 +50,7 @@
             <p class="col-12 text-center">
                 <a href="#"> Mot de passe oublié ? </a>
             </p>
+            {% endif %}
         </div>
     </section>
 {% endblock %}
