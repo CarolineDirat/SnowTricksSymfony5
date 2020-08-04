@@ -35,7 +35,8 @@ class TrickRepository extends ServiceEntityRepository
             ->createQuery(
                 'SELECT t
                 FROM App\Entity\Trick t
-                ORDER BY t.name ASC')
+                ORDER BY t.name ASC'
+            )
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->getResult()
@@ -85,8 +86,10 @@ class TrickRepository extends ServiceEntityRepository
         return array_slice($allTricksWithPictures, $offset, $limit); // ... so I use array_slice
     }
 
-    public function addPicturesToTricksWithFirstPictures(array $tricksWithPictures, array $tricksWithFirstPicture): array
-    {
+    public function addPicturesToTricksWithFirstPictures(
+        array $tricksWithPictures, 
+        array $tricksWithFirstPicture
+    ): array {
         foreach ($tricksWithFirstPicture as $key => $value) {
             $tricksWithFirstPicture[$key]['pictures'] = $tricksWithPictures[$key]['pictures'];
         }
