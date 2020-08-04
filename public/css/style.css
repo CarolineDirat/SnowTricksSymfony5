@@ -48,7 +48,7 @@ nav {
 
 .btn-outline-primary.focus,
 .btn-outline-primary:focus {
-    box-shadow: 0 0 0 0.2rem rgba(153,170,204,.5);
+  box-shadow: 0 0 0 0.2rem rgba(153, 170, 204, 0.5);
 }
 
 .btn.btn-primary {
@@ -302,7 +302,7 @@ h2 {
   max-width: 210px;
   max-height: 200px;
 }
-  
+
 #tricks .div-card-img {
   height: 200px;
 }
