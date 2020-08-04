@@ -87,7 +87,7 @@ class TrickRepository extends ServiceEntityRepository
     }
 
     public function addPicturesToTricksWithFirstPictures(
-        array $tricksWithPictures, 
+        array $tricksWithPictures,
         array $tricksWithFirstPicture
     ): array {
         foreach ($tricksWithFirstPicture as $key => $value) {

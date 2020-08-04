@@ -17,7 +17,7 @@ $(function () {
 
     $('#tricks-up a').click(function(e) {
         e.preventDefault;
-        $('html,body').animate({scrollTop: $("#tricks").offset().top}, 'slow');
+        $('html,body').animate({scrollTop: $('#tricks').offset().top}, 'slow');
     });
 
     // **************************************************************************************************************
