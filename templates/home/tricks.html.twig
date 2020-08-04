@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Liste des tricks
+{% endblock %}
+
+{% block body %}
+    <section class="container-fluid">
+        {{ include('home/_tricks.html.twig') }}
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/tricks.js') }}"></script>
+	<script src="{{ asset('js/home.js') }}"></script>
+{% endblock %}

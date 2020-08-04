@@ -5,13 +5,19 @@
 {% endblock %}
 
 {% block body %}
-	<div id="home-banner" class="container">
-		<div class="row d-flex">
+	<section class="container">
+		<div id="home-banner" class="row d-flex mb-5">
 			<img src="{{ asset('uploads/images/default2.jpg') }}" class="img-fluid" alt="Image de présentation de Snowtricks"/>
-			<h1 class="col-6 col-sm-6">Site collaboratif pour apprendre des Tricks.</h1>
+			<h1 class="col-6 col-sm-6 col-xl-8">Site collaboratif pour apprendre des Tricks de snowboard.</h1>
+			<div id="tricks-down" class="col-12 text-right icon-fa-arrow-circle-down">
+				<a><i class="fas fa-arrow-circle-down"></i></a>
+			</div>
 		</div>
-		<div class="row">
-			<p><a href="{{ path('display_trick', {uuid: trick.uuid, slug: trick.slug}) }}">{{ trick.name }}</p>
-		</div>
-	</div>
+		{{ include('home/_tricks.html.twig') }}
+	</section>
 {% endblock %}
+
+{% block javascripts %}
+	<script src="{{ asset('js/home.js') }}"></script>
+{% endblock %}
+

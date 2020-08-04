@@ -40,7 +40,7 @@
                     <a class="nav-link" href="{{ path("home") }}">Accueil</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Tricks</a>
+                    <a class="nav-link" href="{{ path("tricks") }}">Tricks</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Se connecter</a>
@@ -57,14 +57,18 @@
     {% endblock %}
 
     <!-- Footer -->
-    <footer class="footer mt-auto d-block d-md-none">
+    <footer class="footer fixed-bottom mt-auto d-block d-md-none">
       <div class="container">
         <div class="row">
           <div class="col-6 text-center">
-            <i class="fas fa-home"></i>
+            <a href="{{ path("home") }}">
+              <i class="fas fa-home"></i>
+            </a>
           </div>
           <div class="col-6 text-center">
+            <a href="#">
               <i class="fas fa-sign-in-alt"></i>
+            </a>
           </div>
         </div>
       </div>

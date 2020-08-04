@@ -4,11 +4,11 @@ $(function () {
 
     // **************************************************************************************************************
     //
-    //                                             LOAD MORE BUTTON             
+    //                                             LOAD MORE COMMENTS BUTTON         
     //
     // **************************************************************************************************************
 
-    const load = $('#load-more');
+    let loadComments = $('#load-more-comments');
 
     /** Create a Javascript Date from the string return in JSON data : 2020-08-08T18:10:55+00:00 */
     var createDateJS = function(dateString) {
@@ -41,8 +41,8 @@ $(function () {
         let date = createDateToDisplay(dateJS);
         let time = dateJS.getHours() + ':' + dateJS.getMinutes() + ':' + dateJS.getSeconds();
 
-        $('#comments').append('<div class="card col-12 col-sm-12"></div>');
-        $('.card:last').append('<div class="row no-gutters"></div>');
+        $('#comments').append('<div class="card comments col-12 col-sm-12"></div>');
+        $('div.card.comments:last').append('<div class="row no-gutters"></div>').hide();
         
         let profileElement = document.createElement('div');
         $(profileElement).addClass('col-2 col-lg-1 pt-3');
@@ -59,18 +59,20 @@ $(function () {
             '<p class="card-text">' + comment.content + '</p>',
             '<p class="card-text"><small class="text-muted">Posté le ' + date + ' à ' + time + '</small></p>'
         );
+
+        $('div.card.comments:last').slideDown(1000);
     };
     
     /** more comments are loads by AJAX request when a user click on "load-more" button  */
-    $('#load-more').click(function(e) {
+    loadComments.click(function(e) {
         e.preventDefault();
-        let url = load.attr('href') + '/' + $('div.card').length;
+        let url = loadComments.attr('href') + '/' + $('div.card.comments').length;
         $.getJSON(url).done(function(data) {
             // if no more comments
             if (data.length === 0) {
                 // then delete "load-more" button on trick page
-                $('#load-more').fadeOut('slow', 'linear');
-                $('#comments').animate({'margin-bottom': '100px'}, '3000', 'linear');                    
+                loadComments.slideUp('slow', 'linear');
+                $('#comments').animate({'margin-bottom': '100px'}, 'slow', 'linear');  
             } else {
                 // else add comments on trick page
                 $.each(data, function (index, comment) {

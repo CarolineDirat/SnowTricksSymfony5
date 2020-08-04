@@ -124,6 +124,7 @@ class AppFixtures extends Fixture
         $this->addCommentsToTrick(random_int(1, 15), $noseGrab, $users, $manager, $faker);
         // add Images
         $this->addPicturesToTrick($noseGrab, 4, $faker);
+        $noseGrab->setFirstPicture(null);
         // add Videos
         $videosData = [
             'gZFWW4Vus-Q' => 'YouTube',
@@ -134,9 +135,9 @@ class AppFixtures extends Fixture
         $this->addVideoToTrick($noseGrab, $videosData);
         $manager->persist($noseGrab);
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // Mac Twist
+        // Mc Twist
         /////////////////////////////////////////////////////////////////////////////////////////////////////////
-        $name = 'Mac Twist';
+        $name = 'Mc Twist';
         $description = 'Flip agrémentés d\'une vrille.
         Un grand classique des rotations tête en bas qui se fait en backside, sur un mur backside de pipe. 
         Le Mc Twist est généralement fait en japan, un grab très tweaké (action d\'accentuer un grab en se contorsionnant).
@@ -175,6 +176,7 @@ class AppFixtures extends Fixture
         $this->addCommentsToTrick(random_int(1, 15), $backsideRodeo, $users, $manager, $faker);
         // add Images
         $this->addPicturesToTrick($backsideRodeo, 3, $faker);
+        $backsideRodeo->setFirstPicture(null);
         // add Videos
         $videosData = [
             'aHFlwDYdoIQ' => 'YouTube',
@@ -253,6 +255,7 @@ class AppFixtures extends Fixture
         $this->addCommentsToTrick(random_int(1, 15), $methodAir, $users, $manager, $faker);
         // add Images
         $this->addPicturesToTrick($methodAir, 3, $faker);
+        $methodAir->setFirstPicture(null);
         // add Videos
         $videosData = [
             '2Ul5P-KucE8' => 'YouTube',
