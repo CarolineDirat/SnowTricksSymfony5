@@ -13,6 +13,14 @@ footer {
   font-size: 2rem;
 }
 
+footer a {
+  color: #346;
+}
+
+footer a:hover {
+  color: #5a8bc0;
+}
+
 iframe,
 img {
   margin: 5px;
@@ -101,7 +109,7 @@ h2 {
 }
 
 /*********************************************
-                HOME PAGE
+                HOME PAGE and TRICKS PAGE
 **********************************************/
 .card-img-top {
   width: auto;
@@ -121,6 +129,16 @@ h2 {
   font-size: 1.5rem;
 }
 
+#load-more-tricks {
+  position: relative;
+  top: 10px;
+  z-index: 20;
+}
+
+#tricks {
+  z-index: 1;
+}
+
 #tricks-down {
   position: relative;
   top: -55px;
@@ -131,10 +149,61 @@ h2 {
   text-decoration: none;
 }
 
-#tricks-down i {
+#tricks-down i,
+#tricks-up i {
   font-size: 2rem;
   color: #4d5564;
 }
+
+#tricks-up {
+  position: fixed;
+  z-index: 2;
+  right: 40px;
+  bottom: 70px;
+}
+
+@media (min-width: 1800px) {
+  #tricks-up {
+    right: 380px;
+  }
+}
+
+@media (max-width: 1800px) {
+  #tricks-up {
+    right: 240px;
+  }
+}
+
+@media (max-width: 1600px) {
+  #tricks-up {
+    right: 160px;
+  }
+}
+
+@media (max-width: 1450px) {
+  #tricks-up {
+    right: 80px;
+  }
+}
+
+@media (max-width: 1300px) {
+  #tricks-up {
+    right: 40px;
+  }
+}
+
+@media (max-width: 1200px) {
+  #tricks-up {
+    right: 20px;
+  }
+}
+
+@media (min-width: 762px) {
+  #tricks-up {
+    bottom: 60px;
+  }
+}
+
 
 @media (max-width: 1800px) {
   #home-banner h1 {
@@ -208,6 +277,11 @@ h2 {
 #load-more-tricks.btn.btn-primary {
   background-color: #346;
   border-color: #346;
+}
+
+#load-more-tricks.btn.btn-primary:hover {
+  background-color: #5a8bc0;
+  border-color: #5a8bc0;
 }
 
 #tricks .card-img-top {

@@ -11,6 +11,12 @@ $(function () {
         e.preventDefault;
         $('#tricks').removeClass('d-none');
         $('#load-more-tricks').removeClass('d-none');
+        $('#tricks-up').removeClass('d-none');
+        $('html,body').animate({scrollTop: $("#tricks").offset().top}, 'slow');
+    });
+
+    $('#tricks-up a').click(function(e) {
+        e.preventDefault;
         $('html,body').animate({scrollTop: $("#tricks").offset().top}, 'slow');
     });
 
