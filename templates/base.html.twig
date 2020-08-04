@@ -73,9 +73,15 @@
             </a>
           </div>
           <div class="col-6 text-center">
-            <a href="#">
-              <i class="fas fa-sign-in-alt"></i>
-            </a>
+            {% if app.user %}
+              <a href="{{ path("app_logout") }}">
+                <i class="fas fa-sign-out-alt"></i>
+              </a>
+            {% else %}
+              <a href="{{ path("app_login") }}">
+                <i class="fas fa-sign-in-alt"></i>
+              </a>
+            {% endif %}
           </div>
         </div>
       </div>
