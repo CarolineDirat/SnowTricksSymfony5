@@ -8,11 +8,19 @@
 						class="card-img-top"
 						alt="Picture to illustrate {{ trick.name }} snowboard trick.">
 				</div>
-				<div class="card-body p-0 text-center">
-					<h2 class="card-title">
-						<a href="{{ path('display_trick', {uuid: trick.uuid, slug: trick.slug}) }}" class="btn btn-outline-primary text-nowrap">
+				<div class="card-body p-0">
+					<h2 class="card-title d-flex flex-nowrap justify-content-center">
+						<a href="{{ path('display_trick', {uuid: trick.uuid, slug: trick.slug}) }}" class="btn btn-outline-primary btn-sm text-nowrap mr-2">
 							{{ trick.name|upper }}
 						</a>
+						{% if app.user %}
+							<a href="#" class="btn btn-outline-primary btn-sm mr-1 ml-2">
+								<i class="fas fa-pencil-alt"></i>
+							</a>
+							<a href="#" class="btn btn-outline-primary btn-sm">
+								<i class="fas fa-trash-alt"></i>
+							</a>
+						{% endif %}
 					</h2>
 				</div>
 			</div>

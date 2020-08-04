@@ -42,12 +42,12 @@ $(function () {
 
         let cardBodyTrick = $(document.createElement('div'));
         cardBodyTrick.addClass('card-body p-0 text-center');
-        cardBodyTrick.append('<h2 class="card-title"></h2>');
+        cardBodyTrick.append('<h2 class="card-title d-flex flex-nowrap justify-content-center"></h2>');
         
         $('#tricks').append(containerCardTrick);
         $('.card.tricks:last').append(imageTrickContainer);
         $('.card.tricks:last').append(cardBodyTrick);
-        $('h2.card-title:last').append('<a href="/trick/'+ trick.slug + '/'+ trick.uuid +'" class="btn btn-outline-primary text-nowrap">'+ trick.name.toUpperCase() + '</a>');
+        $('h2.card-title:last').append('<a href="/trick/'+ trick.slug + '/'+ trick.uuid +'" class="btn btn-outline-primary btn-sm text-nowrap">'+ trick.name.toUpperCase() + '</a>');
 
         containerCardTrick.slideDown(1000);
 
