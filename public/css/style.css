@@ -7,6 +7,20 @@ body {
 /*********************************************
                 LAYOUT
 **********************************************/
+a {
+  color: #2576c3;
+}
+
+div.message-login {
+  background-color: #dadde1;
+  border-radius: 10px;
+  border: 1px ridge #346;
+}
+
+div.message-login span {
+  font-size: 1.3rem;
+  font-weight: bolder;
+}
 
 footer {
   background-color: #dadde1;
@@ -51,20 +65,29 @@ nav {
   box-shadow: 0 0 0 0.2rem rgba(153, 170, 204, 0.5);
 }
 
-.btn.btn-primary {
-  background-color: #5a8bc0;
-  border-color: #5a8bc0;
-}
-
-.btn.btn-primary:hover {
+.btn-outline-primary:not(:disabled):not(.disabled):active,
+.btn-outline-primary:not(:disabled):not(.disabled).active,
+.btn-primary:not(:disabled):not(.disabled):active,
+.btn-primary:not(:disabled):not(.disabled).active {
   background-color: #2576c3;
   border-color: #2576c3;
 }
 
+.btn.btn-primary {
+  background-color: #346;
+  border-color: #346;
+}
+
+.btn.btn-primary:hover {
+  background-color: #5a8bc0;
+  border-color: #5a8bc0;
+}
+
 .btn-primary.focus,
-.btn-primary:focus {
-  border-color: #83add8;
-  box-shadow: 0 0 0 0.2rem rgba(131, 173, 216, 0.5);
+.btn-primary:focus,
+ {
+  border-color: #9ac;
+  box-shadow: 0 0 0 0.2rem rgba(153, 170, 204, 0.5);
 }
 
 .navbar-brand,
@@ -288,16 +311,6 @@ h2 {
   }
 }
 
-#load-more-tricks.btn.btn-primary {
-  background-color: #346;
-  border-color: #346;
-}
-
-#load-more-tricks.btn.btn-primary:hover {
-  background-color: #5a8bc0;
-  border-color: #5a8bc0;
-}
-
 #tricks .card-img-top {
   max-width: 210px;
   max-height: 200px;
@@ -320,4 +333,13 @@ h2 {
   margin-top: 30px;
   margin-bottom: 30px;
   font-size: 2em;
+}
+
+/*********************************************
+                LOGIN PAGE
+**********************************************/
+@media (max-width: 400px) {
+  #login h1 {
+    font-size: 2rem;
+  }
 }
