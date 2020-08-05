@@ -52,7 +52,7 @@ $(function () {
 
         if ($('a.add-trick-btn').length) {
             $('h2.card-title:last').append('<a href="#" class="btn btn-outline-primary btn-sm mr-1 ml-2"><i class="fas fa-pencil-alt"></i></a>');
-            $('h2.card-title:last').append('<a href="/trick-suppression/'+ trick.uuid  +'" class="btn btn-outline-primary btn-sm" data-delete data-token="{{ csrf_token("delete-trick-" ~ trick.id) }}" data-trick="'+ trick.name +'"><i class="fas fa-trash-alt"></i></a>');
+            $('h2.card-title:last').append('<a href="/trick-suppression/'+ trick.uuid  +'" class="btn btn-outline-primary btn-sm" data-delete data-trick="'+ trick.name +'"><i class="fas fa-trash-alt"></i></a>');
         }
 
         containerCardTrick.slideDown(1000);
@@ -73,6 +73,9 @@ $(function () {
                 $.each(data, function (index, trick) {
                     displayTrick(trick);
                     $('html,body').animate({scrollTop: $('#load-more-tricks').offset().top}, 'slow');
+                    $('[data-delete]:last').click(function(e) {
+                        deleteTrick(e, $(this));
+                    });
                 });
             }
         });
@@ -84,18 +87,14 @@ $(function () {
     //
     // **************************************************************************************************************
 
-    let deleteLinks = $('[data-delete]');
-
-
-
-    deleteLinks.click(function(e){
+    let deleteTrick = function(e, deleteLink) {
         e.preventDefault();
-        if (confirm('Êtes-vous sûr.e de vouloir supprimer le trick' + $(this).data('trick') + ' ?')) {
+        if (confirm('Êtes-vous sûr.e de vouloir supprimer le trick' + deleteLink.data('trick') + ' ?')) {
             $.ajax({
-                url: $(this).attr('href'), 
+                url: deleteLink.attr('href'), 
                 method: 'DELETE',
                 dataType: 'json',
-                data: JSON.stringify({"_token": $(this).data('token')}),
+                data: JSON.stringify({"_token": $('#tricks').data('token')}),
             }).done(function(data, textStatus, jqXHR) {
                 let url = $(this)[0]['url'];
                 $('a[href="'+ url +'"]').parent().parent().parent().parent().fadeOut('slow');
@@ -103,29 +102,11 @@ $(function () {
             }).fail(function() {
                 alert('Oups, la suppression n\'est pas possible...');
             });
-        };
+        }
+    };
+
+    let deleteLinks = $('[data-delete]');
+    deleteLinks.click(function(e){
+        deleteTrick(e, $(this));
     });
-
-        
-
-    /*$.each(deleteLinks, function(index, deleteLink) {
-        deleteLink.click(function(e) {
-            e.preventDefault();
-            alert(deleteLink);
-            
-            if (confirm('Êtes-vous sûr.e de vouloir supprimer le trick' + $(this).data('trick') + ' ?')) {
-                $.ajax({
-                    url: $(this).attr('href'), 
-                    method: 'DELETE',
-                    dataType: 'json',
-                    data: JSON.stringify({"_token": $(this).data('token')}),
-                }).done(function(data) {
-                    alert(data.message);
-                    $(this).parent().parent().parent().parent().slideUp('slow');
-                }).fail(function() {
-                    alert('Oups, la suppression n\'est pas possible...');
-                });
-            };
-        })
-    });*/
 });

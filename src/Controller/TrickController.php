@@ -82,7 +82,7 @@ class TrickController extends AbstractController
         $trickName = $trick->getName();
 
         // 'delete-trick' is the same value used in the template to generate the token
-        if ($this->isCsrfTokenValid('delete-trick-'.$trick->getId(), $data['_token'])) {
+        if ($this->isCsrfTokenValid('delete-trick-token258941367', $data['_token'])) {
             $entityManager = $this->getDoctrine()->getManager();
             //////////////////////// à placer dans un service ///////////////////////////////////
             $pictures = $trick->getPictures();
