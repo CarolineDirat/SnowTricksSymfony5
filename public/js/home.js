@@ -50,7 +50,7 @@ $(function () {
         $('.card.tricks:last').append(cardBodyTrick);
         $('h2.card-title:last').append('<a href="/trick/'+ trick.slug + '/'+ trick.uuid +'" class="btn btn-outline-primary btn-sm text-nowrap">'+ trick.name.toUpperCase() + '</a>');
 
-        if ($('#tricks a.add-trick-btn').length) {
+        if ($('a.add-trick-btn').length) {
             $('h2.card-title:last').append('<a href="#" class="btn btn-outline-primary btn-sm mr-1 ml-2"><i class="fas fa-pencil-alt"></i></a>');
             $('h2.card-title:last').append('<a href="#" class="btn btn-outline-primary btn-sm"><i class="fas fa-trash-alt"></i></a>');
         }
