@@ -4,19 +4,26 @@
 	{{ trick.name }}
 {% endblock %}
 
-{% block nav %}
-	<nav class="navbar navbar-expand-md fixed-top navbar-dark">
-	{% endblock %}
+
 
 	{% block body %}
-		<section
-			id="trick-read" class="container">
+		<section id="trick-read" class="container">
 			{# trick name and first picture #}
 			<div class="row d-flex">
-				<h1 class="col-sm-12 text-center">{{ trick.name }}</h1>
+				<h1 class="col-12 text-center">{{ trick.name }}</h1>
+				{% if app.user %}
+				<div id="trick-read-icons" class="col-12 d-inline-flex justify-content-end">
+					<a href="#" class="btn btn-outline-primary mr-2" data-toggle="tooltip" data-placement="bottom" title="Modifier le trick">
+						<i class="fas fa-pencil-alt"></i>
+					</a>
+					<a href="{{ path('trick_delete', {uuid: trick.uuid}) }}" class="btn btn-outline-primary mr-2" data-delete data-trick="{{ trick.name }}" data-toggle="modal" data-target="#modalDelete" data-toggle="tooltip" data-placement="bottom" title="Supprimer le trick">
+						<i class="fas fa-trash-alt"></i>
+					</a>
+				</div>
+				{% endif %}	
 				{% set firstPicture = trick.firstPicture ? trick.firstPicture.filename : ( trick.pictures ? trick.pictures[0].filename : 'default.jpg') %}
 				{% set firstPictureAlt = trick.firstPicture ? trick.firstPicture.alt : null %}
-				<picture class="col-sm-12 text-center">
+				<picture class="col-12 d-inline-flex justify-content-center">
 					<source srcset="{{ asset('uploads/images/540/' ~ firstPicture) }}" media="(max-width: 578px)" type="image/jpg">
 					<source srcset="{{ asset('uploads/images/720/' ~ firstPicture) }}" media="(max-width: 800px)" type="image/jpg">
 					<source srcset="{{ asset('uploads/images/960/' ~ firstPicture) }}" media="(max-width: 1100px)" type="image/jpg">
@@ -115,6 +122,6 @@
 		</section>
 	{% endblock %}
 
-	{% block javascripts %}
-		<script src="{{ asset('js/trick.js') }}"></script>
-	{% endblock %}
+{% block javascripts %}
+	<script src="{{ asset('js/trick.js') }}"></script>
+{% endblock %}
