@@ -89,7 +89,7 @@ $(function () {
     let deleteTrick = function(e, deleteLink) {
         e.preventDefault();
         $('#modalDelete div.modal-body').text('Êtes-vous sûr.e de vouloir supprimer le trick ' + deleteLink.data('trick') + ' ?');
-        $('#confirmDeleteTrickModal').on('click', function(e){
+        $('#confirmDeleteTrickModal').one('click', function(e){
             $('#modalDelete').modal('hide');    
             $.ajax({
                 url: deleteLink.attr('href'), 

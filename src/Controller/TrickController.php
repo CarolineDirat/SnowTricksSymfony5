@@ -7,7 +7,7 @@ use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -79,26 +79,14 @@ class TrickController extends AbstractController
      * 
      * @isGranted("ROLE_USER")
      */
-    public function delete(Trick $trick, Request $request, TrickRepository $trickRepository): JsonResponse
+    public function delete(Trick $trick, Request $request, TrickRepository $trickRepository, ParameterBagInterface $container): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
         $trickName = $trick->getName();
-
-        // 'delete-trick' is the same value used in the template to generate the token
+        // 'delete-trick-token258941367' is the same value used in the template to generate the token
         if ($this->isCsrfTokenValid('delete-trick-token258941367', $data['_token'])) {
             $entityManager = $this->getDoctrine()->getManager();
-            //////////////////////// à placer dans un service ///////////////////////////////////
-            $pictures = $trick->getPictures();
-            $filenames = [];
-            // the same picture is multiple, corresponding to different widths, in several folders
-            foreach (['original', '960', '720', '540', '200'] as $value) {
-                foreach ($pictures as $picture) {
-                    $filenames[] = $this->getParameter('app.images_directory').$value.'/'.$picture->getFilename();
-                }
-            }
-            $filesystem = new Filesystem();
-            $filesystem->remove($filenames);
-            /////////////////////////////////////////////////////////////////////////////////////////
+            $trickRepository->deletePicturesFiles($trick, $container);
             $entityManager->remove($trick);
             $entityManager->flush();
 
@@ -110,9 +98,9 @@ class TrickController extends AbstractController
         }
 
         return $this->json(
-                ['message' => 'Oups ! La suppression n\'est pas possible...'],
-                403,
-                ['Content-Type' => 'application/json']
-            );
+            ['message' => 'Oups ! La suppression n\'est pas possible...'],
+            403,
+            ['Content-Type' => 'application/json']
+        );
     }
 }
