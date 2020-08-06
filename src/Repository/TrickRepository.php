@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Trick;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * @method Trick|null find($id, $lockMode = null, $lockVersion = null)
@@ -95,6 +97,24 @@ class TrickRepository extends ServiceEntityRepository
         }
 
         return $tricksWithFirstPicture; // witch is now with pictures
+    }
+
+    /**
+     * deletePicturesFiles
+     * Method called when a trick is delete, to delete it's pictures files.
+     */
+    public function deletePicturesFiles(Trick $trick, ParameterBagInterface $container): void
+    {
+        $pictures = $trick->getPictures();
+        $filenames = [];
+        // the same picture is multiple, corresponding to different widths, in several folders
+        foreach (['original', '960', '720', '540', '200'] as $value) {
+            foreach ($pictures as $picture) {
+                $filenames[] = $container->get('app.images_directory').$value.'/'.$picture->getFilename();
+            }
+        }
+        $filesystem = new Filesystem();
+        $filesystem->remove($filenames);
     }
 
     // /**

@@ -4,8 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Trick;
 use App\Repository\CommentRepository;
+use App\Repository\TrickRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -60,6 +64,46 @@ class TrickController extends AbstractController
         return $this->json(
             $comments,
             200,
+            ['Content-Type' => 'application/json']
+        );
+    }
+
+    /**
+     * Delete a trick.
+     *
+     * @Route(
+     *      "/trick-suppression/{uuid}",
+     *      name="trick_delete",
+     *      methods={"DELETE"}
+     * )
+     *
+     * @isGranted("ROLE_USER")
+     */
+    public function delete(
+        Trick $trick,
+        Request $request,
+        TrickRepository $trickRepository,
+        ParameterBagInterface $container
+    ): JsonResponse {
+        $data = json_decode($request->getContent(), true);
+        $trickName = $trick->getName();
+        // 'delete-trick-token258941367' is the same value used in the template to generate the token
+        if ($this->isCsrfTokenValid('delete-trick-token258941367', $data['_token'])) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $trickRepository->deletePicturesFiles($trick, $container);
+            $entityManager->remove($trick);
+            $entityManager->flush();
+
+            return $this->json(
+                ['message' => 'Le trick '.$trickName.' a bien été supprimé.'],
+                200,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        return $this->json(
+            ['message' => 'Oups ! La suppression n\'est pas possible...'],
+            403,
             ['Content-Type' => 'application/json']
         );
     }

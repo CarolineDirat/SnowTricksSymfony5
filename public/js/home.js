@@ -1,6 +1,41 @@
 /*eslint quotes: ["error", "single", { "avoidEscape": true }]*/
 
 $(function () {
+    // **************************************************************************************************************
+    //
+    //                                             DELETE A TRICK FROM TRASH ICON             
+    //
+    // **************************************************************************************************************
+    
+    let deleteTrick = function(e, deleteLink) {
+        e.preventDefault();
+        $('#modalDelete div.modal-body').text('Êtes-vous sûr.e de vouloir supprimer le trick ' + deleteLink.data('trick') + ' ?');
+        $('#confirmDeleteTrickModal').one('click', function(e){
+            $('#modalDelete').modal('hide');    
+            $.ajax({
+                url: deleteLink.attr('href'), 
+                method: 'DELETE',
+                dataType: 'json',
+                data: JSON.stringify({'_token': $('#tricks').data('token')}),
+            }).done(function(data) {
+                $('a[href="'+ $(this)[0]['url'] +'"]').parent().parent().parent().parent().fadeOut('1000');
+                $('#modalResponseFromDelete  p.modal-title').text(data.message);
+                $('#modalResponseFromDelete').modal('show');
+            }).fail(function() {
+                $('#modalResponseFromDelete  p.modal-title').text("Oups ! La suppression n'a pas pu se faire.");
+                $('#modalResponseFromDelete').modal('show');
+            });
+        });
+    };
+
+    let deleteLinks = $('[data-delete]');
+    deleteLinks.click(function(e){
+        deleteTrick(e, $(this));
+    });
+
+    $('#cancelDeleteTrickModal').click(function(e) {
+        $('#confirmDeleteTrickModal').off('click');
+    });
 
     // **************************************************************************************************************
     //
@@ -12,12 +47,13 @@ $(function () {
         $('#tricks').removeClass('d-none');
         $('#load-more-tricks').removeClass('d-none');
         $('#tricks-up').removeClass('d-none');
+        $('.add-trick-btn').removeClass('d-none');
         $('html,body').animate({scrollTop: $('#tricks').offset().top}, 'slow');
     });
 
     $('#tricks-up a').click(function(e) {
         e.preventDefault;
-        $('html,body').animate({scrollTop: $('#tricks').offset().top}, 'slow');
+        $('html,body').animate({scrollTop: $('#tricks').offset().top}, 'fast');
     });
 
     // **************************************************************************************************************
@@ -42,18 +78,22 @@ $(function () {
 
         let cardBodyTrick = $(document.createElement('div'));
         cardBodyTrick.addClass('card-body p-0 text-center');
-        cardBodyTrick.append('<h2 class="card-title"></h2>');
+        cardBodyTrick.append('<h2 class="card-title d-flex flex-nowrap justify-content-center"></h2>');
         
         $('#tricks').append(containerCardTrick);
         $('.card.tricks:last').append(imageTrickContainer);
         $('.card.tricks:last').append(cardBodyTrick);
-        $('h2.card-title:last').append('<a href="/trick/'+ trick.slug + '/'+ trick.uuid +'" class="btn btn-outline-primary text-nowrap">'+ trick.name.toUpperCase() + '</a>');
+        $('h2.card-title:last').append('<a href="/trick/'+ trick.slug + '/'+ trick.uuid +'" class="btn btn-outline-primary btn-sm text-nowrap">'+ trick.name.toUpperCase() + '</a>');
+
+        if ($('a.add-trick-btn').length) {
+            $('h2.card-title:last').append('<a href="#" class="btn btn-outline-primary btn-sm mr-1 ml-2"><i class="fas fa-pencil-alt"></i></a>');
+            $('h2.card-title:last').append('<a role="button" href="/trick-suppression/'+ trick.uuid  +'" class="btn btn-outline-primary btn-sm" data-delete data-trick="'+ trick.name +'" data-toggle="modal" data-target="#modalDelete"><i class="fas fa-trash-alt"></i></a>');
+        }
 
         containerCardTrick.slideDown(1000);
-
     };
 
-    /** more tricks are loads by AJAX request when a user click on "load-more" button  */
+    // more tricks are loads by AJAX request when a user click on "load-more" button
     loadTricks.click(function(e) {
         e.preventDefault();
         let url = loadTricks.attr('href') + '/' + $('div.card.tricks').length;
@@ -61,12 +101,15 @@ $(function () {
             // if no more comments
             if (data.length === 0) {
                 // then delete "load-more" button on trick page
-                loadTricks.slideUp('slow', 'linear');
-                $('#tricks').animate({'margin-bottom': '100px'}, 'slow', 'linear');                    
+                loadTricks.hide('slow', 'linear');
             } else {
                 // else add comments on trick page
                 $.each(data, function (index, trick) {
                     displayTrick(trick);
+                    $('html,body').animate({scrollTop: $('#load-more-tricks').offset().top}, 'slow');
+                    $('[data-delete]:last').click(function(e) {
+                        deleteTrick(e, $(this));
+                    });
                 });
             }
         });
