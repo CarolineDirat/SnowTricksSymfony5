@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Trick;
 use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -75,6 +76,8 @@ class TrickController extends AbstractController
      *      name="trick_delete",
      *      methods={"DELETE"}
      * )
+     * 
+     * @isGranted("ROLE_USER")
      */
     public function delete(Trick $trick, Request $request, TrickRepository $trickRepository): JsonResponse
     {
