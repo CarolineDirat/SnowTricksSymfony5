@@ -107,7 +107,7 @@ class TrickController extends AbstractController
         }
 
         return $this->json(
-                ['message' => 'Oups, la suppression n\'est pas possible...'],
+                ['message' => 'Oups ! La suppression n\'est pas possible...'],
                 403,
                 ['Content-Type' => 'application/json']
             );

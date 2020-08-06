@@ -52,14 +52,13 @@ $(function () {
 
         if ($('a.add-trick-btn').length) {
             $('h2.card-title:last').append('<a href="#" class="btn btn-outline-primary btn-sm mr-1 ml-2"><i class="fas fa-pencil-alt"></i></a>');
-            $('h2.card-title:last').append('<a href="/trick-suppression/'+ trick.uuid  +'" class="btn btn-outline-primary btn-sm" data-delete data-trick="'+ trick.name +'"><i class="fas fa-trash-alt"></i></a>');
+            $('h2.card-title:last').append('<a role="button" href="/trick-suppression/'+ trick.uuid  +'" class="btn btn-outline-primary btn-sm" data-delete data-trick="'+ trick.name +'" data-toggle="modal" data-target="#modalDelete"><i class="fas fa-trash-alt"></i></a>');
         }
 
         containerCardTrick.slideDown(1000);
-
     };
 
-    /** more tricks are loads by AJAX request when a user click on "load-more" button  */
+    // more tricks are loads by AJAX request when a user click on "load-more" button
     loadTricks.click(function(e) {
         e.preventDefault();
         let url = loadTricks.attr('href') + '/' + $('div.card.tricks').length;
@@ -86,27 +85,35 @@ $(function () {
     //                                             DELETE A TRICK FROM TRASH ICON             
     //
     // **************************************************************************************************************
-
+    
     let deleteTrick = function(e, deleteLink) {
         e.preventDefault();
-        if (confirm('Êtes-vous sûr.e de vouloir supprimer le trick' + deleteLink.data('trick') + ' ?')) {
+        $('#modalDelete div.modal-body').text('Êtes-vous sûr.e de vouloir supprimer le trick ' + deleteLink.data('trick') + ' ?');
+        $('#confirmDeleteTrickModal').on('click', function(e){
+            $('#modalDelete').modal('hide');    
             $.ajax({
                 url: deleteLink.attr('href'), 
                 method: 'DELETE',
                 dataType: 'json',
                 data: JSON.stringify({"_token": $('#tricks').data('token')}),
             }).done(function(data, textStatus, jqXHR) {
-                let url = $(this)[0]['url'];
-                $('a[href="'+ url +'"]').parent().parent().parent().parent().fadeOut('slow');
-                alert(data.message);
+                $('a[href="'+ $(this)[0]['url'] +'"]').parent().parent().parent().parent().fadeOut('1000');
+                $('#modalResponseFromDelete  p.modal-title').text(data.message);
+                $('#modalResponseFromDelete').modal('show');
             }).fail(function() {
-                alert('Oups, la suppression n\'est pas possible...');
+                let message = data.message.length ? data.message : "Oups ! La suppression n'a pas pu se faire."
+                $('#modalResponseFromDelete  p.modal-title').text(message);
+                $('#modalResponseFromDelete').modal('show');
             });
-        }
+        });
     };
 
     let deleteLinks = $('[data-delete]');
     deleteLinks.click(function(e){
         deleteTrick(e, $(this));
+    });
+
+    $('#cancelDeleteTrickModal').click(function(e) {
+        $('#confirmDeleteTrickModal').off('click');
     });
 });
