@@ -64,6 +64,12 @@ nav {
   background-color: #dadde1;
 }
 
+.alert.alert-primary {
+  color: #346;
+  background-color: #3cc4f4;
+  border-color: #3cc4f4;
+}
+
 .badge-primary {
   background-color: #346;
   font-size: 150%;
@@ -376,13 +382,15 @@ h2 {
   top: 47px;
 }
 
-#trick-read-icons a.btn.btn-outline-primary {
+#trick-read-icons a.btn.btn-outline-primary,
+#trick-read-icons button.btn.btn-outline-primary {
   background-color: #fff;
 }
 
-#trick-read-icons a.btn.btn-outline-primary:hover {
-  background-color: #346;
-  color: #fff;
+#trick-read-icons a.btn.btn-outline-primary:hover,
+#trick-read-icons button.btn.btn-outline-primary:hover {
+  background-color: #dadde1;
+  color: #346;
 }
 
 /*********************************************

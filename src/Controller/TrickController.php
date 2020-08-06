@@ -69,17 +69,16 @@ class TrickController extends AbstractController
     }
 
     /**
-     * Delete a trick.
+     * Delete a trick from AJAX request.
      *
      * @Route(
      *      "/trick-suppression/{uuid}",
-     *      name="trick_delete",
+     *      name="trick_delete_ajax",
      *      methods={"DELETE"}
      * )
-     *
      * @isGranted("ROLE_USER")
      */
-    public function delete(
+    public function deleteFromAJAXRequest(
         Trick $trick,
         Request $request,
         TrickRepository $trickRepository,
@@ -106,5 +105,43 @@ class TrickController extends AbstractController
             403,
             ['Content-Type' => 'application/json']
         );
+    }
+
+    /**
+     * Delete a trick.
+     *
+     * @Route(
+     *      "/trick--suppression/{uuid}",
+     *      name="trick_delete",
+     *      methods={"POST"}
+     * )
+     * @isGranted("ROLE_USER")
+     */
+    public function delete(
+        Trick $trick,
+        Request $request,
+        TrickRepository $trickRepository,
+        ParameterBagInterface $container
+    ): Response {
+        $trickName = $trick->getName();
+        $submittedToken = $request->request->get('token');
+        if ($this->isCsrfTokenValid('delete-trick-'. $trick->getId(), $submittedToken)) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $trickRepository->deletePicturesFiles($trick, $container);
+            $entityManager->remove($trick);
+            $entityManager->flush();
+            $this->addFlash(
+                'notice',
+                'Le trick '. $trickName .' a bien été supprimé.'
+            );
+
+            return $this->redirectToRoute('tricks');
+        
+        }
+
+        return $this->redirectToRoute('display_trick', [
+            'slug' => $trick->getSlug(),
+            'uuid' => $trick->getUuid(),
+        ]);
     }
 }

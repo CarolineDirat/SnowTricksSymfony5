@@ -14,9 +14,9 @@
 				<a href="#" class="btn btn-outline-primary mr-2" data-toggle="tooltip" data-placement="bottom" title="Modifier le trick">
 					<i class="fas fa-pencil-alt"></i>
 				</a>
-				<a href="{{ path('trick_delete', {uuid: trick.uuid}) }}" class="btn btn-outline-primary mr-2" data-delete data-trick="{{ trick.name }}" data-toggle="modal" data-target="#modalDeleteTrick" data-toggle="tooltip" data-placement="bottom" title="Supprimer le trick">
+				<button class="btn btn-outline-primary mr-2" data-delete data-trick="{{ trick.name }}" data-toggle="modal" data-target="#modalDeleteTrick" data-toggle="tooltip" data-placement="bottom" title="Supprimer le trick">
 					<i class="fas fa-trash-alt"></i>
-				</a>
+				</button>
 			</div>
 			{% endif %}	
 			{% set firstPicture = trick.firstPicture ? trick.firstPicture.filename : ( trick.pictures ? trick.pictures[0].filename : 'default.jpg') %}
@@ -43,7 +43,10 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-						<button type="button" class="btn btn-primary">Supprimer</button>
+						<form action="{{ url('trick_delete', {uuid: trick.uuid}) }}" method="POST">
+							<input type="hidden" name="token" value="{{ csrf_token('delete-trick-'~ trick.id) }}"/>
+    						<button type="submit" class="btn btn-primary">Supprimer</button>
+						</form>
 					</div>
 				</div>
 			</div>
