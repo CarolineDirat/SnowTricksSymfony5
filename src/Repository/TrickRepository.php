@@ -98,14 +98,10 @@ class TrickRepository extends ServiceEntityRepository
 
         return $tricksWithFirstPicture; // witch is now with pictures
     }
-    
+
     /**
      * deletePicturesFiles
-     * Method called when a trick is delete, to delete it's pictures files
-     *
-     * @param  Trick $trick
-     * @param  ParameterBagInterface $container
-     * @return void
+     * Method called when a trick is delete, to delete it's pictures files.
      */
     public function deletePicturesFiles(Trick $trick, ParameterBagInterface $container): void
     {

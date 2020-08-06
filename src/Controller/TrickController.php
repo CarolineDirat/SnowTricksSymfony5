@@ -76,7 +76,7 @@ class TrickController extends AbstractController
      *      name="trick_delete",
      *      methods={"DELETE"}
      * )
-     * 
+     *
      * @isGranted("ROLE_USER")
      */
     public function delete(Trick $trick, Request $request, TrickRepository $trickRepository, ParameterBagInterface $container): JsonResponse
