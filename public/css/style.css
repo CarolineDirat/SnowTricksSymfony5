@@ -30,7 +30,7 @@ div.message-login span {
 
 nav a.btn.btn-outline-primary {
   background-color: #ddd;
-  border-color: rgba(0,0,0,.5);
+  border-color: rgba(0, 0, 0, 0.5);
   color: white;
 }
 
@@ -85,14 +85,6 @@ nav {
   box-shadow: 0 0 0 0.2rem rgba(153, 170, 204, 0.5);
 }
 
-.btn-outline-primary:not(:disabled):not(.disabled):active,
-.btn-outline-primary:not(:disabled):not(.disabled).active,
-.btn-primary:not(:disabled):not(.disabled):active,
-.btn-primary:not(:disabled):not(.disabled).active {
-  background-color: #9ac;
-  border-color: #9ac;
-}
-
 .btn.btn-primary {
   background-color: #346;
   border-color: #346;
@@ -104,10 +96,17 @@ nav {
 }
 
 .btn-primary.focus,
-.btn-primary:focus,
- {
+.btn-primary:focus {
   border-color: #9ac;
   box-shadow: 0 0 0 0.2rem rgba(121, 173, 216, 0.5);
+}
+
+.btn-outline-primary:not(:disabled):not(.disabled):active,
+.btn-outline-primary:not(:disabled):not(.disabled).active,
+.btn-primary:not(:disabled):not(.disabled):active,
+.btn-primary:not(:disabled):not(.disabled).active {
+  background-color: #9ac;
+  border-color: #9ac;
 }
 
 .btn-secondary {

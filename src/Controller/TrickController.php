@@ -79,8 +79,12 @@ class TrickController extends AbstractController
      *
      * @isGranted("ROLE_USER")
      */
-    public function delete(Trick $trick, Request $request, TrickRepository $trickRepository, ParameterBagInterface $container): JsonResponse
-    {
+    public function delete(
+        Trick $trick,
+        Request $request,
+        TrickRepository $trickRepository,
+        ParameterBagInterface $container
+    ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         $trickName = $trick->getName();
         // 'delete-trick-token258941367' is the same value used in the template to generate the token

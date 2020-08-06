@@ -1,6 +1,41 @@
 /*eslint quotes: ["error", "single", { "avoidEscape": true }]*/
 
 $(function () {
+    // **************************************************************************************************************
+    //
+    //                                             DELETE A TRICK FROM TRASH ICON             
+    //
+    // **************************************************************************************************************
+    
+    let deleteTrick = function(e, deleteLink) {
+        e.preventDefault();
+        $('#modalDelete div.modal-body').text('Êtes-vous sûr.e de vouloir supprimer le trick ' + deleteLink.data('trick') + ' ?');
+        $('#confirmDeleteTrickModal').one('click', function(e){
+            $('#modalDelete').modal('hide');    
+            $.ajax({
+                url: deleteLink.attr('href'), 
+                method: 'DELETE',
+                dataType: 'json',
+                data: JSON.stringify({'_token': $('#tricks').data('token')}),
+            }).done(function(data) {
+                $('a[href="'+ $(this)[0]['url'] +'"]').parent().parent().parent().parent().fadeOut('1000');
+                $('#modalResponseFromDelete  p.modal-title').text(data.message);
+                $('#modalResponseFromDelete').modal('show');
+            }).fail(function() {
+                $('#modalResponseFromDelete  p.modal-title').text("Oups ! La suppression n'a pas pu se faire.");
+                $('#modalResponseFromDelete').modal('show');
+            });
+        });
+    };
+
+    let deleteLinks = $('[data-delete]');
+    deleteLinks.click(function(e){
+        deleteTrick(e, $(this));
+    });
+
+    $('#cancelDeleteTrickModal').click(function(e) {
+        $('#confirmDeleteTrickModal').off('click');
+    });
 
     // **************************************************************************************************************
     //
@@ -78,42 +113,5 @@ $(function () {
                 });
             }
         });
-    });
-
-    // **************************************************************************************************************
-    //
-    //                                             DELETE A TRICK FROM TRASH ICON             
-    //
-    // **************************************************************************************************************
-    
-    let deleteTrick = function(e, deleteLink) {
-        e.preventDefault();
-        $('#modalDelete div.modal-body').text('Êtes-vous sûr.e de vouloir supprimer le trick ' + deleteLink.data('trick') + ' ?');
-        $('#confirmDeleteTrickModal').one('click', function(e){
-            $('#modalDelete').modal('hide');    
-            $.ajax({
-                url: deleteLink.attr('href'), 
-                method: 'DELETE',
-                dataType: 'json',
-                data: JSON.stringify({"_token": $('#tricks').data('token')}),
-            }).done(function(data, textStatus, jqXHR) {
-                $('a[href="'+ $(this)[0]['url'] +'"]').parent().parent().parent().parent().fadeOut('1000');
-                $('#modalResponseFromDelete  p.modal-title').text(data.message);
-                $('#modalResponseFromDelete').modal('show');
-            }).fail(function() {
-                let message = data.message.length ? data.message : "Oups ! La suppression n'a pas pu se faire."
-                $('#modalResponseFromDelete  p.modal-title').text(message);
-                $('#modalResponseFromDelete').modal('show');
-            });
-        });
-    };
-
-    let deleteLinks = $('[data-delete]');
-    deleteLinks.click(function(e){
-        deleteTrick(e, $(this));
-    });
-
-    $('#cancelDeleteTrickModal').click(function(e) {
-        $('#confirmDeleteTrickModal').off('click');
     });
 });
