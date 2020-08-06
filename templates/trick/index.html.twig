@@ -4,123 +4,154 @@
 	{{ trick.name }}
 {% endblock %}
 
-
-
-	{% block body %}
-		<section id="trick-read" class="container">
-			{# trick name and first picture #}
-			<div class="row d-flex">
-				<h1 class="col-12 text-center">{{ trick.name }}</h1>
-				{% if app.user %}
-				<div id="trick-read-icons" class="col-12 d-inline-flex justify-content-end">
-					<a href="#" class="btn btn-outline-primary mr-2" data-toggle="tooltip" data-placement="bottom" title="Modifier le trick">
-						<i class="fas fa-pencil-alt"></i>
-					</a>
-					<a href="{{ path('trick_delete', {uuid: trick.uuid}) }}" class="btn btn-outline-primary mr-2" data-delete data-trick="{{ trick.name }}" data-toggle="modal" data-target="#modalDelete" data-toggle="tooltip" data-placement="bottom" title="Supprimer le trick">
-						<i class="fas fa-trash-alt"></i>
-					</a>
-				</div>
-				{% endif %}	
-				{% set firstPicture = trick.firstPicture ? trick.firstPicture.filename : ( trick.pictures ? trick.pictures[0].filename : 'default.jpg') %}
-				{% set firstPictureAlt = trick.firstPicture ? trick.firstPicture.alt : null %}
-				<picture class="col-12 d-inline-flex justify-content-center">
-					<source srcset="{{ asset('uploads/images/540/' ~ firstPicture) }}" media="(max-width: 578px)" type="image/jpg">
-					<source srcset="{{ asset('uploads/images/720/' ~ firstPicture) }}" media="(max-width: 800px)" type="image/jpg">
-					<source srcset="{{ asset('uploads/images/960/' ~ firstPicture) }}" media="(max-width: 1100px)" type="image/jpg">
-					<img src="{{ asset('uploads/images/original/' ~ firstPicture) }}" class="img-fluid" alt="{{ firstPicture ~ ', ' }} , photo pour illustrer le trick de snowboard {{ trick.name }}"/>
-				</picture>
+{% block body %}
+	<section id="trick-read" class="container">
+		{# trick name and first picture #}
+		<div class="row d-flex">
+			<h1 class="col-12 text-center">{{ trick.name }}</h1>
+			{% if app.user %}
+			<div id="trick-read-icons" class="col-12 d-inline-flex justify-content-end">
+				<a href="#" class="btn btn-outline-primary mr-2" data-toggle="tooltip" data-placement="bottom" title="Modifier le trick">
+					<i class="fas fa-pencil-alt"></i>
+				</a>
+				<a href="{{ path('trick_delete', {uuid: trick.uuid}) }}" class="btn btn-outline-primary mr-2" data-delete data-trick="{{ trick.name }}" data-toggle="modal" data-target="#modalDeleteTrick" data-toggle="tooltip" data-placement="bottom" title="Supprimer le trick">
+					<i class="fas fa-trash-alt"></i>
+				</a>
 			</div>
-			{# pictures and videos #}
-			<div
-				class="row d-flex">
-				{# width > 540 px #}
-				<h2 class="d-none d-md-block col-sm-12 text-center">{{ trick.name }}</h2>
-				<div class="d-none d-md-block col-sm-12 col-md-7 col-xl-5 text-center">
+			{% endif %}	
+			{% set firstPicture = trick.firstPicture ? trick.firstPicture.filename : ( trick.pictures ? trick.pictures[0].filename : 'default.jpg') %}
+			{% set firstPictureAlt = trick.firstPicture ? trick.firstPicture.alt : null %}
+			<picture class="col-12 d-inline-flex justify-content-center">
+				<source srcset="{{ asset('uploads/images/540/' ~ firstPicture) }}" media="(max-width: 578px)" type="image/jpg">
+				<source srcset="{{ asset('uploads/images/720/' ~ firstPicture) }}" media="(max-width: 800px)" type="image/jpg">
+				<source srcset="{{ asset('uploads/images/960/' ~ firstPicture) }}" media="(max-width: 1100px)" type="image/jpg">
+				<img src="{{ asset('uploads/images/original/' ~ firstPicture) }}" class="img-fluid" alt="{{ firstPicture ~ ', ' }} , photo pour illustrer le trick de snowboard {{ trick.name }}"/>
+			</picture>
+		</div>
+		{# Modal Page to delete the trick #}
+		<div class="modal fade" id="modalDeleteTrick" tabindex="-1" aria-labelledby="modalDeleteTrickLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="modalDeleteTrickLabel">Attention ! Cette action est définitive !</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						{# ask confirmation to delete the trick {{ trick name define by JS code }} #}
+					</div>
+					<div class="modal-footer">
+						<button id="cancelDeleteTrickModal2" type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+						<button id="confirmDeleteTrickModal2" type="button" class="btn btn-primary">Supprimer</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		{# Modal page to display deletion response #}
+		<div class="modal fade" id="modalResponseFromDeleteTrick" tabindex="-1" aria-labelledby="modalResponseDeleteLabel" aria-hidden="true">
+  			<div class="modal-dialog modal-dialog-centered">
+    			<div class="modal-content">
+      				<div class="modal-header">
+	  					<p class="modal-title" id="modalResponseDeleteLabel">{# response #}</p>
+       					 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          					<span aria-hidden="true">&times;</span>
+        				</button>
+      				</div>
+    			</div>
+ 			</div>
+		</div>
+		{# pictures and videos #}
+		<div
+			class="row d-flex">
+			{# width > 540 px #}
+			<h2 class="d-none d-md-block col-sm-12 text-center">{{ trick.name }}</h2>
+			<div class="d-none d-md-block col-sm-12 col-md-7 col-xl-5 text-center">
+				{% for picture in trick.pictures %}
+					<img src="{{ asset('uploads/images/200/' ~ picture.filename) }}" alt="{{ picture.alt ~ ', ' }} photo pour illustrer le trick de snowboard {{ trick.name }}." class="img-thumbnail rounded"/>
+				{% endfor %}
+			</div>
+			<div class="d-none d-md-block col-sm-12 col-md-5 col-xl-7 text-center">
+				{% for video in trick.videos %}
+					{{ include('fragments/_iframe.html.twig', {width: 280, height: 157}) }}
+				{% endfor %}
+			</div>
+			{# width < 540px #}
+			<div class="d-block d-md-none col-12 text-center mt-5">
+				<p>
+					<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapsePictures" aria-expanded="false" aria-controls="collapsePictures">
+						Photos
+					</button>
+				</p>
+				<div class="collapse mb-4" id="collapsePictures">
 					{% for picture in trick.pictures %}
-						<img src="{{ asset('uploads/images/200/' ~ picture.filename) }}" alt="{{ picture.alt ~ ', ' }} photo pour illustrer le trick de snowboard {{ trick.name }}." class="img-thumbnail rounded"/>
+						<img src="{{ asset('uploads/images/540/' ~ picture.filename) }}" alt="{{ picture.alt }} , photo pour illustrer le trick de snowboard {{ trick.name }}" class="img-thumbnail rounded"/>
 					{% endfor %}
 				</div>
-				<div class="d-none d-md-block col-sm-12 col-md-5 col-xl-7 text-center">
+			</div>
+			<div class="d-block d-md-none col-12 text-center">
+				<p>
+					<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseVideos" aria-expanded="false" aria-controls="collapseVideos">
+						Vidéos
+					</button>
+				</p>
+				<div class="collapse" id="collapseVideos">
 					{% for video in trick.videos %}
 						{{ include('fragments/_iframe.html.twig', {width: 280, height: 157}) }}
 					{% endfor %}
 				</div>
-				{# width < 540px #}
-				<div class="d-block d-md-none col-12 text-center mt-5">
-					<p>
-						<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapsePictures" aria-expanded="false" aria-controls="collapsePictures">
-							Photos
-						</button>
-					</p>
-					<div class="collapse mb-4" id="collapsePictures">
-						{% for picture in trick.pictures %}
-							<img src="{{ asset('uploads/images/540/' ~ picture.filename) }}" alt="{{ picture.alt }} , photo pour illustrer le trick de snowboard {{ trick.name }}" class="img-thumbnail rounded"/>
-						{% endfor %}
-					</div>
-				</div>
-				<div class="d-block d-md-none col-12 text-center">
-					<p>
-						<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseVideos" aria-expanded="false" aria-controls="collapseVideos">
-							Vidéos
-						</button>
-					</p>
-					<div class="collapse" id="collapseVideos">
-						{% for video in trick.videos %}
-							{{ include('fragments/_iframe.html.twig', {width: 280, height: 157}) }}
-						{% endfor %}
-					</div>
-				</div>
 			</div>
-			{# trick description #}
-			<div class="row">
-				<h2 class="col-md-12 text-center">{{ trick.name }}</h2>
-				<p class="text-justify px-4">
-					{{ trick.description }}
+		</div>
+		{# trick description #}
+		<div class="row">
+			<h2 class="col-md-12 text-center">{{ trick.name }}</h2>
+			<p class="text-justify px-4">
+				{{ trick.description }}
+			</p>
+			<div class="col-sm-12 text-center mb-5">
+				<p class="badge badge-primary mt-4 mr-4 text-uppercase">
+					{{ trick.groupTrick.name }}
 				</p>
-				<div class="col-sm-12 text-center mb-5">
-					<p class="badge badge-primary mt-4 mr-4 text-uppercase">
-						{{ trick.groupTrick.name }}
-					</p>
-					<p>
-						Créé le
-						<span class="font-weight-bold">{{ trick.createdAt|date('d/m/Y') }}</span>, et modifié le
-						<span class="font-weight-bold">{{ trick.updatedAt|date('d/m/Y') }}</span>
-					</p>
-				</div>
-				<hr/>
+				<p>
+					Créé le
+					<span class="font-weight-bold">{{ trick.createdAt|date('d/m/Y') }}</span>, et modifié le
+					<span class="font-weight-bold">{{ trick.updatedAt|date('d/m/Y') }}</span>
+				</p>
 			</div>
-			{# comments #}
-			<div id="comments" class="row">
-				{% for comment in comments %}
-					<div class="card comments col-12 col-sm-12 ">
-						<div class="row no-gutters">
-							{% set filename = comment.user.profile ? comment.user.profile : 'default.jpg' %}
-							<div class="col-2 col-lg-1 pt-3">
-								<img src="{{ asset('uploads/images/profile/' ~ filename) }}" class="card-img" alt="Image de profil de {{ comment.user.username }}">
-							</div>
-							<div class="col-10 col-lg-11">
-								<div class="card-body">
-									<h5 class="card-title font-weight-bold">{{ comment.user.username }}</h5>
-									<p class="card-text">{{ comment.content }}</p>
-									<p class="card-text">
-										<small class="text-muted">Posté le
-											{{ comment.createdAt|date('d/m/Y') }}
-											à
-											{{ comment.createdAt|date('H:i:s') }}</small>
-									</p>
-								</div>
+			<hr/>
+		</div>
+		{# comments #}
+		<div id="comments" class="row">
+			{% for comment in comments %}
+				<div class="card comments col-12 col-sm-12 ">
+					<div class="row no-gutters">
+						{% set filename = comment.user.profile ? comment.user.profile : 'default.jpg' %}
+						<div class="col-2 col-lg-1 pt-3">
+							<img src="{{ asset('uploads/images/profile/' ~ filename) }}" class="card-img" alt="Image de profil de {{ comment.user.username }}">
+						</div>
+						<div class="col-10 col-lg-11">
+							<div class="card-body">
+								<h5 class="card-title font-weight-bold">{{ comment.user.username }}</h5>
+								<p class="card-text">{{ comment.content }}</p>
+								<p class="card-text">
+									<small class="text-muted">Posté le
+										{{ comment.createdAt|date('d/m/Y') }}
+										à
+										{{ comment.createdAt|date('H:i:s') }}</small>
+								</p>
 							</div>
 						</div>
 					</div>
-				{% endfor %}
-			</div>
-			<div class="row">
-				<div class="col-sm-12 text-center mb-5">
-					<a id="load-more-comments" role="button" href="{{ path('load-more-comments', {uuid: trick.uuid, slug: trick.slug}) }}" class="btn btn-primary m-4">Voir plus</a>
 				</div>
+			{% endfor %}
+		</div>
+		<div class="row">
+			<div class="col-sm-12 text-center mb-5">
+				<a id="load-more-comments" role="button" href="{{ path('load-more-comments', {uuid: trick.uuid, slug: trick.slug}) }}" class="btn btn-primary m-4">Voir plus</a>
 			</div>
-		</section>
-	{% endblock %}
+		</div>
+	</section>
+{% endblock %}
 
 {% block javascripts %}
 	<script src="{{ asset('js/trick.js') }}"></script>
