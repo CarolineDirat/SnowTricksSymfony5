@@ -39,27 +39,14 @@
 						</button>
 					</div>
 					<div class="modal-body">
-						{# ask confirmation to delete the trick {{ trick name define by JS code }} #}
+						Êtes-vous sûr.e de vouloir supprimer le trick <span class="font-weight-bold">{{ trick.name }}</span> ?
 					</div>
 					<div class="modal-footer">
-						<button id="cancelDeleteTrickModal2" type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-						<button id="confirmDeleteTrickModal2" type="button" class="btn btn-primary">Supprimer</button>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+						<button type="button" class="btn btn-primary">Supprimer</button>
 					</div>
 				</div>
 			</div>
-		</div>
-		{# Modal page to display deletion response #}
-		<div class="modal fade" id="modalResponseFromDeleteTrick" tabindex="-1" aria-labelledby="modalResponseDeleteLabel" aria-hidden="true">
-  			<div class="modal-dialog modal-dialog-centered">
-    			<div class="modal-content">
-      				<div class="modal-header">
-	  					<p class="modal-title" id="modalResponseDeleteLabel">{# response #}</p>
-       					 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          					<span aria-hidden="true">&times;</span>
-        				</button>
-      				</div>
-    			</div>
- 			</div>
 		</div>
 		{# pictures and videos #}
 		<div
