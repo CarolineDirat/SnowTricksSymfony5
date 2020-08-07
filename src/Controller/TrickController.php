@@ -43,7 +43,7 @@ class TrickController extends AbstractController
         $comment->setUser($this->getUser());
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
-        // process comment form 
+        // process comment form
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($comment);
