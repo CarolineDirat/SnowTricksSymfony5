@@ -64,6 +64,12 @@ nav {
   background-color: #dadde1;
 }
 
+.alert.alert-primary {
+  color: #346;
+  background-color: #3cc4f4;
+  border-color: #3cc4f4;
+}
+
 .badge-primary {
   background-color: #346;
   font-size: 150%;
@@ -120,6 +126,14 @@ nav {
   border-color: #9ac;
 }
 
+.form-control:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #83add8;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(131, 173, 216, 0.25);
+}
+
 .navbar-brand,
 h1,
 h2 {
@@ -145,7 +159,7 @@ h2 {
 
 @media (max-width: 1200px) {
   .navbar-brand {
-    margin-right: 400px;
+    margin-right: 380px;
   }
 }
 
@@ -368,6 +382,23 @@ h2 {
   margin-top: 30px;
   margin-bottom: 30px;
   font-size: 2em;
+}
+
+#trick-read-icons {
+  position: relative;
+  z-index: 20;
+  top: 47px;
+}
+
+#trick-read-icons a.btn.btn-outline-primary,
+#trick-read-icons button.btn.btn-outline-primary {
+  background-color: #fff;
+}
+
+#trick-read-icons a.btn.btn-outline-primary:hover,
+#trick-read-icons button.btn.btn-outline-primary:hover {
+  background-color: #dadde1;
+  color: #346;
 }
 
 /*********************************************

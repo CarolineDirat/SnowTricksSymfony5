@@ -10,14 +10,14 @@
 				</div>
 				<div class="card-body p-0">
 					<h2 class="card-title d-flex flex-nowrap justify-content-center">
-						<a href="{{ path('display_trick', {uuid: trick.uuid, slug: trick.slug}) }}" class="btn btn-outline-primary btn-sm text-nowrap mr-2">
+						<a href="{{ path('display_trick', {uuid: trick.uuid, slug: trick.slug}) }}" class="btn btn-outline-primary btn-sm text-nowrap mr-2" data-toggle="tooltip" data-placement="bottom" title="Page de présentation du trick">
 							{{ trick.name|upper }}
 						</a>
 						{% if app.user %}
-						<a href="#" class="btn btn-outline-primary btn-sm mr-1 ml-2">
+						<a href="#" class="btn btn-outline-primary btn-sm mr-1 ml-2" data-toggle="tooltip" data-placement="bottom" title="Modifier le trick">
 							<i class="fas fa-pencil-alt"></i>
 						</a>
-						<a role="button" href="{{ path('trick_delete', {uuid: trick.uuid}) }}" class="btn btn-outline-primary btn-sm" data-delete data-trick="{{ trick.name }}" data-toggle="modal" data-target="#modalDelete">
+						<a role="button" href="{{ path('trick_delete_ajax', {uuid: trick.uuid}) }}" class="btn btn-outline-primary btn-sm" data-delete data-trick="{{ trick.name }}" data-toggle="modal" data-target="#modalDelete" data-toggle="tooltip" data-placement="bottom" title="Supprimer le trick">
 							<i class="fas fa-trash-alt"></i>
 						</a>
 						{% endif %}
@@ -52,7 +52,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-	  	<p class="modal-title" id="modalDeleteLabel">{# response #}</p>
+	  	<p class="modal-title" id="modalResponseLabel">{# response #}</p>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>

@@ -7,6 +7,13 @@
 {% block body %}
     <section id="tricks-page" class="container-fluid">
         <h1 class="d-flex justify-content-center"> Les Tricks </h2>
+        {% for message in app.flashes('notice') %}
+        <div class="row justify-content-center">
+            <div class="alert alert-primary my-4 font-weight-bold col-11 col-sm-11 col-md-8 col-xl-4 text-center">
+                {{ message }}
+            </div>
+        </div>
+        {% endfor %}
         {{ include('home/_tricks.html.twig') }}
     </section>
 {% endblock %}

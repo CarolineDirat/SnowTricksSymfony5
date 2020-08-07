@@ -2,6 +2,10 @@
 
 $(function () {
 
+    $('#scroll-to-comments').click(function(e) {
+        $('html,body').animate({scrollTop: $('#comments-for-scroll').offset().top}, 'slow', 'linear');
+    });
+
     // **************************************************************************************************************
     //
     //                                             LOAD MORE COMMENTS BUTTON         
