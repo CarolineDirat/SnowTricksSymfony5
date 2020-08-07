@@ -10,6 +10,9 @@
 		<div class="row d-flex">
 			<h1 class="col-12 text-center">{{ trick.name }}</h1>
 			{% if app.user %}
+			<div class="col text-right">
+				<button id="scroll-to-comments" class="btn btn-primary btn-sm"> Aller aux commentaires <i class="fas fa-level-down-alt"></i> </button>
+			</div>
 			<div id="trick-read-icons" class="col-12 d-inline-flex justify-content-end">
 				<a href="#" class="btn btn-outline-primary mr-2" data-toggle="tooltip" data-placement="bottom" title="Modifier le trick">
 					<i class="fas fa-pencil-alt"></i>
@@ -112,13 +115,12 @@
 		<hr class="mb-5">
 		{# comments #}
 		{% if app.user %}
-		
 			{{ form_start(form, {'method': 'POST'}) }}
-			<div class="form-row align-items-center mt-4">
-				<div class="col-9">
+			<div id="comments-for-scroll" class="form-row align-items-center mt-4">
+				<div class="col-12 col-sm-8 col-md-9">
 					{{ form_widget(form.content) }}
 				</div>
-				<div class="col ">
+				<div class="col-12 mt-3 col-sm-4 mt-sm-0 col-md-3 text-center ">
 					<input type="submit" class="btn btn-primary" value="Laisser un commentaire">
 				</div>
 			</div>
