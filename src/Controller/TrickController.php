@@ -7,6 +7,7 @@ use App\Entity\Trick;
 use App\Form\CommentType;
 use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
+use DateTimeImmutable;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -36,7 +37,22 @@ class TrickController extends AbstractController
         }
 
         $comment = new Comment();
+        $comment->setTrick($trick);
+        $comment->setCreatedAt(new DateTimeImmutable());
+        $comment->setUser($this->getUser());
+
         $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($comment);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('display_trick', [
+                'slug' => $trick->getSlug(),
+                'uuid' => $trick->getUuid(),
+            ]);
+        }
 
         return $this->render('trick/index.html.twig', [
             'trick' => $trick,

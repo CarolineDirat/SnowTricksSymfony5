@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CommentRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CommentRepository::class)
@@ -20,6 +21,18 @@ class Comment
 
     /**
      * @ORM\Column(type="text")
+     * 
+     *  @Assert\Type(
+     *      type="string",
+     *      message="Ce commentaire n'est pas valide."
+     * )
+     * @Assert\NotBlank(
+     *      message="Un commentaire ne peut pas être vide."
+     * )
+     * @Assert\Length(
+     *      max=2000,
+     *      maxMessage="Le commentaire est trop. Il ne peut pas faire plus de {{ limit }} caractères."
+     * )
      */
     private ?string $content = null;
 
