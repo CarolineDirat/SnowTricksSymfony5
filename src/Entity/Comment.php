@@ -21,7 +21,7 @@ class Comment
     /**
      * @ORM\Column(type="text")
      */
-    private ?string $content;
+    private ?string $content = null;
 
     /**
      * @ORM\Column(type="datetime_immutable", name="created_at")

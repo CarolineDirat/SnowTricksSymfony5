@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Trick;
+use App\Form\CommentType;
 use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -20,8 +22,12 @@ class TrickController extends AbstractController
      *
      * @Route("/trick/{slug}/{uuid}", name="display_trick")
      */
-    public function display(Trick $trick, string $slug, CommentRepository $commentRepository): Response
-    {
+    public function display(
+        Trick $trick,
+        string $slug,
+        CommentRepository $commentRepository,
+        Request $request
+    ): Response {
         if ($slug !== $trick->getSlug()) {
             return $this->redirectToRoute('display_trick', [
                 'slug' => $trick->getSlug(),
@@ -29,9 +35,13 @@ class TrickController extends AbstractController
             ]);
         }
 
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+
         return $this->render('trick/index.html.twig', [
             'trick' => $trick,
             'comments' => $commentRepository->getLastComments($trick, 5),
+            'form' => $form->createView(),
         ]);
     }
 

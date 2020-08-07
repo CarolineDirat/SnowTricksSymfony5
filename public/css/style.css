@@ -126,6 +126,14 @@ nav {
   border-color: #9ac;
 }
 
+.form-control:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #83add8;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(131, 173, 216, 0.25);
+}
+
 .navbar-brand,
 h1,
 h2 {
