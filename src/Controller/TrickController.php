@@ -29,21 +29,22 @@ class TrickController extends AbstractController
         CommentRepository $commentRepository,
         Request $request
     ): Response {
+        // check slug
         if ($slug !== $trick->getSlug()) {
             return $this->redirectToRoute('display_trick', [
                 'slug' => $trick->getSlug(),
                 'uuid' => $trick->getUuid(),
             ]);
         }
-
+        // create comment form
         $comment = new Comment();
         $comment->setTrick($trick);
         $comment->setCreatedAt(new DateTimeImmutable());
         $comment->setUser($this->getUser());
-
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()) {
+        // process comment form 
+        if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($comment);
             $entityManager->flush();
@@ -151,18 +152,17 @@ class TrickController extends AbstractController
     ): Response {
         $trickName = $trick->getName();
         $submittedToken = $request->request->get('token');
-        if ($this->isCsrfTokenValid('delete-trick-'. $trick->getId(), $submittedToken)) {
+        if ($this->isCsrfTokenValid('delete-trick-'.$trick->getId(), $submittedToken)) {
             $entityManager = $this->getDoctrine()->getManager();
             $trickRepository->deletePicturesFiles($trick, $container);
             $entityManager->remove($trick);
             $entityManager->flush();
             $this->addFlash(
                 'notice',
-                'Le trick '. $trickName .' a bien été supprimé.'
+                'Le trick '.$trickName.' a bien été supprimé.'
             );
 
             return $this->redirectToRoute('tricks');
-        
         }
 
         return $this->redirectToRoute('display_trick', [

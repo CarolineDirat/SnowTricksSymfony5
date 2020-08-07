@@ -4,7 +4,6 @@ namespace App\Form;
 
 use App\Entity\Comment;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -28,7 +27,7 @@ class CommentType extends AbstractType
             'csrf_field_name' => '_token',
             // an arbitrary string used to generate the value of the token
             // using a different string for each form improves its security
-            'csrf_token_id'   => 'comment_trick',
+            'csrf_token_id' => 'comment_trick',
         ]);
     }
 }

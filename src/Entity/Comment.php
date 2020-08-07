@@ -21,7 +21,7 @@ class Comment
 
     /**
      * @ORM\Column(type="text")
-     * 
+     *
      *  @Assert\Type(
      *      type="string",
      *      message="Ce commentaire n'est pas valide."
