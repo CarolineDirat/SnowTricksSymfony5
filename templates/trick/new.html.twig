@@ -45,7 +45,7 @@
                 <div class="row">
                     <div class="col-12 col-md-10 col-lg-6">
                         {{ form_widget(picture.file) }}
-                        <label class="custom-file-label" >Choisir un ou plusieurs fichiers</label>
+                        <label class="custom-file-label" >Choisir un fichier image</label>
                         <p id="display-upload" class="col-12 text-info"></p>
                         <div class="invalid-feedback">
                             {{ form_errors(picture.file) }}
@@ -71,6 +71,11 @@
                         {{ form_widget(video.service) }}
                         <div class="invalid-feedback">
                             {{ form_errors(video.service) }}
+                            {% for message in app.flashes('upload') %}
+                                <div class="alert alert-danger">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
                         </div>
                     </div>
                     <div class="col-sm-8 mt-3 mt-sm-0">

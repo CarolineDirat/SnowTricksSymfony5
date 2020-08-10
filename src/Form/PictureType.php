@@ -20,11 +20,11 @@ class PictureType extends AbstractType
             ->add('file', FileType::class, [
                 'label' => false,
                 'mapped' => false,
-                'multiple' => true,
+                'required' => false,
                 'constraints' => [
                     new NotNull(),
                     new File([
-                        'maxSize' => '300k',
+                        'maxSize' => '500k',
                         'maxSizeMessage' => 'Le fichier {{ name }} est trop gros. Il ne doit pas dépasser {{ limit }}.',
                         'notFoundMessage' => 'Le fichier {{ file }} n\'a pas été trouvé.',
                         'uploadErrorMessage' => 'La fichier n\'a pas pu être uploadé.',

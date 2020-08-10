@@ -14,10 +14,13 @@ use DateTimeImmutable;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class TrickController extends AbstractController
 {
@@ -162,7 +165,7 @@ class TrickController extends AbstractController
             $entityManager->flush();
             $this->addFlash(
                 'notice',
-                'Le trick '.$trickName.' a bien été supprimé.'
+                'Le trick "'.$trickName.'" a bien été supprimé.'
             );
 
             return $this->redirectToRoute('tricks');
@@ -183,7 +186,7 @@ class TrickController extends AbstractController
      * )
      * @isGranted("ROLE_USER")
      */
-    public function new(): Response
+    public function new(Request $request, SluggerInterface $slugger): Response
     {
         $trick = new Trick();
         $picture = new Picture();
@@ -191,8 +194,47 @@ class TrickController extends AbstractController
         $video = new Video();
         $trick->addVideo($video);
         $form = $this->createForm(TrickType::class, $trick);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()) {
+            $trick->setSlug($slugger->slug(strtolower($trick->getName())));
+            $pictures = $trick->getPictures();
+            $picturesForm = $form->get('pictures');
+            foreach ($pictures as $key => $picture) {
+                /** @var UploadedFile $file */
+                $file = $picturesForm[$key]->get('file')->getData();
+                $filename = sprintf(
+                    "%s.%s",
+                    uniqid($trick->getSlug().'-', true),
+                    $file->guessExtension()
+                );
+                // Move the file to the directory where brochures are stored
+                try {
+                    $file->move(
+                        $this->getParameter('app.images_directory').'/original',
+                        $filename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                    $this->addFlash('upload', "A FileException was caught: ". $e->getMessage());
+                    return $this->redirectToRoute('trick_new', [
+                        'form' => $form->createView(),
+                    ]);
+                }
+                $picture->setFilename($filename);
+                $trick->addPicture($picture);
+            }
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($trick);
+            $entityManager->flush();
+            $this->addFlash(
+                'notice',
+                "Le trick " . $trick->getName() . " vient d'être ajouté"
+            );
 
-        return $this->render('trick/add.html.twig', [
+            return $this->redirectToRoute('tricks');
+        }
+
+        return $this->render('trick/new.html.twig', [
             'form' => $form->createView(),
         ]);
     }
