@@ -60,6 +60,11 @@ img {
   margin: 5px;
 }
 
+label {
+  font-weight: bold;
+  color: #2576c3;
+}
+
 nav {
   background-color: #dadde1;
 }
@@ -73,6 +78,15 @@ nav {
 .badge-primary {
   background-color: #346;
   font-size: 150%;
+}
+
+.badge-info {
+  background-color: #3cc4f4;
+  font-size: 90%;
+}
+
+.badge.badge-secondary {
+  background-color: #9ac;
 }
 
 .btn.btn-outline-primary {
@@ -409,4 +423,32 @@ h2 {
   #login h1 {
     font-size: 2rem;
   }
+}
+
+/*********************************************
+                TRICK FORM
+**********************************************/
+
+@media (max-width: 400px) {
+    #trick-new h1 {
+    font-size: 1.9rem;
+  }
+}
+
+@media (max-width: 400px) {
+  #trick-new h1 {
+  font-size: 1.6rem;
+  margin-bottom: 1.5rem!important;
+  margin-top: 2rem!important;
+}
+}
+
+#trick_name {
+  font-family: 'Permanent Marker', cursive, sans-serif;
+  text-transform: uppercase;
+}
+
+#modal-info-code {
+  color: #2576c3;
+  font-size: 1.2rem;
 }

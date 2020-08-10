@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
+use App\Entity\Picture;
 use App\Entity\Trick;
+use App\Entity\Video;
 use App\Form\CommentType;
+use App\Form\TrickType;
 use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
 use DateTimeImmutable;
@@ -168,6 +171,29 @@ class TrickController extends AbstractController
         return $this->redirectToRoute('display_trick', [
             'slug' => $trick->getSlug(),
             'uuid' => $trick->getUuid(),
+        ]);
+    }
+
+    /**
+     * Delete a trick.
+     *
+     * @Route(
+     *      "/ajouter/trick",
+     *      name="trick_new"
+     * )
+     * @isGranted("ROLE_USER")
+     */
+    public function new(): Response
+    {
+        $trick = new Trick();
+        $picture = new Picture();
+        $trick->addPicture($picture);
+        $video = new Video();
+        $trick->addVideo($video);
+        $form = $this->createForm(TrickType::class, $trick);
+
+        return $this->render('trick/add.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 }

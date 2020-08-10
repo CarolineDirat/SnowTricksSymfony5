@@ -1,0 +1,125 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	Ajouter un trick
+{% endblock %}
+
+{% block body %}
+<section id="trick-new" class="container">
+    <div class="row">
+        <h1 class="col-12 my-5 d-flex justify-content-center">Ajouter un Trick</h1>
+        <div class="col-12">
+        {{ form_start(form) }}
+            <div class="form-group row">
+                {{ form_label(form.name, 'Nom du trick : ', {'label_attr': {'class': 'col-sm-3 col-lg-2 col-form-label'}}) }}
+                <div class="col-sm-9">
+                {{ form_widget(form.name) }}
+                    <div class="invalid-feedback">
+                    {{ form_errors(form.name) }}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                {{ form_label(form.groupTrick, 'Groupe : ', {'label_attr': {'class': 'col-sm-3 col-lg-2 col-form-label'}}) }}
+                <div class="col-sm-5 col-md-4 col-lg-3">
+                {{ form_widget(form.groupTrick) }}
+                    <div class="invalid-feedback">
+                    {{ form_errors(form.groupTrick) }}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                {{ form_label(form.description, 'Description : ', {'label_attr': {'class': 'col-sm-3 col-lg-2 col-form-label'}}) }}
+                <div class="col-sm-9">
+                {{ form_widget(form.description, {'attr': {'rows': '8'}}) }}
+                    <div class="invalid-feedback">
+                    {{ form_errors(form.description) }}
+                    </div>
+                </div>
+            </div>
+            <h5 class="mt-5 mb-3 font-weight-bolder">
+                Ajouter une ou plusieurs photos
+                <span class="badge badge-secondary ml-2">FACULTATIF</span>
+            </h5>
+            {% for picture in form.pictures %}
+                <div class="row">
+                    <div class="col-12 col-md-10 col-lg-6">
+                        {{ form_widget(picture.file) }}
+                        <label class="custom-file-label" >Choisir un ou plusieurs fichiers</label>
+                        <p id="display-upload" class="col-12 text-info"></p>
+                        <div class="invalid-feedback">
+                            {{ form_errors(picture.file) }}
+                        </div>
+                    </div>
+                    <div class="form-group mt-2 col-12">
+                        {{ form_label(picture.alt) }}
+                        {{ form_widget(picture.alt) }}
+                        <div class="invalid-feedback">
+                            {{ form_errors(picture.alt) }}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            <h5 class="mt-5 mb-3 font-weight-bolder">
+                Ajouter une ou plusieurs vidéos 
+                <span class="badge badge-secondary ml-2">FACULTATIF</span>
+            </h5>
+            {% for video in form.videos %}
+                <div class="form-row">
+                    <div class="col-sm-4">
+                        {{ form_label(video.service) }} 
+                        {{ form_widget(video.service) }}
+                        <div class="invalid-feedback">
+                            {{ form_errors(video.service) }}
+                        </div>
+                    </div>
+                    <div class="col-sm-8 mt-3 mt-sm-0">
+                        {{ form_label(video.code) }}
+                        <span id="modal-info-code" class="ml-1 mb-1" data-toggle="modal" data-target="#modal-help-code-video"> <i class="fas fa-question-circle"></i> </span>
+                        {{ form_widget(video.code) }}
+                        <div class="invalid-feedback">
+                            {{ form_errors(video.code) }}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="row justify-content-center my-3">
+                <button type="submit" class="btn btn-primary">Enregistrer le trick</button>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+    {# modal page to help to know how found the video code #}
+    <div class="modal fade" id="modal-help-code-video" tabindex="-1" aria-labelledby="ModalLabelHelpCodeVideo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="ModalLabelHelpCodeVideo">Où trouver le code de la vidéo ?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+           <h5 class="font-weight-bold text-danger"> Dans l'url de la vidéo :</h5>
+           <hr>
+           <h6 class="badge badge-info">Sur YouTube :</h6>
+           <img src="{{ asset('images/help-code-youtube.png') }}" alt="Comment trouver le code de la video sur YouTube ? Le code dans l'URL après 'v='"/>
+           <hr>
+           <h6 class="badge badge-info">Sur Vimeo :</h6><br>
+           <img src="{{ asset('images/help-code-vimeo.png') }}" alt="Comment trouver le code de la video sur YouTube ? Le code dans l'URL après 'v='"/>
+           <hr>
+           <h6 class="badge badge-info">Sur Dailymotion :</h6>
+           <img src="{{ asset('images/help-code-dailymotion.png') }}" alt="Comment trouver le code de la video sur YouTube ? Le code dans l'URL après 'v='"/>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+        </div>
+        </div>
+    </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/trick-new.js') }}"></script>
+{% endblock %}
