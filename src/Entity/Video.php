@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\VideoRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=VideoRepository::class)
@@ -19,13 +20,20 @@ class Video
 
     /**
      * @ORM\Column(type="string", length=255)
+     * 
+     * @Assert\Type("string")
+     * @Assert\NotBlank
      */
-    private ?string $code;
+    private ?string $code = null;
 
     /**
      * @ORM\Column(type="string", length=45)
+     * 
+     * @Assert\Type("string")
+     * @Assert\NotBlank
+     * @Assert\Choice({"youtube", "vimeo", "dailymotion"})
      */
-    private ?string $service;
+    private ?string $service = null;
 
     /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="videos")
@@ -57,11 +65,11 @@ class Video
     public function setService(string $service): self
     {
         if (in_array(strtolower($service), ['youtube', 'vimeo', 'dailymotion'])) {
-            $this->service = $service;
+            $this->service = strtolower($service);
 
             return $this;
         }
-        $this->service = 'unknown';
+        $this->service = null;
 
         return $this;
     }
