@@ -9,9 +9,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=TrickRepository::class)
+ * @UniqueEntity("name")
  */
 class Trick
 {
@@ -29,18 +32,31 @@ class Trick
 
     /**
      * @ORM\Column(type="string", length=200, unique=true)
+     * 
+     * @Assert\Type("string")
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      max=200,
+     *      maxMessage="Le nom est trop long. Il ne peut pas faire plus de {{ limit }} caractères.",
+     *      min=3,
+     *      minMessage="Le nom doit au moins faire {{ limit }} caractères."
+     * )
+     *
      */
-    private ?string $name;
+    private ?string $name = null;
 
     /**
      * @ORM\Column(type="text")
+     * 
+     * @Assert\Type("string")
+     * @Assert\NotBlank
      */
-    private ?string $description;
+    private ?string $description = null;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private ?string $slug;
+    private ?string $slug = null;
 
     /**
      * @ORM\Column(name="created_at", type="datetime_immutable")
@@ -71,7 +87,7 @@ class Trick
      * @ORM\ManyToOne(targetEntity=Group::class, inversedBy="tricks")
      * @ORM\JoinColumn(nullable=false)
      */
-    private ?Group $groupTrick;
+    private ?Group $groupTrick = null;
 
     /**
      * @ORM\OneToOne(targetEntity=Picture::class, cascade={"persist", "remove"})
