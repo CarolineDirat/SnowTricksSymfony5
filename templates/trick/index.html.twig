@@ -22,7 +22,7 @@
 				</button>
 			</div>
 			{% endif %}	
-			{% set firstPicture = trick.firstPicture ? trick.firstPicture.filename : ( trick.pictures ? trick.pictures[0].filename : 'default.jpg') %}
+			{% set firstPicture = trick.firstPicture ? trick.firstPicture.filename : (trick.pictures|length > 0 ? trick.pictures[0].filename : 'default.jpg') %}
 			{% set firstPictureAlt = trick.firstPicture ? trick.firstPicture.alt : null %}
 			<picture class="col-12 d-inline-flex justify-content-center">
 				<source srcset="{{ asset('uploads/images/540/' ~ firstPicture) }}" media="(max-width: 578px)" type="image/jpg">

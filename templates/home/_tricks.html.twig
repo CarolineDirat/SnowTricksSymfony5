@@ -4,7 +4,7 @@
 			<div class="card tricks">
 				<div class="div-card-img d-flex align-items-center justify-content-center">
 					<img 
-						src="{{ asset('uploads/images/200/' ~ (trick.firstPicture ? trick.firstPicture.filename : (trick.pictures ? trick.pictures[0].filename : 'default.jpg'))) }}" 
+						src="{{ asset('uploads/images/200/' ~ (trick.firstPicture ? trick.firstPicture.filename : (trick.pictures|length > 0 ? trick.pictures[0].filename : 'default.jpg'))) }}" 
 						class="card-img-top"
 						alt="Picture to illustrate {{ trick.name }} snowboard trick.">
 				</div>
