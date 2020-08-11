@@ -22,18 +22,19 @@ class PictureType extends AbstractType
                 'mapped' => false,
                 'required' => false,
                 'constraints' => [
-                    new NotNull(),
                     new File([
                         'maxSize' => '500k',
                         'maxSizeMessage' => 'Le fichier {{ name }} est trop gros. Il ne doit pas dépasser {{ limit }}.',
-                        'notFoundMessage' => 'Le fichier {{ file }} n\'a pas été trouvé.',
-                        'uploadErrorMessage' => 'La fichier n\'a pas pu être uploadé.',
+                        'notFoundMessage' => "Le fichier {{ file }} n'a pas été trouvé.",
+                        'uploadErrorMessage' => "La fichier n'a pas pu être uploadé.",
                     ]),
                     new Image([
                         'minWidth' => 300,
-                        'minWidthMessage' => 'L\'image doit faire au minimum {{ limit }} pixels de largeur',
-                        'maxWidth' => 2000,
-                        'maxWidthMessage' => 'L\'image ne doit pas faire plus de {{ limit }} pixels de largeur',
+                        'minWidthMessage' => "L'image doit faire au minimum {{ limit }} pixels de largeur",
+                        'mimeTypes' => ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
+                        'mimeTypesMessage' => "Le fichier de l'image doit avoir une des extensions suivantes : png, jpeg, jpg, gif, webp.",
+                        'minRatio' => 0.67,
+                        'minRatioMessage' => "Le ratio {{ ratio }} de l'image (largeur/hauteur) est ici trop petit. Il doit être au moins de {{ max_ratio }}."
                     ]),
                 ]
             ])
