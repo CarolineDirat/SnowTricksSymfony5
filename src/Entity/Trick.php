@@ -38,9 +38,9 @@ class Trick
      * @Assert\NotBlank
      * @Assert\Length(
      *      max=200,
-     *      maxMessage="Le nom est trop long. Il ne peut pas faire plus de {{ limit }} caractères.",
+     *      maxMessage="Le nom du trick est trop long. Il ne peut pas faire plus de {{ limit }} caractères.",
      *      min=3,
-     *      minMessage="Le nom doit au moins faire {{ limit }} caractères."
+     *      minMessage="Le nom du trick doit au moins faire {{ limit }} caractères."
      * )
      *
      */
