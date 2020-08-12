@@ -219,6 +219,7 @@ class TrickController extends AbstractController
                         ]);
                     }
                     $picture->setFilename($filename);
+                    $picture->setTrick($trick);
                     $trick->addPicture($picture);
                 } else {
                     $trick->removePicture($picture);

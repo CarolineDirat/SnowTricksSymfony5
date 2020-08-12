@@ -36,22 +36,22 @@
                 </div>
             </div>
             <h5 class="mt-5 mb-3 font-weight-bolder">
-                Ajouter une ou plusieurs photos
+                Ajouter une photo
                 <span class="badge badge-secondary ml-2">FACULTATIF</span>
             </h5>
+            <div class="pictures" data-prototype="{{ form_widget(form.pictures.vars.prototype)|e('html_attr') }}">
             {% for picture in form.pictures %}
-                <div class="row">
+                <div class="row picture">
                     <div class="col-12 col-md-10 col-lg-6">
-                        {{ form_label(picture.file, 'Choisir un fichier image')}}
-                        {{ form_widget(picture.file) }}
-                        <p id="display-upload" class="col-12 text-info"></p>
+                        {{ form_row(picture.file) }}
                     </div>
                     <div class="form-group mt-2 col-12">
-                        {{ form_label(picture.alt) }}
-                        {{ form_widget(picture.alt) }}
+                        {{ form_row(picture.alt) }}
                     </div>
                 </div>
             {% endfor %}
+            </div>
+            <button id="add_picture_link" type="button" class="btn btn-primary btn-sm mt-3"> Ajouter une autre photo </button>
             <h5 class="mt-5 mb-3 font-weight-bolder">
                 Ajouter une ou plusieurs vidéos 
                 <span class="badge badge-secondary ml-2">FACULTATIF</span>

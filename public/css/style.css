@@ -452,3 +452,14 @@ h2 {
   color: #2576c3;
   font-size: 1.2rem;
 }
+
+div.row.picture {
+  border: 1px solid #9ac;
+  box-shadow: rgba(153, 170, 204, 0.5);
+  border-radius: 10px;
+}
+
+div.picture div.form-group {
+  margin-bottom: 0.5rem;
+  padding-top: 0.5rem;
+}
