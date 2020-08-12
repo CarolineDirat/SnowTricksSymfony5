@@ -6,12 +6,13 @@ use App\Entity\Comment;
 use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Entity\Video;
+use App\EntityForm\CommentForm;
 use App\Form\CommentType;
 use App\Form\TrickType;
+use App\FormHandler\CommentFormHandler;
 use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
 use App\Service\ImageProcessInterface;
-use DateTimeImmutable;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -34,7 +35,9 @@ class TrickController extends AbstractController
         Trick $trick,
         string $slug,
         CommentRepository $commentRepository,
-        Request $request
+        Request $request,
+        CommentForm $commentForm,
+        CommentFormHandler $commentFormHandler
     ): Response {
         // check slug
         if ($slug !== $trick->getSlug()) {
@@ -44,18 +47,11 @@ class TrickController extends AbstractController
             ]);
         }
         // create comment form
-        $comment = new Comment();
-        $comment->setTrick($trick);
-        $comment->setCreatedAt(new DateTimeImmutable());
-        $comment->setUser($this->getUser());
+        $comment = $commentForm->initialize($trick, $this->getUser());
         $form = $this->createForm(CommentType::class, $comment);
-        $form->handleRequest($request);
         // process comment form
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($comment);
-            $entityManager->flush();
-
+        if ($commentFormHandler->handle($request, $form, $comment)) {
+            
             return $this->redirectToRoute('display_trick', [
                 'slug' => $trick->getSlug(),
                 'uuid' => $trick->getUuid(),
