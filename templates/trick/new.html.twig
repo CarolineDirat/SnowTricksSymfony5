@@ -42,12 +42,9 @@
             {% for picture in form.pictures %}
                 <div class="row">
                     <div class="col-12 col-md-10 col-lg-6">
+                        {{ form_label(picture.file, 'Choisir un fichier image')}}
                         {{ form_widget(picture.file) }}
-                        <label class="custom-file-label" >Choisir un fichier image</label>
                         <p id="display-upload" class="col-12 text-info"></p>
-                        <div class="invalid-feedback">
-                            {{ form_errors(picture.file) }}
-                        </div>
                     </div>
                     <div class="form-group mt-2 col-12">
                         {{ form_label(picture.alt) }}
