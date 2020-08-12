@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Image;
+use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotNull;
 
 class PictureType extends AbstractType
@@ -18,19 +19,16 @@ class PictureType extends AbstractType
     {
         $builder
             ->add('file', FileType::class, [
-                'label' => false,
                 'mapped' => false,
                 'required' => false,
                 'constraints' => [
-                    new File([
+                    new Image([
                         'maxSize' => '500k',
-                        'maxSizeMessage' => 'Le fichier {{ name }} est trop gros. Il ne doit pas dépasser {{ limit }}.',
+                        'maxSizeMessage' => 'Le fichier {{ name }} est trop gros. Il ne doit pas dépasser {{ limit }} {{ suffix }}.',
                         'notFoundMessage' => "Le fichier {{ file }} n'a pas été trouvé.",
                         'uploadErrorMessage' => "La fichier n'a pas pu être uploadé.",
-                    ]),
-                    new Image([
                         'minWidth' => 300,
-                        'minWidthMessage' => "L'image doit faire au minimum {{ limit }} pixels de largeur",
+                        'minWidthMessage' => "L'image doit faire au minimum {{ min_width }} pixels de largeur",
                         'mimeTypes' => ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
                         'mimeTypesMessage' => "Le fichier de l'image doit avoir une des extensions suivantes : png, jpeg, jpg, gif, webp.",
                         'minRatio' => 0.67,
@@ -41,6 +39,12 @@ class PictureType extends AbstractType
             ->add('alt', TextType::class, [
                 'label' => 'Une brève description de l\'image (facultatif) :',
                 'required' => false,
+                'constraints' => [
+                    new Length([
+                        'max' => 100,
+                        'maxMessage' => "La description est trop longue. Elle ne peut pas faire plus de {{ limit }} caractères."
+                    ])
+                ]
             ] )
         ;
     }

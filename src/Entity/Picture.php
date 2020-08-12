@@ -32,7 +32,7 @@ class Picture
      * @Assert\Type("string")
      * @Assert\NotBlank(allowNull=true)
      * @Assert\Length(
-     *      max=140,
+     *      max=100,
      *      maxMessage="La description est trop longue. Elle ne peut pas faire plus de {{ limit }} caractères."
      * )
      */
