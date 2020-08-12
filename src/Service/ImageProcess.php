@@ -57,7 +57,6 @@ class ImageProcess implements ImageProcessInterface
                 $this->resizesAndMoves($file, $filename, $imagecreatefromType, $imageType);
 
                 return $filename;
-                break;
             case 'image/png':
                 $filename = $filename.'.png';
                 $imagecreatefromType = function(UploadedFile $file) {
@@ -72,7 +71,6 @@ class ImageProcess implements ImageProcessInterface
                 $this->resizesAndMoves($file, $filename, $imagecreatefromType, $imageType);
 
                 return $filename;
-                break;
             case 'image/gif':
                 $filename = $filename.'.gif';
                 $imagecreatefromType = function(UploadedFile $file) {
@@ -87,7 +85,6 @@ class ImageProcess implements ImageProcessInterface
                 $this->resizesAndMoves($file, $filename, $imagecreatefromType, $imageType);
                 
                 return $filename;
-                break;
             case 'image/webp':
                 $filename = $filename.'.webp';
                 $imagecreatefromType = function(UploadedFile $file) {
@@ -100,8 +97,8 @@ class ImageProcess implements ImageProcessInterface
                     );
                 };
                 $this->resizesAndMoves($file, $filename, $imagecreatefromType, $imageType);
+
                 return $filename;
-                break;
             default:
                 throw new FileException("Unknown image type");
         }
