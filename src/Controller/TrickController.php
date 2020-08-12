@@ -229,6 +229,9 @@ class TrickController extends AbstractController
             foreach ($videos as $video) {
                 if(empty($video->getService()) || empty($video->getCode())) {
                     $trick->removeVideo($video);
+                } else {
+                    $video->setTrick($trick);
+                    $trick->addVideo($video);
                 }
             }
             $entityManager = $this->getDoctrine()->getManager();

@@ -14,10 +14,6 @@ class VideoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('code', TextType::class, [
-                'label' => 'Le code de la vidéo :',
-                'help' => 'La suite de chiffres et de lettres que vous trouvez dans l\'URL',
-            ])
             ->add('service', ChoiceType::class, [
                 'label' => 'Quelle est sa plateforme vidéo ?',
                 'expanded' => true,
@@ -27,6 +23,9 @@ class VideoType extends AbstractType
                     'Vimeo' => 'vimeo',
                     'Dailymotion' => 'dailymotion',
                 ],
+            ])
+            ->add('code', TextType::class, [
+                'label' => 'Le code de la vidéo :',
             ])
         ;
     }
