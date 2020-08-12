@@ -3,6 +3,15 @@
 $(function () {
 
     //////////////////////////////////////////////////////////////////////////////////////////
+    //                   FILE BROWSE : customizing the strings with HTML
+    //////////////////////////////////////////////////////////////////////////////////////////
+    
+    var translateBrowse = function() {
+        $('label.custom-file-label').attr('data-browse', 'Parcourir mes fichiers');
+    }
+    translateBrowse();    
+    
+    //////////////////////////////////////////////////////////////////////////////////////////
     //                   DISPLAY CHOSEN FILE NAME IN IT'S INPUT TAG
     //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -54,6 +63,7 @@ $(function () {
     addPictureButton.on('click', function (e) {
         // add a new picture form
         addPictureForm(collectionHolderPictures);
+        translateBrowse();
         displayFilename();
     });
 
