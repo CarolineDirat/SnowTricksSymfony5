@@ -10,6 +10,7 @@ use App\Form\CommentType;
 use App\Form\TrickType;
 use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
+use App\Service\ImageProcessInterface;
 use DateTimeImmutable;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -186,8 +187,11 @@ class TrickController extends AbstractController
      * )
      * @isGranted("ROLE_USER")
      */
-    public function new(Request $request, SluggerInterface $slugger): Response
-    {
+    public function new(
+        Request $request,
+        SluggerInterface $slugger,
+        ImageProcessInterface $imageProcess
+    ): Response {
         $trick = new Trick();
         $picture = new Picture();
         $trick->addPicture($picture);
@@ -200,28 +204,31 @@ class TrickController extends AbstractController
             $pictures = $trick->getPictures();
             $picturesForm = $form->get('pictures');
             foreach ($pictures as $key => $picture) {
-                /** @var UploadedFile $file */
                 $file = $picturesForm[$key]->get('file')->getData();
-                $filename = sprintf(
-                    "%s.%s",
-                    uniqid($trick->getSlug().'-', true),
-                    $file->guessExtension()
-                );
-                // Move the file to the directory where brochures are stored
-                try {
-                    $file->move(
-                        $this->getParameter('app.images_directory').'/original',
-                        $filename
-                    );
-                } catch (FileException $e) {
-                    // ... handle exception if something happens during file upload
-                    $this->addFlash('upload', "A FileException was caught: ". $e->getMessage());
-                    return $this->redirectToRoute('trick_new', [
-                        'form' => $form->createView(),
-                    ]);
+                if($file instanceof UploadedFile) { 
+                    $filename = uniqid($trick->getSlug().'-', true); // file name without extension
+                    // Resize the picture file to severals widths (cf service.yaml),
+                    // and move files in their corresponding directory named with each width
+                    try {
+                        $filename = $imageProcess->execute($file, $filename);
+                    } catch (FileException $e) {
+                        // ... handle exception if something happens during file upload
+                        $this->addFlash('upload', "Le fichier ".$file->getFilename()." n'a pas pu être traité.". $e->getMessage());
+                        return $this->redirectToRoute('trick_new', [
+                            'form' => $form->createView(),
+                        ]);
+                    }
+                    $picture->setFilename($filename);
+                    $trick->addPicture($picture);
+                } else {
+                    $trick->removePicture($picture);
                 }
-                $picture->setFilename($filename);
-                $trick->addPicture($picture);
+            }
+            $videos = $trick->getVideos();
+            foreach ($videos as $video) {
+                if(empty($video->getService()) || empty($video->getCode())) {
+                    $trick->removeVideo($video);
+                }
             }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($trick);
