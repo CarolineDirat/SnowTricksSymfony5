@@ -113,18 +113,19 @@ class ImageProcess implements ImageProcessInterface
                     $resizeHeight,
                     $resizeWidth
                 );
-            } else {
-                $this->resizeAndMove(
-                    $file,
-                    $filename,
-                    $originalWidth,
-                    $originalHeight,
-                    $resizeWidth
-                );
-            }
-        }
 
-        return $filename;
+                return $filename;
+            }
+            $this->resizeAndMove(
+                $file,
+                $filename,
+                $originalWidth,
+                $originalHeight,
+                $resizeWidth
+            );
+
+            return $filename;
+        }
     }
 
     /**
@@ -148,7 +149,10 @@ class ImageProcess implements ImageProcessInterface
         imagecopyresampled(
             $destination,
             $source,
-            0, 0, 0, 0,
+            0,
+            0,
+            0,
+            0,
             imagesx($destination),
             imagesy($destination),
             imagesx($source),
