@@ -3,7 +3,6 @@
 namespace App\FormHandler;
 
 use Doctrine\Migrations\Query\Exception\InvalidArguments;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
