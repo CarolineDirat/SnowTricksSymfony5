@@ -7,7 +7,14 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class ImageProcess implements ImageProcessInterface
-{    
+{
+    const ALLOW_MIME_TYPE = [
+        'jpeg' => 'image/jpeg',
+        'png' => 'image/png',
+        'gif' => 'image/gif',
+        'webp' => 'image/webp',
+    ];
+
     /**
      * Different widths of images, corresponding to directories to move them
      *
@@ -17,7 +24,7 @@ class ImageProcess implements ImageProcessInterface
 
     private ParameterBagInterface $parameterBag;
 
-    private string $type;
+    private ?string $type = null;
 
     public function __construct(ParameterBagInterface $parameterBag, array $widths)
     {
@@ -29,45 +36,28 @@ class ImageProcess implements ImageProcessInterface
      * execute
      *
      * For each possible mime type of an uploaded image file,
-     * we define :
-     *  - the file extension corresponding to the mime type
-     *      $filename = $filename.'.extension';
-     *  - the callable function $imagecreatefromType 
-     *      witch will create the source image from the file
-     *  - the callable function $imageType 
-     *      witch will save the resized file in %app.images_directory%/$resizedWidth/$filename
-     * and the $this->resizesAndMoves() method is called
+     * we define the extension corresponding to the mime type file
+     * then the $this->resizesAndMoves() method is called
      *       
      * @param  UploadedFile $file   uploaded file from trick form
      * @param  string $filename     the new name of resize file (without it's extension)
      * 
      * @return string               the new name of resizes files, with it's extension
-     *                              corresponding to the file mime type
+     *                              (corresponding to the file mime type)
      */
     public function execute(UploadedFile $file, string $filename): string
     {
         $mime = $file->getMimeType();
-        switch ($mime) {
-            case 'image/jpeg':
-                $this->type = 'jpeg';
-
-                return $this->resizesAndMoves($file, $filename);
-            case 'image/png':
-                $this->type = 'png';
-                
-                return $this->resizesAndMoves($file, $filename);
-            case 'image/gif':
-                $this->type = 'gif';
-
-                return $this->resizesAndMoves($file, $filename);
-            case 'image/webp':
-                $this->type = 'webp';
-                
-                return $this->resizesAndMoves($file, $filename);
-            default:
-                // should never happen because it's check during form validation
-                throw new FileException("Unknown image type");
+        foreach (self::ALLOW_MIME_TYPE as $key => $allowMime) {
+            if ($allowMime === $mime) {
+                $this->type = $key;
+            }
         }
+        if ($this->type) {
+            return $this->resizesAndMoves($file, $filename);
+        }
+        // What follows should not happen because it's check during form validation
+        throw new FileException("Unknown image type");
     }
     
     /**
@@ -109,7 +99,7 @@ class ImageProcess implements ImageProcessInterface
      * But if the image file is lower than the destination width,
      * then the file is resized with it's originals dimensions.
      * 
-     * Finally return filename with it's extension; corresponding to the file mime type
+     * Finally it return filename with it's extension; corresponding to the file mime type
      * 
      */
     public function resizesAndMoves(UploadedFile $file, string $filename): string 
@@ -117,7 +107,7 @@ class ImageProcess implements ImageProcessInterface
         $filename = $filename . '.' . ('jpeg' === $this->type ? 'jpg' : $this->type);
 
         list($originalWidth, $originalHeight) = getimagesize($file);
-        
+
         foreach ($this->widths as $resizeWidth) {
             if ($originalWidth > $resizeWidth) {
                 $resizeHeight = ceil(($originalHeight * $resizeWidth)/$originalWidth);
@@ -146,7 +136,8 @@ class ImageProcess implements ImageProcessInterface
      * 
      * $file is resize to create an image 
      *      with width=$destinationWidth and heigth=$destinationHeigth
-     * And the created image is saved in corresponding directory : 
+     * And the created image is saved in corresponding directory, 
+     *      with imageType() method : 
      *      %app.images_directory%/$directoryWidth/$filename
      */    
     public function resizeAndMove(

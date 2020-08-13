@@ -10,20 +10,14 @@ interface ImageProcessInterface
      * execute
      *
      * For each possible mime type of an uploaded image file,
-     * we define :
-     *  - the file extension corresponding to the mime type
-     *      $filename = $filename.'.extension';
-     *  - the callable function $imagecreatefromType 
-     *      witch will create the source image from the file
-     *  - the callable function $imageType 
-     *      witch will save the resized file in %app.images_directory%/$resizedWidth/$filename
-     * and then, the $this->resizesAndMoves() method is called
+     * we define the extension corresponding to the mime type file
+     * then the $this->resizesAndMoves() method is called
      *       
      * @param  UploadedFile $file   uploaded file from trick form
      * @param  string $filename     the new name of resize file (without it's extension)
      * 
-     * @return string                the new name of resizes files, with it's extension
-     *                              corresponding to the file mime type
+     * @return string               the new name of resizes files, with it's extension
+     *                              (corresponding to the file mime type)
      */
     public function execute(UploadedFile $file, string $filename): string;
     
@@ -35,7 +29,7 @@ interface ImageProcessInterface
      * But if the image file is lower than the destination width,
      * then the file is only resized with it's originals dimensions.
      * 
-     * Finally return filename with it's extension; corresponding to the file mime type
+     * Finally it return filename with it's extension; corresponding to the file mime type
      * 
      */
     public function resizesAndMoves(UploadedFile $file, string $filename): string;
@@ -45,9 +39,10 @@ interface ImageProcessInterface
      * 
      * $file is resize to create an image 
      *      with width=$destinationWidth and heigth=$destinationHeigth
-     * And the created image is saved in corresponding directory : 
+     * And the created image is saved in corresponding directory, 
+     *      with imageType() method : 
      *      %app.images_directory%/$directoryWidth/$filename
-     */   
+     */    
     public function resizeAndMove(
         UploadedFile $file,
         string $filename,
