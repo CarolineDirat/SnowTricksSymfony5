@@ -2,27 +2,22 @@
 
 namespace App\Controller;
 
-use App\Entity\Comment;
-use App\Entity\Picture;
 use App\Entity\Trick;
-use App\Entity\Video;
 use App\EntityForm\CommentForm;
+use App\EntityForm\TrickForm;
 use App\Form\CommentType;
 use App\Form\TrickType;
 use App\FormHandler\CommentFormHandler;
+use App\FormHandler\TrickFormHandler;
 use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
-use App\Service\ImageProcessInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 class TrickController extends AbstractController
 {
@@ -184,60 +179,13 @@ class TrickController extends AbstractController
      * @isGranted("ROLE_USER")
      */
     public function new(
+        TrickForm $trickForm,
         Request $request,
-        SluggerInterface $slugger,
-        ImageProcessInterface $imageProcess
+        TrickFormHandler $trickFormHandler
     ): Response {
-        $trick = new Trick();
-        $picture = new Picture();
-        $trick->addPicture($picture);
-        $video = new Video();
-        $trick->addVideo($video);
+        $trick = $trickForm->initialize();
         $form = $this->createForm(TrickType::class, $trick);
-        $form->handleRequest($request);
-        if($form->isSubmitted() && $form->isValid()) {
-            $trick->setSlug($slugger->slug(strtolower($trick->getName())));
-            $pictures = $trick->getPictures();
-            $picturesForm = $form->get('pictures');
-            foreach ($pictures as $key => $picture) {
-                $file = $picturesForm[$key]->get('file')->getData();
-                if($file instanceof UploadedFile) { 
-                    $filename = uniqid($trick->getSlug().'-', true); // file name without extension
-                    // Resize the picture file to severals widths (cf service.yaml),
-                    // and move files in their corresponding directory named with each width
-                    try {
-                        $filename = $imageProcess->execute($file, $filename);
-                    } catch (FileException $e) {
-                        // ... handle exception if something happens during file upload
-                        $this->addFlash('upload', "Le fichier ".$file->getFilename()." n'a pas pu être traité.". $e->getMessage());
-                        return $this->redirectToRoute('trick_new', [
-                            'form' => $form->createView(),
-                        ]);
-                    }
-                    $picture->setFilename($filename);
-                    $picture->setTrick($trick);
-                    $trick->addPicture($picture);
-                } else {
-                    $trick->removePicture($picture);
-                }
-            }
-            $videos = $trick->getVideos();
-            foreach ($videos as $video) {
-                if(empty($video->getService()) || empty($video->getCode())) {
-                    $trick->removeVideo($video);
-                } else {
-                    $video->setTrick($trick);
-                    $trick->addVideo($video);
-                }
-            }
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($trick);
-            $entityManager->flush();
-            $this->addFlash(
-                'notice',
-                "Le trick " . $trick->getName() . " vient d'être ajouté"
-            );
-
+        if($trickFormHandler->handle($request, $form, $trick)) {
             return $this->redirectToRoute('tricks');
         }
 
