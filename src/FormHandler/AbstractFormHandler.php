@@ -9,13 +9,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractFormHandler implements FormHandlerInterface
 {
-    private ManagerRegistry $managerRegistry;
-
-    public function __construct(ManagerRegistry $managerRegistry)
-    {
-        $this->managerRegistry = $managerRegistry;
-    }
-
+    protected FormInterface $form;
+    
     abstract public function getEntityClass(): string;
 
     abstract public function process(object $entity): void;
@@ -32,6 +27,7 @@ abstract class AbstractFormHandler implements FormHandlerInterface
     public function handle(Request $request, FormInterface $form, object $entity): bool
     {
         $form->handleRequest($request);
+        $this->setForm($form);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->process($this->checkEntity($entity));
 
@@ -40,8 +36,23 @@ abstract class AbstractFormHandler implements FormHandlerInterface
         return false;
     }
 
-    public function getManagerRegistry(): ManagerRegistry
+    /**
+     * Get the value of form
+     */ 
+    public function getForm(): FormInterface
     {
-        return $this->managerRegistry;
+        return $this->form;
+    }
+
+    /**
+     * Set the value of form
+     *
+     * @return  self
+     */ 
+    public function setForm(FormInterface $form)
+    {
+        $this->form = $form;
+
+        return $this;
     }
 }
