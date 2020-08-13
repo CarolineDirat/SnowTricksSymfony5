@@ -9,7 +9,7 @@ use DateTimeImmutable;
 
 class CommentForm
 {
-    public function initialize(Trick $trick, User $user): Comment
+    public function initialize(Trick $trick, ?User $user): Comment
     {
         $comment = new Comment();
         return $comment
