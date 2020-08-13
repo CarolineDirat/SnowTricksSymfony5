@@ -58,6 +58,8 @@ $(function () {
         $('#trick_pictures_' + (index - 1)).addClass('row picture mt-2 pt-2');
         $('#trick_pictures_' + (index - 1) + ' div.form-group:first').wrap('<div class="col-12 col-md-10 col-lg-6"></div>');
         $('#trick_pictures_' + (index - 1) + ' div.form-group:last').addClass('my-2 col-12');
+
+        $('#trick_pictures_' + (index - 1)).hide().slideDown('slow');
     };
 
     addPictureButton.on('click', function (e) {
@@ -100,7 +102,9 @@ $(function () {
         $('#trick_videos_' + (index - 1)).addClass('form-row video pb-2 pt-1 mt-2');
         $('#trick_videos_' + (index - 1) + ' fieldset').addClass('pl-3 col-sm-6 col-md-5 col-lg-4 col-xl-3 mb-0');
         $('#trick_videos_' + (index - 1) + ' div.form-group').addClass('col-sm-6 col-md-7 col-lg-8 mt-3 col-xl-9 mt-sm-0 mb-0');
-        $('#trick_videos_' + (index - 1) + ' div.form-group label').after('<span class="modal-info-code ml-2 mb-1" data-toggle="modal" data-target="#modal-help-code-video"><i class="fas fa-question-circle"></i></span>')
+        $('#trick_videos_' + (index - 1) + ' div.form-group label').after('<span class="modal-info-code ml-2 mb-1" data-toggle="modal" data-target="#modal-help-code-video"><i class="fas fa-question-circle"></i></span>');
+
+        $('#trick_videos_' + (index - 1)).hide().slideDown('slow');
     };
 
     addVideoButton.on('click', function (e) {
