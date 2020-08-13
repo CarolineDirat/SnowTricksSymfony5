@@ -1,3 +1,8 @@
+{% for message in app.flashes('upload') %}
+    <div class="alert alert-warning my-4 font-weight-bold row text-center">
+        {{ message }} Vous pouvez réessayer avec un autre fichier.
+    </div>
+{% endfor %}
 <div id="tricks" class="row d-none" data-token="{{ csrf_token('delete-trick-token258941367') }}">
 	{% for trick in tricks %}
 		<div class="col-sm-6 col-md-4 col-lg-3 my-2">
