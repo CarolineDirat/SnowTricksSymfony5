@@ -14,6 +14,11 @@
             </div>
         </div>
         {% endfor %}
+        {% for message in app.flashes('upload') %}
+            <div class="alert alert-warning my-4 font-weight-bold row text-center">
+                {{ message }} Vous pouvez réessayer avec un autre fichier.
+            </div>
+        {% endfor %}
         {{ include('home/_tricks.html.twig') }}
     </section>
 {% endblock %}
