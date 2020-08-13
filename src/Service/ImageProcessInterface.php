@@ -35,9 +35,7 @@ interface ImageProcessInterface
      */
     public function resizesAndMoves(
         UploadedFile $file,
-        string $filename,
-        callable $imagecreatefromType,
-        callable $imageType
+        string $filename
     ): void;
 
     /**
@@ -52,9 +50,7 @@ interface ImageProcessInterface
         UploadedFile $file,
         string $filename,
         int $destinationWidth,
-        int $destinationHeigth,
-        int $directoryWidth,
-        callable $imagecreatefromType,
-        callable $imageType
+        int $destinationHeight,
+        int $directoryWidth
     ): void;
 }

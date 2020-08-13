@@ -17,6 +17,8 @@ class ImageProcess implements ImageProcessInterface
 
     private ParameterBagInterface $parameterBag;
 
+    private string $type;
+
     public function __construct(ParameterBagInterface $parameterBag, array $widths)
     {
         $this->widths = $widths;
@@ -45,63 +47,63 @@ class ImageProcess implements ImageProcessInterface
         switch ($mime) {
             case 'image/jpeg':
                 $filename = $filename.'.jpg';
-                $imagecreatefromType = function(UploadedFile $file) {
-                    return imagecreatefromjpeg($file->getPathname());
-                };
-                $imageType = function($destination, int $resizeWidth, string $filename) {
-                    return imagejpeg(
-                        $destination,
-                        $this->parameterBag->get('app.images_directory').(string)$resizeWidth.'/'.$filename
-                    );
-                };
-                $this->resizesAndMoves($file, $filename, $imagecreatefromType, $imageType);
+                $this->type = 'jpeg';
+                $this->resizesAndMoves($file, $filename);
 
                 return $filename;
             case 'image/png':
                 $filename = $filename.'.png';
-                $imagecreatefromType = function(UploadedFile $file) {
-                    return imagecreatefrompng($file->getPathname());
-                };
-                $imageType = function($destination, int $resizeWidth, string $filename) {
-                    return imagepng(
-                        $destination,
-                        $this->parameterBag->get('app.images_directory').(string)$resizeWidth.'/'.$filename
-                    );
-                };
-                $this->resizesAndMoves($file, $filename, $imagecreatefromType, $imageType);
+                $this->type = 'png';
+                $this->resizesAndMoves($file, $filename);
 
                 return $filename;
             case 'image/gif':
                 $filename = $filename.'.gif';
-                $imagecreatefromType = function(UploadedFile $file) {
-                    return imagecreatefromgif($file->getPathname());
-                };
-                $imageType = function($destination, int $resizeWidth, string $filename) {
-                    return imagegif(
-                        $destination,
-                        $this->parameterBag->get('app.images_directory').(string)$resizeWidth.'/'.$filename
-                    );
-                };
-                $this->resizesAndMoves($file, $filename, $imagecreatefromType, $imageType);
+                $this->type = 'gif';
+                $this->resizesAndMoves($file, $filename);
                 
                 return $filename;
             case 'image/webp':
                 $filename = $filename.'.webp';
-                $imagecreatefromType = function(UploadedFile $file) {
-                    return imagecreatefromwebp($file->getPathname());
-                };
-                $imageType = function($destination, int $resizeWidth, string $filename) {
-                    return imagewebp(
-                        $destination,
-                        $this->parameterBag->get('app.images_directory').(string)$resizeWidth.'/'.$filename
-                    );
-                };
-                $this->resizesAndMoves($file, $filename, $imagecreatefromType, $imageType);
+                $this->type = 'webp';
+                $this->resizesAndMoves($file, $filename);
 
                 return $filename;
             default:
+                // should never happen because it's check during form validation
                 throw new FileException("Unknown image type");
         }
+    }
+    
+    /**
+     * imagecreatefromType
+     *
+     * @param  UploadedFile $file
+     * @return resource
+     */
+    public function imagecreatefromType(UploadedFile $file)
+    {
+        $imagecreatefromType = 'imagecreatefrom' . $this->type;
+        
+        return $imagecreatefromType($file->getPathname());
+    }
+    
+    /**
+     * imageType
+     *
+     * @param  resource $destination
+     * @param  int $resizeWidth
+     * @param  string $filename
+     * @return bool
+     */
+    public function imageType($destination, int $resizeWidth, string $filename): bool
+    {
+        $imageType = 'image' . $this->type;
+        
+        return $imageType(
+            $destination,
+            $this->parameterBag->get('app.images_directory').(string)$resizeWidth.'/'.$filename
+        );
     }
     
     /**
@@ -115,9 +117,7 @@ class ImageProcess implements ImageProcessInterface
      */
     public function resizesAndMoves(
         UploadedFile $file,
-        string $filename,
-        callable $imagecreatefromType,
-        callable $imageType
+        string $filename
     ): void {
         list($originalWidth, $originalHeight) = getimagesize($file);
         foreach ($this->widths as $resizeWidth) {
@@ -128,9 +128,7 @@ class ImageProcess implements ImageProcessInterface
                     $filename,
                     $resizeWidth,
                     $resizeHeight,
-                    $resizeWidth,
-                    $imagecreatefromType,
-                    $imageType
+                    $resizeWidth
                 );
             } else {
                 $this->resizeAndMove(
@@ -138,9 +136,7 @@ class ImageProcess implements ImageProcessInterface
                     $filename,
                     $originalWidth,
                     $originalHeight,
-                    $resizeWidth,
-                    $imagecreatefromType,
-                    $imageType
+                    $resizeWidth
                 );
             }
         }
@@ -158,13 +154,11 @@ class ImageProcess implements ImageProcessInterface
         UploadedFile $file,
         string $filename,
         int $destinationWidth,
-        int $destinationHeigth,
-        int $directoryWidth,
-        callable $imagecreatefromType,
-        callable $imageType
+        int $destinationHeight,
+        int $directoryWidth
     ): void {
-        $source = $imagecreatefromType($file);
-        $destination = imagecreatetruecolor($destinationWidth, $destinationHeigth);
+        $source = $this->imagecreatefromType($file);
+        $destination = imagecreatetruecolor($destinationWidth, $destinationHeight);
         imagecopyresampled(
             $destination,
             $source,
@@ -174,7 +168,7 @@ class ImageProcess implements ImageProcessInterface
             imagesx($source),
             imagesy($source)
         );
-        if (!$imageType($destination, $directoryWidth, $filename)) {
+        if (!$this->imageType($destination, $directoryWidth, $filename)) {
             throw new FileException("Le fichier " . $file->getClientOriginalName() . " n'a pas pu être traité.");
         }
     }
