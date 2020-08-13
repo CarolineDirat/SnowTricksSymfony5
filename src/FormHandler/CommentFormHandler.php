@@ -16,7 +16,7 @@ class CommentFormHandler extends AbstractFormHandler
     {
         $this->managerRegistry = $managerRegistry;
     }
-    
+
     public function getEntityClass(): string
     {
         return Comment::class;
@@ -25,12 +25,13 @@ class CommentFormHandler extends AbstractFormHandler
     public function initialize(Trick $trick, ?User $user): Comment
     {
         $comment = new Comment();
+
         return $comment
             ->setTrick($trick)
             ->setCreatedAt(new DateTimeImmutable())
             ->setUser($user);
     }
-    
+
     public function process(object $entity): void
     {
         $entityManager = $this->getManagerRegistry()->getManager();

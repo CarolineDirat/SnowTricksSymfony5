@@ -20,11 +20,11 @@ class TrickType extends AbstractType
         $builder
             ->add('name', TextType::class)
             ->add('description', TextareaType::class, [
-                'label' => 'Description du trick :'
+                'label' => 'Description du trick :',
             ])
             ->add('groupTrick', EntityType::class, [
                 'class' => Group::class,
-                'query_builder' => function(GroupRepository $groupRepository) {
+                'query_builder' => function (GroupRepository $groupRepository) {
                     return $groupRepository->createQueryBuilder('g')
                         ->orderBy('g.name', 'DESC');
                 },

@@ -20,7 +20,7 @@ class Video
 
     /**
      * @ORM\Column(type="string", length=255)
-     * 
+     *
      * @Assert\Type("string")
      * @Assert\NotBlank
      */
@@ -28,7 +28,7 @@ class Video
 
     /**
      * @ORM\Column(type="string", length=45)
-     * 
+     *
      * @Assert\Type("string")
      * @Assert\NotBlank
      * @Assert\Choice({"youtube", "vimeo", "dailymotion"})

@@ -20,7 +20,7 @@ class Picture
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
-     * 
+     *
      * @Assert\Type("string")
      * @Assert\NotBlank
      */

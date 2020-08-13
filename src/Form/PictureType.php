@@ -8,10 +8,8 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotNull;
 
 class PictureType extends AbstractType
 {
@@ -33,9 +31,9 @@ class PictureType extends AbstractType
                         'mimeTypes' => ['image/png', 'image/jpeg', 'image/gif', 'image/webp'],
                         'mimeTypesMessage' => "Le fichier de l'image doit avoir une des extensions suivantes : png, jpeg, jpg, gif, webp.",
                         'minRatio' => 0.67,
-                        'minRatioMessage' => "Le ratio {{ ratio }} de l'image (largeur/hauteur) est ici trop petit. Il doit être au moins de {{ max_ratio }}."
+                        'minRatioMessage' => "Le ratio {{ ratio }} de l'image (largeur/hauteur) est ici trop petit. Il doit être au moins de {{ max_ratio }}.",
                     ]),
-                ]
+                ],
             ])
             ->add('alt', TextType::class, [
                 'label' => 'Une brève description de l\'image (facultatif) :',
@@ -43,10 +41,10 @@ class PictureType extends AbstractType
                 'constraints' => [
                     new Length([
                         'max' => 100,
-                        'maxMessage' => "La description est trop longue. Elle ne peut pas faire plus de {{ limit }} caractères."
-                    ])
-                ]
-            ] )
+                        'maxMessage' => 'La description est trop longue. Elle ne peut pas faire plus de {{ limit }} caractères.',
+                    ]),
+                ],
+            ])
         ;
     }
 

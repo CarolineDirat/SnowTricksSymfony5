@@ -10,10 +10,10 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
-use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 use Symfony\Component\String\Slugger\AsciiSlugger;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class TrickFormHandler extends AbstractFormHandler
 {
@@ -34,7 +34,7 @@ class TrickFormHandler extends AbstractFormHandler
         $this->imageProcess = $imageProcess;
         $this->session = new Session(new NativeSessionStorage(), new AttributeBag());
     }
-    
+
     public function getEntityClass(): string
     {
         return Trick::class;
@@ -60,7 +60,7 @@ class TrickFormHandler extends AbstractFormHandler
         $entityManager = $this->getManagerRegistry()->getManager();
         $entityManager->persist($trick);
         $entityManager->flush();
-        $this->session->getFlashBag()->add('notice',"Le trick " . $trick->getName() . " vient d'être ajouté");
+        $this->session->getFlashBag()->add('notice', 'Le trick '.$trick->getName()." vient d'être ajouté");
     }
 
     public function processPictures(Trick $trick): void
@@ -70,7 +70,7 @@ class TrickFormHandler extends AbstractFormHandler
         foreach ($pictures as $key => $picture) {
             $file = $picturesForm[$key]->get('file')->getData();
             if ($file instanceof UploadedFile) {
-                $filename = uniqid($trick->getSlug() . '-', true); // file name without extension
+                $filename = uniqid($trick->getSlug().'-', true); // file name without extension
                 // Resize the picture file to severals widths (cf service.yaml),
                 // and move files in their corresponding directory named with each width
                 try {
@@ -102,24 +102,24 @@ class TrickFormHandler extends AbstractFormHandler
     }
 
     /**
-     * Get the value of slugger
-     */ 
+     * Get the value of slugger.
+     */
     public function getSlugger(): SluggerInterface
     {
         return $this->slugger;
     }
 
     /**
-     * Get the value of imageProcess
-     */ 
+     * Get the value of imageProcess.
+     */
     public function getImageProcess(): ImageProcess
     {
         return $this->imageProcess;
     }
 
     /**
-     * Get the value of managerRegistry
-     */ 
+     * Get the value of managerRegistry.
+     */
     public function getManagerRegistry(): ManagerRegistry
     {
         return $this->managerRegistry;
