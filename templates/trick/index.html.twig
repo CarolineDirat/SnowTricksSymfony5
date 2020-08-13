@@ -70,11 +70,13 @@
 			</div>
 			{# width < 540px #}
 			<div class="d-block d-md-none col-12 text-center mt-5">
+				{% if trick.pictures|length > 0 %}
 				<p>
 					<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapsePictures" aria-expanded="false" aria-controls="collapsePictures">
 						Photos
 					</button>
 				</p>
+				{% endif %}
 				<div class="collapse mb-4" id="collapsePictures">
 					{% for picture in trick.pictures %}
 						<img src="{{ asset('uploads/images/540/' ~ picture.filename) }}" alt="{{ picture.alt }} , photo pour illustrer le trick de snowboard {{ trick.name }}" class="img-thumbnail rounded"/>
@@ -82,11 +84,13 @@
 				</div>
 			</div>
 			<div class="d-block d-md-none col-12 text-center">
+				{% if trick.videos|length > 0 %}
 				<p>
 					<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseVideos" aria-expanded="false" aria-controls="collapseVideos">
 						Vidéos
 					</button>
 				</p>
+				{% endif %}
 				<div class="collapse" id="collapseVideos">
 					{% for video in trick.videos %}
 						{{ include('fragments/_iframe.html.twig', {width: 280, height: 157}) }}
