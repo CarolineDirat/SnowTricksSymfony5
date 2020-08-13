@@ -49,7 +49,7 @@ class ImageProcess implements ImageProcessInterface
                     return imagecreatefromjpeg($file->getPathname());
                 };
                 $imageType = function($destination, int $resizeWidth, string $filename) {
-                    imagejpeg(
+                    return imagejpeg(
                         $destination,
                         $this->parameterBag->get('app.images_directory').(string)$resizeWidth.'/'.$filename
                     );
@@ -63,7 +63,7 @@ class ImageProcess implements ImageProcessInterface
                     return imagecreatefrompng($file->getPathname());
                 };
                 $imageType = function($destination, int $resizeWidth, string $filename) {
-                    imagepng(
+                    return imagepng(
                         $destination,
                         $this->parameterBag->get('app.images_directory').(string)$resizeWidth.'/'.$filename
                     );
@@ -77,7 +77,7 @@ class ImageProcess implements ImageProcessInterface
                     return imagecreatefromgif($file->getPathname());
                 };
                 $imageType = function($destination, int $resizeWidth, string $filename) {
-                    imagegif(
+                    return imagegif(
                         $destination,
                         $this->parameterBag->get('app.images_directory').(string)$resizeWidth.'/'.$filename
                     );
@@ -91,7 +91,7 @@ class ImageProcess implements ImageProcessInterface
                     return imagecreatefromwebp($file->getPathname());
                 };
                 $imageType = function($destination, int $resizeWidth, string $filename) {
-                    imagewebp(
+                    return imagewebp(
                         $destination,
                         $this->parameterBag->get('app.images_directory').(string)$resizeWidth.'/'.$filename
                     );
@@ -174,6 +174,8 @@ class ImageProcess implements ImageProcessInterface
             imagesx($source),
             imagesy($source)
         );
-        $imageType($destination, $directoryWidth, $filename);
+        if (!$imageType($destination, $directoryWidth, $filename)) {
+            throw new FileException("Le fichier " . $file->getClientOriginalName() . " n'a pas pu être traité.");
+        }
     }
 }
