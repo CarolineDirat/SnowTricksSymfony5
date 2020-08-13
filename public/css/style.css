@@ -71,8 +71,9 @@ nav {
 
 .alert.alert-primary {
   color: #346;
-  background-color: #3cc4f4;
-  border-color: #3cc4f4;
+  background-color: #ccd5e7;
+  border: 1px solid #ccd5e7;
+  box-shadow: 0px 0px 10px 4px rgba(131, 173, 216, 0.75);
 }
 
 .badge-primary {
