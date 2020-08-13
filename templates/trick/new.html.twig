@@ -9,11 +9,9 @@
     <div class="row">
         <h1 class="col-12 my-5 d-flex justify-content-center">Ajouter un Trick</h1>
         {% for message in app.flashes('upload') %}
-        <div class="row justify-content-center">
-            <div class="alert alert-warning my-4 font-weight-bold col-11 col-sm-11 col-md-8 col-xl-4 text-center">
-                {{ message }} Le fichier doit être corrompu.
+            <div class="alert alert-warning my-4 font-weight-bold row text-center">
+                {{ message }} Vous pouvez réessayer avec un autre fichier.
             </div>
-        </div>
         {% endfor %}
         <div class="col-12">
         {{ form_start(form) }}
