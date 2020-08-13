@@ -3,8 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Trick;
-use App\EntityForm\CommentForm;
-use App\EntityForm\TrickForm;
 use App\Form\CommentType;
 use App\Form\TrickType;
 use App\FormHandler\CommentFormHandler;
@@ -31,7 +29,6 @@ class TrickController extends AbstractController
         string $slug,
         CommentRepository $commentRepository,
         Request $request,
-        CommentForm $commentForm,
         CommentFormHandler $commentFormHandler
     ): Response {
         // check slug
@@ -42,7 +39,7 @@ class TrickController extends AbstractController
             ]);
         }
         // create comment form
-        $comment = $commentForm->initialize($trick, $this->getUser());
+        $comment = $commentFormHandler->initialize($trick, $this->getUser());
         $form = $this->createForm(CommentType::class, $comment);
         // process comment form
         if ($commentFormHandler->handle($request, $form, $comment)) {
@@ -179,11 +176,10 @@ class TrickController extends AbstractController
      * @isGranted("ROLE_USER")
      */
     public function new(
-        TrickForm $trickForm,
         Request $request,
         TrickFormHandler $trickFormHandler
     ): Response {
-        $trick = $trickForm->initialize();
+        $trick = $trickFormHandler->initialize();
         $form = $this->createForm(TrickType::class, $trick);
         if($trickFormHandler->handle($request, $form, $trick)) {
             return $this->redirectToRoute('tricks');
