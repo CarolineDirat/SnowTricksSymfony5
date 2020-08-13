@@ -21,6 +21,9 @@ interface ImageProcessInterface
      *       
      * @param  UploadedFile $file   uploaded file from trick form
      * @param  string $filename     the new name of resize file (without it's extension)
+     * 
+     * @return string                the new name of resizes files, with it's extension
+     *                              corresponding to the file mime type
      */
     public function execute(UploadedFile $file, string $filename): string;
     
@@ -32,11 +35,10 @@ interface ImageProcessInterface
      * But if the image file is lower than the destination width,
      * then the file is only resized with it's originals dimensions.
      * 
+     * Finally return filename with it's extension; corresponding to the file mime type
+     * 
      */
-    public function resizesAndMoves(
-        UploadedFile $file,
-        string $filename
-    ): void;
+    public function resizesAndMoves(UploadedFile $file, string $filename): string;
 
     /**
      * resizeAndMove
