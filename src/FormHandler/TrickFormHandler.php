@@ -53,8 +53,18 @@ class TrickFormHandler extends AbstractFormHandler
 
     public function process(object $trick): void
     {
+        // trick slug will be used in file name pictures
         $trick->setSlug($this->getSlugger()->slug(strtolower($trick->getName())));
-        // process picture(s)
+        $this->processPictures($trick);
+        $this->processVideos($trick);
+        $entityManager = $this->getManagerRegistry()->getManager();
+        $entityManager->persist($trick);
+        $entityManager->flush();
+        $this->session->getFlashBag()->add('notice',"Le trick " . $trick->getName() . " vient d'être ajouté");
+    }
+
+    public function processPictures(Trick $trick): void
+    {
         $pictures = $trick->getPictures();
         $picturesForm = $this->getForm()->get('pictures');
         foreach ($pictures as $key => $picture) {
@@ -76,7 +86,10 @@ class TrickFormHandler extends AbstractFormHandler
                 $trick->removePicture($picture);
             }
         }
-        // process video(s)
+    }
+
+    public function processVideos(Trick $trick): void
+    {
         $videos = $trick->getVideos();
         foreach ($videos as $video) {
             if (empty($video->getService()) || empty($video->getCode())) {
@@ -86,10 +99,6 @@ class TrickFormHandler extends AbstractFormHandler
                 $trick->addVideo($video);
             }
         }
-        $entityManager = $this->getManagerRegistry()->getManager();
-        $entityManager->persist($trick);
-        $entityManager->flush();
-        $this->session->getFlashBag()->add('notice',"Le trick " . $trick->getName() . " vient d'être ajouté");
     }
 
     /**
