@@ -108,7 +108,7 @@ class ImageProcess implements ImageProcessInterface
             $resizeHeight = ceil(($originalHeight * $resizeWidth) / $originalWidth);
             $destinationHeight = $originalWidth > $resizeWidth ? $resizeHeight : $originalHeight;
             $this->resizeAndMove(
-                $file, 
+                $file,
                 $filename,
                 $destinationWidth,
                 $destinationHeight,
