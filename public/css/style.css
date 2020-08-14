@@ -91,6 +91,16 @@ nav {
   font-size: 60%;
 }
 
+.btn.btn-add {
+  background-color: #2576c3;
+  color: #fff;
+}
+
+.btn.btn-add:hover {
+  background-color: #71A2D1;
+  color: #fff;
+}
+
 .btn.btn-outline-primary {
   color: #346;
   border-color: #346;
@@ -479,6 +489,19 @@ h2 {
 /*********************************************
                 UPDATE TRICK FORM
 **********************************************/
+
+#trick-update a.btn-delete {
+  background-color: #8B0000;
+  color: #fff;
+}
+
+#trick-update a.btn-delete:hover {
+  background-color: #CD5C5C;
+}
+
+#trick-update a.btn.btn-delete:focus {
+  box-shadow: none;
+}
 
 #trick-update h1 {
   font-size: 2rem;
