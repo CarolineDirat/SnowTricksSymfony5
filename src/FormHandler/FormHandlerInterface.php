@@ -13,5 +13,5 @@ interface FormHandlerInterface
 
     public function checkEntity(object $entity): object;
 
-    public function handle(Request $request, FormInterface $form, object $entity): bool;
+    public function isHandled(Request $request, FormInterface $form, object $entity): bool;
 }

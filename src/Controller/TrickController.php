@@ -42,7 +42,7 @@ class TrickController extends AbstractController
         $comment = $commentFormHandler->initialize($trick, $this->getUser());
         $form = $this->createForm(CommentType::class, $comment);
         // process comment form
-        if ($commentFormHandler->handle($request, $form, $comment)) {
+        if ($commentFormHandler->isHandled($request, $form, $comment)) {
             return $this->redirectToRoute('display_trick', [
                 'slug' => $trick->getSlug(),
                 'uuid' => $trick->getUuid(),
@@ -180,7 +180,7 @@ class TrickController extends AbstractController
     ): Response {
         $trick = $trickFormHandler->initialize();
         $form = $this->createForm(TrickType::class, $trick);
-        if ($trickFormHandler->handle($request, $form, $trick)) {
+        if ($trickFormHandler->isHandled($request, $form, $trick)) {
             return $this->redirectToRoute('tricks');
         }
 
