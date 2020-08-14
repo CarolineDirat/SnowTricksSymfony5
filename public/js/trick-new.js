@@ -8,7 +8,7 @@ $(function () {
     
     var translateBrowse = function() {
         $('label.custom-file-label').attr('data-browse', 'Parcourir mes fichiers');
-    }
+    };
     translateBrowse();    
     
     //////////////////////////////////////////////////////////////////////////////////////////
