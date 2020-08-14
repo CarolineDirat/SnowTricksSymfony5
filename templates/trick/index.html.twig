@@ -57,7 +57,9 @@
 		<div
 			class="row d-flex">
 			{# width > 540 px #}
-			<h2 class="d-none d-md-block col-sm-12 text-center">{{ trick.name }}</h2>
+			{% if trick.pictures|length > 0 or trick.videos|length > 0 %}
+				<h2 class="d-none d-md-block col-sm-12 text-center">{{ trick.name }}</h2>
+			{% endif %}
 			<div class="d-none d-md-block col-sm-12 col-md-7 col-xl-5 text-center">
 				{% for picture in trick.pictures %}
 					<img src="{{ asset('uploads/images/200/' ~ picture.filename) }}" alt="{{ picture.alt ~ ', ' }} photo pour illustrer le trick de snowboard {{ trick.name }}." class="img-thumbnail rounded"/>
