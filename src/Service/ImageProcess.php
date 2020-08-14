@@ -104,28 +104,19 @@ class ImageProcess implements ImageProcessInterface
         list($originalWidth, $originalHeight) = getimagesize($file);
 
         foreach ($this->widths as $resizeWidth) {
-            if ($originalWidth > $resizeWidth) {
-                $resizeHeight = ceil(($originalHeight * $resizeWidth) / $originalWidth);
-                $this->resizeAndMove(
-                    $file,
-                    $filename,
-                    $resizeWidth,
-                    $resizeHeight,
-                    $resizeWidth
-                );
-
-                return $filename;
-            }
+            $destinationWidth = $originalWidth > $resizeWidth ? $resizeWidth : $originalWidth;
+            $resizeHeight = ceil(($originalHeight * $resizeWidth) / $originalWidth);
+            $destinationHeight = $originalWidth > $resizeWidth ? $resizeHeight : $originalHeight;
             $this->resizeAndMove(
-                $file,
+                $file, 
                 $filename,
-                $originalWidth,
-                $originalHeight,
+                $destinationWidth,
+                $destinationHeight,
                 $resizeWidth
             );
-
-            return $filename;
         }
+
+        return $filename;
     }
 
     /**
