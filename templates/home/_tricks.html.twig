@@ -4,24 +4,26 @@
 			<div class="card tricks">
 				<div class="div-card-img d-flex align-items-center justify-content-center">
 					<img 
-						src="{{ asset('uploads/images/200/' ~ (trick.firstPicture ? trick.firstPicture.filename : (trick.pictures ? trick.pictures[0].filename : 'default.jpg'))) }}" 
+						src="{{ asset('uploads/images/200/' ~ (trick.firstPicture ? trick.firstPicture.filename : (trick.pictures|length > 0 ? trick.pictures[0].filename : 'default.jpg'))) }}" 
 						class="card-img-top"
 						alt="Picture to illustrate {{ trick.name }} snowboard trick.">
 				</div>
-				<div class="card-body p-0">
-					<h2 class="card-title d-flex flex-nowrap justify-content-center">
-						<a href="{{ path('display_trick', {uuid: trick.uuid, slug: trick.slug}) }}" class="btn btn-outline-primary btn-sm text-nowrap mr-2" data-toggle="tooltip" data-placement="bottom" title="Page de présentation du trick">
+				<div class="card-body row justify-content-center">
+					<h2 class="card-title d-flex justify-content-center">
+						<a href="{{ path('display_trick', {uuid: trick.uuid, slug: trick.slug}) }}" class="btn btn-outline-primary btn-sm mr-2" data-toggle="tooltip" data-placement="bottom" title="Page de présentation du trick">
 							{{ trick.name|upper }}
 						</a>
-						{% if app.user %}
+					</h2>
+					{% if app.user %}
+					<div class="">
 						<a href="#" class="btn btn-outline-primary btn-sm mr-1 ml-2" data-toggle="tooltip" data-placement="bottom" title="Modifier le trick">
 							<i class="fas fa-pencil-alt"></i>
 						</a>
 						<a role="button" href="{{ path('trick_delete_ajax', {uuid: trick.uuid}) }}" class="btn btn-outline-primary btn-sm" data-delete data-trick="{{ trick.name }}" data-toggle="modal" data-target="#modalDelete" data-toggle="tooltip" data-placement="bottom" title="Supprimer le trick">
 							<i class="fas fa-trash-alt"></i>
 						</a>
-						{% endif %}
-					</h2>
+					</div>
+					{% endif %}
 				</div>
 			</div>
 		</div>
@@ -69,7 +71,7 @@
 	</div>
 	{% if app.user %}
 	<div class="col-12 text-center mb-5">
-		<a href="#" class="btn btn-secondary mb-4 add-trick-btn d-none">
+		<a href="{{ path('trick_new') }}" class="btn btn-secondary mb-4 add-trick-btn d-none">
 			Ajouter un trick
 		</a>
 	</div>

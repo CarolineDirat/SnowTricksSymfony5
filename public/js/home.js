@@ -66,7 +66,7 @@ $(function () {
 
     var displayTrick = function(trick) {
 
-        let firstPicture = trick.firstPicture ? trick.firstPicture.filename : (trick.pictures ? trick.pictures[0].filename : 'default.jpg');
+        let firstPicture = trick.firstPicture ? trick.firstPicture.filename : (trick.pictures.length ? trick.pictures[0].filename : 'default.jpg');
 
         let containerCardTrick = $(document.createElement('div'));
         containerCardTrick.addClass('col-sm-6 col-md-4 col-lg-3 my-2');

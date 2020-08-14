@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PictureRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=PictureRepository::class)
@@ -19,13 +20,23 @@ class Picture
 
     /**
      * @ORM\Column(type="string", length=255, unique=true)
+     *
+     * @Assert\Type("string")
+     * @Assert\NotBlank
      */
-    private ?string $filename;
+    private ?string $filename = null;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
+     *
+     * @Assert\Type("string")
+     * @Assert\NotBlank(allowNull=true)
+     * @Assert\Length(
+     *      max=100,
+     *      maxMessage="La description est trop longue. Elle ne peut pas faire plus de {{ limit }} caractères."
+     * )
      */
-    private ?string $alt;
+    private ?string $alt = null;
 
     /**
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="pictures")

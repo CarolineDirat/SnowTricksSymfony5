@@ -279,7 +279,6 @@ class AppFixtures extends Fixture
         AsciiSlugger $slugger
     ): Trick {
         $trick = new Trick();
-        $trick->setUuid(Uuid::uuid4());
         $trick->setName($name);
         $trick->setDescription($description);
         $trick->setSlug(strtolower($slugger->slug($trick->getName())));

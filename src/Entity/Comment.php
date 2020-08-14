@@ -22,7 +22,7 @@ class Comment
     /**
      * @ORM\Column(type="text")
      *
-     *  @Assert\Type(
+     * @Assert\Type(
      *      type="string",
      *      message="Ce commentaire n'est pas valide."
      * )
@@ -30,8 +30,8 @@ class Comment
      *      message="Un commentaire ne peut pas être vide."
      * )
      * @Assert\Length(
-     *      max=2000,
-     *      maxMessage="Le commentaire est trop. Il ne peut pas faire plus de {{ limit }} caractères."
+     *      max=3000,
+     *      maxMessage="Le commentaire est trop long. Il ne peut pas faire plus de {{ limit }} caractères."
      * )
      */
     private ?string $content = null;

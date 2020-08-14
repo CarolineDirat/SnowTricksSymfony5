@@ -2,12 +2,13 @@
 
 namespace App\Controller;
 
-use App\Entity\Comment;
 use App\Entity\Trick;
 use App\Form\CommentType;
+use App\Form\TrickType;
+use App\FormHandler\CommentFormHandler;
+use App\FormHandler\TrickFormHandler;
 use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
-use DateTimeImmutable;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -27,7 +28,8 @@ class TrickController extends AbstractController
         Trick $trick,
         string $slug,
         CommentRepository $commentRepository,
-        Request $request
+        Request $request,
+        CommentFormHandler $commentFormHandler
     ): Response {
         // check slug
         if ($slug !== $trick->getSlug()) {
@@ -37,18 +39,10 @@ class TrickController extends AbstractController
             ]);
         }
         // create comment form
-        $comment = new Comment();
-        $comment->setTrick($trick);
-        $comment->setCreatedAt(new DateTimeImmutable());
-        $comment->setUser($this->getUser());
+        $comment = $commentFormHandler->initialize($trick, $this->getUser());
         $form = $this->createForm(CommentType::class, $comment);
-        $form->handleRequest($request);
         // process comment form
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($comment);
-            $entityManager->flush();
-
+        if ($commentFormHandler->isHandled($request, $form, $comment)) {
             return $this->redirectToRoute('display_trick', [
                 'slug' => $trick->getSlug(),
                 'uuid' => $trick->getUuid(),
@@ -159,7 +153,7 @@ class TrickController extends AbstractController
             $entityManager->flush();
             $this->addFlash(
                 'notice',
-                'Le trick '.$trickName.' a bien été supprimé.'
+                'Le trick "'.$trickName.'" a bien été supprimé.'
             );
 
             return $this->redirectToRoute('tricks');
@@ -168,6 +162,30 @@ class TrickController extends AbstractController
         return $this->redirectToRoute('display_trick', [
             'slug' => $trick->getSlug(),
             'uuid' => $trick->getUuid(),
+        ]);
+    }
+
+    /**
+     * Delete a trick.
+     *
+     * @Route(
+     *      "/ajouter/trick",
+     *      name="trick_new"
+     * )
+     * @isGranted("ROLE_USER")
+     */
+    public function new(
+        Request $request,
+        TrickFormHandler $trickFormHandler
+    ): Response {
+        $trick = $trickFormHandler->initialize();
+        $form = $this->createForm(TrickType::class, $trick);
+        if ($trickFormHandler->isHandled($request, $form, $trick)) {
+            return $this->redirectToRoute('tricks');
+        }
+
+        return $this->render('trick/new.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 }

@@ -22,13 +22,12 @@
 				</button>
 			</div>
 			{% endif %}	
-			{% set firstPicture = trick.firstPicture ? trick.firstPicture.filename : ( trick.pictures ? trick.pictures[0].filename : 'default.jpg') %}
+			{% set firstPicture = trick.firstPicture ? trick.firstPicture.filename : (trick.pictures|length > 0 ? trick.pictures[0].filename : 'default.jpg') %}
 			{% set firstPictureAlt = trick.firstPicture ? trick.firstPicture.alt : null %}
 			<picture class="col-12 d-inline-flex justify-content-center">
 				<source srcset="{{ asset('uploads/images/540/' ~ firstPicture) }}" media="(max-width: 578px)" type="image/jpg">
 				<source srcset="{{ asset('uploads/images/720/' ~ firstPicture) }}" media="(max-width: 800px)" type="image/jpg">
-				<source srcset="{{ asset('uploads/images/960/' ~ firstPicture) }}" media="(max-width: 1100px)" type="image/jpg">
-				<img src="{{ asset('uploads/images/original/' ~ firstPicture) }}" class="img-fluid" alt="{{ firstPicture ~ ', ' }} , photo pour illustrer le trick de snowboard {{ trick.name }}"/>
+				<img src="{{ asset('uploads/images/960/' ~ firstPicture) }}" class="img-fluid" alt="{{ firstPicture ~ ', ' }} , photo pour illustrer le trick de snowboard {{ trick.name }}"/>
 			</picture>
 		</div>
 		{# Modal Page to delete the trick #}
@@ -71,11 +70,13 @@
 			</div>
 			{# width < 540px #}
 			<div class="d-block d-md-none col-12 text-center mt-5">
+				{% if trick.pictures|length > 0 %}
 				<p>
 					<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapsePictures" aria-expanded="false" aria-controls="collapsePictures">
 						Photos
 					</button>
 				</p>
+				{% endif %}
 				<div class="collapse mb-4" id="collapsePictures">
 					{% for picture in trick.pictures %}
 						<img src="{{ asset('uploads/images/540/' ~ picture.filename) }}" alt="{{ picture.alt }} , photo pour illustrer le trick de snowboard {{ trick.name }}" class="img-thumbnail rounded"/>
@@ -83,11 +84,13 @@
 				</div>
 			</div>
 			<div class="d-block d-md-none col-12 text-center">
+				{% if trick.videos|length > 0 %}
 				<p>
 					<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseVideos" aria-expanded="false" aria-controls="collapseVideos">
 						Vidéos
 					</button>
 				</p>
+				{% endif %}
 				<div class="collapse" id="collapseVideos">
 					{% for video in trick.videos %}
 						{{ include('fragments/_iframe.html.twig', {width: 280, height: 157}) }}
@@ -99,7 +102,7 @@
 		<div class="row">
 			<h2 class="col-md-12 text-center">{{ trick.name }}</h2>
 			<p class="text-justify px-4">
-				{{ trick.description }}
+				{{ trick.description|nl2br }}
 			</p>
 			<div class="col-sm-12 text-center mb-2">
 				<p class="badge badge-primary mt-4 mr-4 text-uppercase">
