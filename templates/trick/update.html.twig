@@ -1,0 +1,85 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	Modifier un trick
+{% endblock %}
+
+{% block body %}
+    <section id="trick-update" class="container">
+		{# trick name and first picture #}
+		<div class="row">
+			<h1 class="col-12 text-center mt-5">Modifier le trick :</h1>
+            <h2 class="col-12 text-center mt-2 mb-3">{{ trick.name|upper }}</h2>
+        </div>
+        <div class="row d-flex flex-nowrap justify-content-center first-image mt-4">
+			{% set firstPicture = trick.firstPicture ? trick.firstPicture.filename : (trick.pictures|length > 0 ? trick.pictures[0].filename : 'default.jpg') %}
+			{% set firstPictureAlt = trick.firstPicture ? trick.firstPicture.alt : null %}
+			<picture>
+				<source srcset="{{ asset('uploads/images/540/' ~ firstPicture) }}" media="(max-width: 578px)" type="image/jpg">
+				<source srcset="{{ asset('uploads/images/720/' ~ firstPicture) }}" media="(max-width: 800px)" type="image/jpg">
+				<img src="{{ asset('uploads/images/960/' ~ firstPicture) }}" class="img-fluid" alt="{{ firstPicture }} photo pour illustrer le trick de snowboard {{ trick.name }}"/>
+			</picture>
+            <div id="first-image-icons" class="align-self-start d-flex flex-nowrap">
+                <a href="#" class="btn btn-outline-primary btn-sm mr-2" data-toggle="tooltip" data-placement="bottom" title="Modifier l'image à la une">
+                    <i class="fas fa-pencil-alt"></i>
+                </a>
+                <a class="btn btn-outline-primary btn-sm mr-2" data-delete data-trick="{{ trick.name }}" data-toggle="tooltip" data-placement="bottom" title="Supprimer l'image à la une">
+                    <i class="fas fa-trash-alt"></i>
+                </a>
+            </div>
+		</div>
+		{# Modal Page to change the trick's first image #}
+        {#################################################}
+        
+        {# medias #}
+        {# pictures and videos #}
+		<div class="row d-flex">
+			{# width > 540 px #}
+			<div class="d-none d-md-block col-sm-12 col-md-7 col-xl-5 text-center">
+				{% for picture in trick.pictures %}
+					<img src="{{ asset('uploads/images/200/' ~ picture.filename) }}" alt="{{ picture.alt }} photo pour illustrer le trick de snowboard {{ trick.name }}." class="img-thumbnail rounded"/>
+				{% endfor %}
+			</div>
+			<div class="d-none d-md-block col-sm-12 col-md-5 col-xl-7 text-center">
+				{% for video in trick.videos %}
+					{{ include('fragments/_iframe.html.twig', {width: 280, height: 157}) }}
+				{% endfor %}
+			</div>
+			{# width < 540px #}
+			<div class="d-block d-md-none col-12 text-center mt-5">
+				{% if trick.pictures|length > 0 %}
+				<p>
+					<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapsePictures" aria-expanded="false" aria-controls="collapsePictures">
+						Photos
+					</button>
+				</p>
+				{% endif %}
+				<div class="collapse mb-4" id="collapsePictures">
+					{% for picture in trick.pictures %}
+						<img src="{{ asset('uploads/images/540/' ~ picture.filename) }}" alt="{{ picture.alt }} , photo pour illustrer le trick de snowboard {{ trick.name }}" class="img-thumbnail rounded"/>
+					{% endfor %}
+				</div>
+			</div>
+			<div class="d-block d-md-none col-12 text-center">
+				{% if trick.videos|length > 0 %}
+				<p>
+					<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseVideos" aria-expanded="false" aria-controls="collapseVideos">
+						Vidéos
+					</button>
+				</p>
+				{% endif %}
+				<div class="collapse" id="collapseVideos">
+					{% for video in trick.videos %}
+						{{ include('fragments/_iframe.html.twig', {width: 280, height: 157}) }}
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+
+    </section>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('js/trick-new.js') }}"></script>
+{% endblock %}

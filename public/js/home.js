@@ -86,8 +86,8 @@ $(function () {
         $('h2.card-title:last').append('<a href="/trick/'+ trick.slug + '/'+ trick.uuid +'" class="btn btn-outline-primary btn-sm text-nowrap" data-toggle="tooltip" data-placement="bottom" title="Page de présentation du trick">'+ trick.name.toUpperCase() + '</a>');
 
         if ($('a.add-trick-btn').length) {
-            $('h2.card-title:last').append('<a href="#" class="btn btn-outline-primary btn-sm mr-1 ml-2" data-toggle="tooltip" data-placement="bottom" title="Modifier le trick"><i class="fas fa-pencil-alt"></i></a>');
-            $('h2.card-title:last').append('<a href="/trick-suppression/'+ trick.uuid  +'" class="btn btn-outline-primary btn-sm" data-delete data-trick="'+ trick.name +'" data-toggle="modal" data-target="#modalDelete" data-toggle="tooltip" data-placement="bottom" title="Supprimer le trick"><i class="fas fa-trash-alt"></i></a>');
+            $('h2.card-title:last').append('<a href="/modifier/trick/' + trick.slug + '/' + trick.uuid + '" class="btn btn-outline-primary btn-sm mr-1 ml-2" data-toggle="tooltip" data-placement="bottom" title="Modifier le trick"><i class="fas fa-pencil-alt"></i></a>');
+            $('h2.card-title:last').append('<a href="/trick-suppression/' + trick.uuid  + '" class="btn btn-outline-primary btn-sm" data-delete data-trick="'+ trick.name +'" data-toggle="modal" data-target="#modalDelete" data-toggle="tooltip" data-placement="bottom" title="Supprimer le trick"><i class="fas fa-trash-alt"></i></a>');
         }
 
         containerCardTrick.slideDown(1000);

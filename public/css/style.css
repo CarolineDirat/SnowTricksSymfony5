@@ -428,18 +428,21 @@ h2 {
 }
 
 /*********************************************
-                TRICK FORM
+                NEW TRICK FORM
 **********************************************/
 
 @media (max-width: 400px) {
-  #trick-new h1 {
+  #trick-new h1,
+  #trick-update h1 {
     font-size: 1.9rem;
+    margin-top: 2rem !important;
   }
 }
 
-@media (max-width: 400px) {
-  #trick-new h1 {
-    font-size: 1.6rem;
+@media (max-width: 300px) {
+  #trick-new h1,
+  #trick-update h1 {
+    font-size: 1.4rem;
     margin-bottom: 1.5rem !important;
     margin-top: 2rem !important;
   }
@@ -472,3 +475,60 @@ h2 {
 .picture div.form-group {
   margin-bottom: 0.5rem;
 }
+
+/*********************************************
+                UPDATE TRICK FORM
+**********************************************/
+
+#trick-update h1 {
+  font-size: 2rem;
+}
+
+#trick-update h2 {
+  color: #5a8bc0;
+}
+
+#first-image-icons {
+  position: relative;
+  z-index: 20;
+  right: 80px;
+  top: 8px;
+}
+
+#first-image-icons .btn.btn-outline-primary {
+  background-color: #fff;
+}
+
+.first-image {
+  position: relative;
+  z-index: 0;
+  left: 40px;
+}
+
+@media(max-width: 1200px) {
+  #first-image-icons {
+    right: 70px;
+  }
+}
+
+@media (max-width: 400px) {
+  #trick-update h2 {
+    font-size: 1.9rem;
+    margin-top: 0.5rem !important;
+  }
+}
+
+@media (max-width: 300px) {
+  #trick-update h2 {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 300px) {
+  #trick-update h1 {
+    font-size: 1.4rem;
+    margin-bottom: 0 !important;
+  }
+}
+
+

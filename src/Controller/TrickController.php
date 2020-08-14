@@ -166,7 +166,7 @@ class TrickController extends AbstractController
     }
 
     /**
-     * Delete a trick.
+     * New trick.
      *
      * @Route(
      *      "/ajouter/trick",
@@ -174,10 +174,8 @@ class TrickController extends AbstractController
      * )
      * @isGranted("ROLE_USER")
      */
-    public function new(
-        Request $request,
-        TrickFormHandler $trickFormHandler
-    ): Response {
+    public function new(Request $request, TrickFormHandler $trickFormHandler): Response 
+    {
         $trick = $trickFormHandler->initialize();
         $form = $this->createForm(TrickType::class, $trick);
         if ($trickFormHandler->isHandled($request, $form, $trick)) {
@@ -186,6 +184,46 @@ class TrickController extends AbstractController
 
         return $this->render('trick/new.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Update trick.
+     *
+     * @Route(
+     *      "/modifier/trick/{slug}/{uuid}",
+     *      name="trick_update"
+     * )
+     * @isGranted("ROLE_USER")
+     */
+    public function update(Trick $trick, string $slug, Request $request): Response 
+    {        
+        // check slug
+        if ($slug !== $trick->getSlug()) {
+            return $this->redirectToRoute('trick_update', [
+                'slug' => $trick->getSlug(),
+                'uuid' => $trick->getUuid(),
+            ]);
+        }
+        
+        $form = $this->createForm(TrickType::class, $trick);
+
+        return $this->render('trick/update.html.twig', [
+            'trick' => $trick,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Display the page to update a trick from slug only.
+     *
+     * @Route("modifier/trick/{slug}", name="trick_update_slug")
+     */
+    public function redirectBySlugUpdate(Trick $trick): Response
+    {
+        return $this->redirectToRoute('trick_update', [
+            'slug' => $trick->getSlug(),
+            'uuid' => $trick->getUuid(),
         ]);
     }
 }

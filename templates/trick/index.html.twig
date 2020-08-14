@@ -14,7 +14,7 @@
 				<button id="scroll-to-comments" class="btn btn-primary btn-sm"> Aller aux commentaires <i class="fas fa-level-down-alt"></i> </button>
 			</div>
 			<div id="trick-read-icons" class="col-12 d-inline-flex justify-content-end">
-				<a href="#" class="btn btn-outline-primary mr-2" data-toggle="tooltip" data-placement="bottom" title="Modifier le trick">
+				<a href="{{ path('trick_update', {slug: trick.slug, uuid: trick.uuid}) }}" class="btn btn-outline-primary mr-2" data-toggle="tooltip" data-placement="bottom" title="Modifier le trick">
 					<i class="fas fa-pencil-alt"></i>
 				</a>
 				<button class="btn btn-outline-primary mr-2" data-delete data-trick="{{ trick.name }}" data-toggle="modal" data-target="#modalDeleteTrick" data-toggle="tooltip" data-placement="bottom" title="Supprimer le trick">
@@ -27,7 +27,7 @@
 			<picture class="col-12 d-inline-flex justify-content-center">
 				<source srcset="{{ asset('uploads/images/540/' ~ firstPicture) }}" media="(max-width: 578px)" type="image/jpg">
 				<source srcset="{{ asset('uploads/images/720/' ~ firstPicture) }}" media="(max-width: 800px)" type="image/jpg">
-				<img src="{{ asset('uploads/images/960/' ~ firstPicture) }}" class="img-fluid" alt="{{ firstPicture ~ ', ' }} , photo pour illustrer le trick de snowboard {{ trick.name }}"/>
+				<img src="{{ asset('uploads/images/960/' ~ firstPicture) }}" class="img-fluid" alt="{{ firstPicture }}  photo pour illustrer le trick de snowboard {{ trick.name }}"/>
 			</picture>
 		</div>
 		{# Modal Page to delete the trick #}
@@ -54,15 +54,14 @@
 			</div>
 		</div>
 		{# pictures and videos #}
-		<div
-			class="row d-flex">
+		<div class="row d-flex">
 			{# width > 540 px #}
 			{% if trick.pictures|length > 0 or trick.videos|length > 0 %}
 				<h2 class="d-none d-md-block col-sm-12 text-center">{{ trick.name }}</h2>
 			{% endif %}
 			<div class="d-none d-md-block col-sm-12 col-md-7 col-xl-5 text-center">
 				{% for picture in trick.pictures %}
-					<img src="{{ asset('uploads/images/200/' ~ picture.filename) }}" alt="{{ picture.alt ~ ', ' }} photo pour illustrer le trick de snowboard {{ trick.name }}." class="img-thumbnail rounded"/>
+					<img src="{{ asset('uploads/images/200/' ~ picture.filename) }}" alt="{{ picture.alt }} photo pour illustrer le trick de snowboard {{ trick.name }}." class="img-thumbnail rounded"/>
 				{% endfor %}
 			</div>
 			<div class="d-none d-md-block col-sm-12 col-md-5 col-xl-7 text-center">
@@ -81,7 +80,7 @@
 				{% endif %}
 				<div class="collapse mb-4" id="collapsePictures">
 					{% for picture in trick.pictures %}
-						<img src="{{ asset('uploads/images/540/' ~ picture.filename) }}" alt="{{ picture.alt }} , photo pour illustrer le trick de snowboard {{ trick.name }}" class="img-thumbnail rounded"/>
+						<img src="{{ asset('uploads/images/540/' ~ picture.filename) }}" alt="{{ picture.alt }} photo pour illustrer le trick de snowboard {{ trick.name }}" class="img-thumbnail rounded"/>
 					{% endfor %}
 				</div>
 			</div>
