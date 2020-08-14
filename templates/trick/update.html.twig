@@ -23,7 +23,7 @@
                 <a href="#" class="btn btn-outline-primary btn-sm mr-2" data-toggle="tooltip" data-placement="bottom" title="Modifier l'image à la une">
                     <i class="fas fa-pencil-alt"></i>
                 </a>
-                <a class="btn btn-outline-primary btn-sm mr-2" data-delete data-trick="{{ trick.name }}" data-toggle="tooltip" data-placement="bottom" title="Supprimer l'image à la une">
+                <a href="#" class="btn btn-outline-primary btn-sm mr-2" data-delete data-trick="{{ trick.name }}" data-toggle="tooltip" data-placement="bottom" title="Supprimer l'image à la une">
                     <i class="fas fa-trash-alt"></i>
                 </a>
             </div>
@@ -33,45 +33,69 @@
         
         {# medias #}
         {# pictures and videos #}
-		<div class="row d-flex">
-			{# width > 540 px #}
-			<div class="d-none d-md-block col-sm-12 col-md-7 col-xl-5 text-center">
+		<div class="row d-flex mt-4">
+			{# width > 720px #}
+			<div class="d-none d-md-block col-sm-12 col-md-7 col-lg-6 text-left">
 				{% for picture in trick.pictures %}
-					<img src="{{ asset('uploads/images/200/' ~ picture.filename) }}" alt="{{ picture.alt }} photo pour illustrer le trick de snowboard {{ trick.name }}." class="img-thumbnail rounded"/>
+                <div class="d-inline-block mb-2">
+					<img width="160px" src="{{ asset('uploads/images/200/' ~ picture.filename) }}" alt="{{ picture.alt }} photo pour illustrer le trick de snowboard {{ trick.name }}." class="img-thumbnail rounded"/>
+                    {{ include('fragments/_icons-media.html.twig', { hrefUpdate: '#', hrefDelete: '#', media: 'photo'}) }}
+                </div>
 				{% endfor %}
+                <div class="row justify-content-center mt-2">
+                    <button class="btn btn-primary btn-sm">Ajouter une photo</button>
+                </div>
 			</div>
-			<div class="d-none d-md-block col-sm-12 col-md-5 col-xl-7 text-center">
+			<div class="d-none d-md-block col-sm-12 col-md-5 col-lg-6 text-right">
 				{% for video in trick.videos %}
-					{{ include('fragments/_iframe.html.twig', {width: 280, height: 157}) }}
+                <div class="d-inline-block mb-2">
+					{{ include('fragments/_iframe.html.twig', {width: 210, height: 118}) }}
+                    {{ include('fragments/_icons-media.html.twig', { hrefUpdate: '#', hrefDelete: '#', media: 'vidéo'}) }}
+                </div>
 				{% endfor %}
+                <div class="row justify-content-center mt-2">
+                    <button class="btn btn-primary btn-sm">Ajouter une vidéo</button>
+                </div>
 			</div>
-			{# width < 540px #}
+			{# width < 720px #}
 			<div class="d-block d-md-none col-12 text-center mt-5">
 				{% if trick.pictures|length > 0 %}
 				<p>
-					<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapsePictures" aria-expanded="false" aria-controls="collapsePictures">
+					<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapsePicturesUpdate" aria-expanded="false" aria-controls="collapsePictures">
 						Photos
 					</button>
 				</p>
 				{% endif %}
-				<div class="collapse mb-4" id="collapsePictures">
+				<div class="collapse mb-4" id="collapsePicturesUpdate">
 					{% for picture in trick.pictures %}
-						<img src="{{ asset('uploads/images/540/' ~ picture.filename) }}" alt="{{ picture.alt }} , photo pour illustrer le trick de snowboard {{ trick.name }}" class="img-thumbnail rounded"/>
+                    <div class="d-inline-block">
+						<img src="{{ asset('uploads/images/200/' ~ picture.filename) }}" alt="{{ picture.alt }} , photo pour illustrer le trick de snowboard {{ trick.name }}" class="img-thumbnail rounded"/>
+                        {{ include('fragments/_icons-media.html.twig', { hrefUpdate: '#', hrefDelete: '#', media: 'photo'}) }}
+                    </div>
 					{% endfor %}
+                    <div class="row justify-content-center mt-4 mb-5">
+                        <button class="btn btn-primary btn-sm">Ajouter une photo</button>
+                    </div>
 				</div>
 			</div>
 			<div class="d-block d-md-none col-12 text-center">
 				{% if trick.videos|length > 0 %}
 				<p>
-					<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseVideos" aria-expanded="false" aria-controls="collapseVideos">
+					<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseVideosUpdate" aria-expanded="false" aria-controls="collapseVideos">
 						Vidéos
 					</button>
 				</p>
 				{% endif %}
-				<div class="collapse" id="collapseVideos">
+				<div class="collapse" id="collapseVideosUpdate">
 					{% for video in trick.videos %}
-						{{ include('fragments/_iframe.html.twig', {width: 280, height: 157}) }}
+                    <div class="d-inline-block mt-2">
+						{{ include('fragments/_iframe.html.twig', {width: 210, height: 118}) }}
+                        {{ include('fragments/_icons-media.html.twig', { hrefUpdate: '#', hrefDelete: '#', media: 'vidéo'}) }}
+                    </div>
 					{% endfor %}
+                    <div class="row justify-content-center mt-4">
+                        <button class="btn btn-primary btn-sm">Ajouter une vidéo</button>
+                    </div>
 				</div>
 			</div>
 		</div>
