@@ -88,6 +88,7 @@ nav {
 
 .badge.badge-secondary {
   background-color: #9ac;
+  font-size: 60%;
 }
 
 .btn.btn-outline-primary {
@@ -441,6 +442,13 @@ h2 {
     font-size: 1.6rem;
     margin-bottom: 1.5rem !important;
     margin-top: 2rem !important;
+  }
+}
+
+@media (max-width: 300px) {
+  #trick-new .badge {
+    font-size: 45%;
+    margin-left: 0 !important;
   }
 }
 
