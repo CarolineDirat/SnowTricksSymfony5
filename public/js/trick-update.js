@@ -23,7 +23,7 @@ $(function () {
         e.preventDefault();
         $('#updateFirstImageModal').modal('hide');    
         $.ajax({
-            url: updateFirstImage.attr('href'), 
+            url: $(this).attr('href'), 
             method: 'POST',
             dataType: 'json',
             data: JSON.stringify({
@@ -33,7 +33,31 @@ $(function () {
         }).done(function(data) {
             displayNewFirstPicture(data);
         }).fail(function(data){
-            alert(data.massage);
+            alert(data.message);
         });
     });
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //                                  DELETE FIRST IMAGE
+    //////////////////////////////////////////////////////////////////////////////////////////
+
+    let deleteFirstImage = $('#delete-first-image');
+
+    deleteFirstImage.click(function(e) {
+        e.preventDefault();    
+        $.ajax({
+            url: $(this).attr('href'), 
+            method: 'POST',
+            dataType: 'json',
+            data: JSON.stringify({
+                '_token': $(this).data('token'),
+            })
+        }).done(function(data) {
+            displayNewFirstPicture(data);
+        }).fail(function(data){
+            console.log(data);
+            alert(data.responseJSON.message);
+        });
+    });
+
 });

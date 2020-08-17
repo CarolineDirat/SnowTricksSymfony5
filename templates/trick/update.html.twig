@@ -5,7 +5,8 @@
 {% endblock %}
 
 {% block body %}
-	<section id="trick-update" class="container">
+	<section
+		id="trick-update" class="container">
 		{# trick name and first picture #}
 		<div class="row">
 			<h1 class="col-12 text-center mt-5">Modifier le trick :</h1>
@@ -15,70 +16,69 @@
 			{% set firstPicture = trick.firstPicture ? trick.firstPicture.filename : (trick.pictures|length > 0 ? trick.pictures[0].filename : 'default.jpg') %}
 			{% set firstPictureAlt = trick.firstPicture ? trick.firstPicture.alt : null %}
 			<picture>
-				<source srcset="{{ asset('uploads/images/540/' ~ firstPicture) }}" media="(max-width: 578px)" type="image/jpg">
-				<source srcset="{{ asset('uploads/images/720/' ~ firstPicture) }}" media="(max-width: 800px)" type="image/jpg">
+				<source srcset="{{ asset('uploads/images/540/' ~ firstPicture) }}" media="(max-width: 578px)">
+				<source srcset="{{ asset('uploads/images/720/' ~ firstPicture) }}" media="(max-width: 800px)">
 				<img src="{{ asset('uploads/images/960/' ~ firstPicture) }}" class="img-fluid" alt="{{ firstPicture }} photo pour illustrer le trick de snowboard {{ trick.name }}"/>
 			</picture>
 			<div id="first-image-icons" class="align-self-start d-flex flex-nowrap">
-				<button 
-					type="button" class="btn btn-outline-primary btn-sm mr-2" 
-					data-toggle="modal" data-target="#updateFirstImageModal"
-					data-toggle="tooltip" data-placement="bottom" title="Modifier l'image à la une">
+				<button type="button" class="btn btn-outline-primary btn-sm mr-2" data-toggle="modal" data-target="#updateFirstImageModal" data-toggle="tooltip" data-placement="bottom" title="Modifier l'image à la une">
 					<i class="fas fa-pencil-alt"></i>
 				</button>
-				<a href="#" class="btn btn-outline-primary btn-sm mr-2" data-delete data-trick="{{ trick.name }}" data-toggle="tooltip" data-placement="bottom" title="Supprimer l'image à la une">
-					<i class="fas fa-trash-alt"></i>
+				<a href="{{ path('trick_delete_first_image', {slug: trick.slug, uuid: trick.uuid}) }}" 
+					id="delete-first-image" class="btn btn-outline-primary btn-sm mr-2" 
+					data-token="{{ csrf_token('delete-first-image-token-' ~ trick.uuid) }}"  
+					data-toggle="tooltip" data-placement="bottom" title="Supprimer l'image à la une">
+						<i class="fas fa-trash-alt"></i>
 				</a>
 			</div>
 		</div>
 		{################### Modal Page to change the trick's first image ########################}
 		<div class="modal fade" id="updateFirstImageModal" tabindex="-1" aria-labelledby="updateFirstImageModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
-				<form action="#">
-					<div class="modal-content">
+				<div class="modal-content">
 					<div class="modal-header">
 						<h5 class="modal-title" id="updateFirstImageModalLabel">Choisir l'image à la une :</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
+							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
 					<div class="modal-body">
 						<div class="container-fluid">
-							<div class="d-flex flex-row flex-wrap justify-content-center">
-								{% for picture in trick.pictures %}
-								<div>
-									<img width="120px" src="{{ asset('uploads/images/200/'~ picture.filename) }}" alt="{{ picture.alt }} pour illustrer le trick {{ trick.name }}">
-									<div class="custom-control custom-radio text-center">
-										<input type="radio" id="first_picture_{{ loop.index }}" name="first_picture" class="custom-control-input" value="{{ picture.id }}">
-										<label class="custom-control-label" for="first_picture_{{ loop.index }}"></label>
-									</div>
+							<form action="#">
+								<div class="d-flex flex-row flex-wrap justify-content-center">
+									{% if trick.pictures|length == 0 %}
+										<p> Ajouter une ou plusieurs photos pour pouvoir en mettre une à la une ;)</p>
+									{% endif %}
+									{% for picture in trick.pictures %}
+										<div>
+											<img width="120px" src="{{ asset('uploads/images/200/'~ picture.filename) }}" alt="{{ picture.alt }} pour illustrer le trick {{ trick.name }}">
+											<div class="custom-control custom-radio text-center">
+												<input type="radio" id="first_picture_{{ loop.index }}" name="first_picture" class="custom-control-input" value="{{ picture.id }}">
+												<label class="custom-control-label" for="first_picture_{{ loop.index }}"></label>
+											</div>
+										</div>
+									{% endfor %}
 								</div>
-								{% endfor %}
-							</div>
+							</form>
 						</div>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-						<a 
-							href="{{ path('trick_update_first_image', {slug: trick.slug, uuid: trick.uuid}) }}"
-							id="update-first-image" class="btn btn-primary"
-							data-token="{{ csrf_token('update-first-image-token-'~ trick.uuid) }}"
-						>
-							Enregistrer
-						</a>
+						{% if trick.pictures|length > 0 %}
+							<a href="{{ path('trick_update_first_image', {slug: trick.slug, uuid: trick.uuid}) }}" id="update-first-image" class="btn btn-primary" data-token="{{ csrf_token('update-first-image-token-'~ trick.uuid) }}">
+								Enregistrer
+							</a>
+						{% endif %}
 					</div>
-					</div>
-				</form>
+				</div>
 			</div>
 		</div>
 		{###########################################################################################}
 
-        
-
 		{# medias #}
 		{# pictures and videos #}
-		<div class="row d-flex mt-2"> 
-        {# width > 720px #}
+			<div
+			class="row d-flex mt-2"> {# width > 720px #}
 			<div class="d-none d-md-block col-sm-12 col-md-7 col-lg-6 text-left">
 				{% for picture in trick.pictures %}
 					<div class="d-inline-block mb-2">
@@ -137,7 +137,7 @@
 							{{ include('fragments/_icons-media.html.twig', { hrefUpdate: '#', hrefDelete: '#', media: 'vidéo'}) }}
 						</div>
 					{% endfor %}
-					
+
 				</div>
 				<div class="row justify-content-center">
 					<button class="btn btn-add btn-sm">Ajouter une vidéo</button>
@@ -145,38 +145,35 @@
 			</div>
 		</div>
 
-        {{ form_start(form) }}
+		{{ form_start(form) }}
 
 		{# description #}
-        <hr class="mt-5">
-        <div class="row justify-content-center ">
-            <h2 class="col-12 text-center mt-2 mb-3">{{ trick.name|upper }}</h2>
-            <p>
-                Créé le
-                <span class="font-weight-bold">{{ trick.createdAt|date('d/m/Y') }}</span>, et modifié le
-                <span class="font-weight-bold">{{ trick.updatedAt|date('d/m/Y') }}</span>
-            </p>
-            <div class="col-sm-12 col-lg-9 mb-3">
-                {{ form_label(form.description) }}
-                {{ form_widget(form.description, {attr: {'class': 'col-12', 'rows': '10'}}) }}
-            </div>
-            <div class="col-sm-12 col-lg-9 mb-5">
-                <div class="row">
-                    {{ form_label(form.groupTrick, 'Modifier le groupe : ', {'label_attr': {'class': 'col-12'}}) }}
-                    {{ form_widget(form.groupTrick, {'attr': {'class': 'mb-4 mb-md-0 ml-4 col-6 col-sm-4'}}) }}
-                </div>
-                <div class="row justify-content-end mb-5 ">
-                    <a href="{{ path('trick_delete', {uuid: trick.uuid}) }}" type="button" class="btn btn-delete mt-2 mr-2">Supprimer le Trick</a>
-                    <button type="submit" class="btn btn-primary mr-2 mt-2">Enregistrer le modifications</button>
-                </div>
-            </div>
-        </div>
-        {# Modal Page to delete the trick #}
-        {###################################}
-            
-        
-        
-        
+		<hr class="mt-5">
+		<div class="row justify-content-center ">
+			<h2 class="col-12 text-center mt-2 mb-3">{{ trick.name|upper }}</h2>
+			<p>
+				Créé le
+				<span class="font-weight-bold">{{ trick.createdAt|date('d/m/Y') }}</span>, et modifié le
+				<span class="font-weight-bold">{{ trick.updatedAt|date('d/m/Y') }}</span>
+			</p>
+			<div class="col-sm-12 col-lg-9 mb-3">
+				{{ form_label(form.description) }}
+				{{ form_widget(form.description, {attr: {'class': 'col-12', 'rows': '10'}}) }}
+			</div>
+			<div class="col-sm-12 col-lg-9 mb-5">
+				<div class="row">
+					{{ form_label(form.groupTrick, 'Modifier le groupe : ', {'label_attr': {'class': 'col-12'}}) }}
+					{{ form_widget(form.groupTrick, {'attr': {'class': 'mb-4 mb-md-0 ml-4 col-6 col-sm-4'}}) }}
+				</div>
+				<div class="row justify-content-end mb-5 ">
+					<a href="{{ path('trick_delete', {uuid: trick.uuid}) }}" type="button" class="btn btn-delete mt-2 mr-2">Supprimer le Trick</a>
+					<button type="submit" class="btn btn-primary mr-2 mt-2">Enregistrer le modifications</button>
+				</div>
+			</div>
+		</div>
+		{# Modal Page to delete the trick #}
+		{###################################}
+
 
 	</section>
 

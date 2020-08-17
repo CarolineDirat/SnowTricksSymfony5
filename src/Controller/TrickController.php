@@ -271,4 +271,39 @@ class TrickController extends AbstractController
             ['Content-Type' => 'application/json']
         );
     }
+
+    /**
+     * Delete trick first image.
+     *
+     * @Route("supprimer/trick-image/{slug}/{uuid}", name="trick_delete_first_image", methods={"POST"})
+     * 
+     * @isGranted("ROLE_USER")
+     */
+    public function deleteFirstImage(
+        Trick $trick,
+        Request $request
+    ): JsonResponse {
+        $data = json_decode($request->getContent(), true);
+        if ($this->isCsrfTokenValid('delete-first-image-token-' . $trick->getUuid(), $data['_token'])) {
+            $trick->setFirstPicture(null);
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->json(
+                [
+                    'message' => 'L\'image à la une a été supprimée.',
+                    'filename' => 'default.jpg',
+                    'alt' => '',
+                    'trickName' => $trick->getName(),
+                ],
+                200,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        return $this->json(
+            ['message' => 'Accès refusé.'],
+            403,
+            ['Content-Type' => 'application/json']
+        );
+    }
 }
