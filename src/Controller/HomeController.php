@@ -10,6 +10,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
+    const NUMBER_FIRST_TRICKS = 8;
+    const OFFSET_LOADED_TRICKS = self::NUMBER_FIRST_TRICKS;
+    const LIMIT_LOADED_TRICKS = 4;
+
     /**
      * Display the home page.
      *
@@ -17,7 +21,7 @@ class HomeController extends AbstractController
      */
     public function index(TrickRepository $trickRepository): Response
     {
-        $tricks = $trickRepository->getPaginatedTricks(0, 8);
+        $tricks = $trickRepository->getPaginatedTricks(0, self::NUMBER_FIRST_TRICKS);
 
         return $this->render('home/index.html.twig', ['tricks' => $tricks]);
     }
@@ -29,7 +33,7 @@ class HomeController extends AbstractController
      */
     public function onlyTricks(TrickRepository $trickRepository): Response
     {
-        $tricks = $trickRepository->getPaginatedTricks(0, 8);
+        $tricks = $trickRepository->getPaginatedTricks(0, self::NUMBER_FIRST_TRICKS);
 
         return $this->render('home/tricks.html.twig', ['tricks' => $tricks]);
     }
@@ -43,9 +47,9 @@ class HomeController extends AbstractController
      *      methods={"GET"}
      * )
      */
-    public function loadMoreComments(TrickRepository $trickRepository, int $offset = 8): JsonResponse
+    public function loadMoreTricks(TrickRepository $trickRepository, int $offset = self::OFFSET_LOADED_TRICKS): JsonResponse
     {
-        $tricks = $trickRepository->getArrayPaginatedTricks($offset, 4);
+        $tricks = $trickRepository->getArrayPaginatedTricks($offset, self::LIMIT_LOADED_TRICKS);
 
         return $this->json(
             $tricks,
