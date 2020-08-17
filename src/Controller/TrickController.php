@@ -8,6 +8,7 @@ use App\Form\TrickType;
 use App\FormHandler\CommentFormHandler;
 use App\FormHandler\TrickFormHandler;
 use App\Repository\CommentRepository;
+use App\Repository\PictureRepository;
 use App\Repository\TrickRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -119,7 +120,7 @@ class TrickController extends AbstractController
             $entityManager->flush();
 
             return $this->json(
-                ['message' => 'Le trick '.$trickName.' a bien été supprimé.'],
+                ['message' => 'Le trick ' . $trickName . ' a bien été supprimé.'],
                 200,
                 ['Content-Type' => 'application/json']
             );
@@ -150,14 +151,14 @@ class TrickController extends AbstractController
     ): Response {
         $trickName = $trick->getName();
         $submittedToken = $request->request->get('token');
-        if ($this->isCsrfTokenValid('delete-trick-'.$trick->getId(), $submittedToken)) {
+        if ($this->isCsrfTokenValid('delete-trick-' . $trick->getId(), $submittedToken)) {
             $entityManager = $this->getDoctrine()->getManager();
             $trickRepository->deletePicturesFiles($trick, $container);
             $entityManager->remove($trick);
             $entityManager->flush();
             $this->addFlash(
                 'notice',
-                'Le trick "'.$trickName.'" a bien été supprimé.'
+                'Le trick "' . $trickName . '" a bien été supprimé.'
             );
 
             return $this->redirectToRoute('tricks');
@@ -178,7 +179,7 @@ class TrickController extends AbstractController
      * )
      * @isGranted("ROLE_USER")
      */
-    public function new(Request $request, TrickFormHandler $trickFormHandler): Response 
+    public function new(Request $request, TrickFormHandler $trickFormHandler): Response
     {
         $trick = $trickFormHandler->initialize();
         $form = $this->createForm(TrickType::class, $trick);
@@ -200,8 +201,8 @@ class TrickController extends AbstractController
      * )
      * @isGranted("ROLE_USER")
      */
-    public function update(Trick $trick, string $slug, Request $request): Response 
-    {        
+    public function update(Trick $trick, string $slug, Request $request): Response
+    {
         // check slug
         if ($slug !== $trick->getSlug()) {
             return $this->redirectToRoute('trick_update', [
@@ -209,7 +210,7 @@ class TrickController extends AbstractController
                 'uuid' => $trick->getUuid(),
             ]);
         }
-        
+
         $form = $this->createForm(TrickType::class, $trick);
 
         return $this->render('trick/update.html.twig', [
@@ -221,7 +222,9 @@ class TrickController extends AbstractController
     /**
      * Display the page to update a trick from slug only.
      *
-     * @Route("modifier/trick/{slug}", name="trick_update_slug")
+     * @Route("modifier/trick/{slug}", name="trick_update_by_slug")
+     * 
+     * @isGranted("ROLE_USER")
      */
     public function redirectBySlugUpdate(Trick $trick): Response
     {
@@ -229,5 +232,43 @@ class TrickController extends AbstractController
             'slug' => $trick->getSlug(),
             'uuid' => $trick->getUuid(),
         ]);
+    }
+
+    /**
+     * Update trick first image.
+     *
+     * @Route("modifier/trick-image/{slug}/{uuid}", name="trick_update_first_image", methods={"POST"})
+     * 
+     * @isGranted("ROLE_USER")
+     */
+    public function updateFirstImage(
+        Trick $trick,
+        Request $request,
+        PictureRepository $pictureRepository
+    ): JsonResponse {
+        $data = json_decode($request->getContent(), true);
+        if ($this->isCsrfTokenValid('update-first-image-token-' . $trick->getUuid(), $data['_token'])) {
+            $pictureId = $data['pictureId'];
+            $firstPicture = $pictureRepository->find($pictureId);
+            $trick->setFirstPicture($firstPicture);
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->json(
+                [
+                    'message' => 'L\'image à la une a été modifiée.',
+                    'filename' => $firstPicture->getFilename(),
+                    'alt' => $firstPicture->getAlt(),
+                    'trickName' => $trick->getName(),
+                ],
+                200,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        return $this->json(
+            ['message' => 'Accès refusé.'],
+            403,
+            ['Content-Type' => 'application/json']
+        );
     }
 }

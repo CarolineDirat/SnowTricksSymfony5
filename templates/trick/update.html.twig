@@ -20,16 +20,58 @@
 				<img src="{{ asset('uploads/images/960/' ~ firstPicture) }}" class="img-fluid" alt="{{ firstPicture }} photo pour illustrer le trick de snowboard {{ trick.name }}"/>
 			</picture>
 			<div id="first-image-icons" class="align-self-start d-flex flex-nowrap">
-				<a href="#" class="btn btn-outline-primary btn-sm mr-2" data-toggle="tooltip" data-placement="bottom" title="Modifier l'image à la une">
+				<button 
+					type="button" class="btn btn-outline-primary btn-sm mr-2" 
+					data-toggle="modal" data-target="#updateFirstImageModal"
+					data-toggle="tooltip" data-placement="bottom" title="Modifier l'image à la une">
 					<i class="fas fa-pencil-alt"></i>
-				</a>
+				</button>
 				<a href="#" class="btn btn-outline-primary btn-sm mr-2" data-delete data-trick="{{ trick.name }}" data-toggle="tooltip" data-placement="bottom" title="Supprimer l'image à la une">
 					<i class="fas fa-trash-alt"></i>
 				</a>
 			</div>
 		</div>
-		{# Modal Page to change the trick's first image #}
-		{#################################################}
+		{################### Modal Page to change the trick's first image ########################}
+		<div class="modal fade" id="updateFirstImageModal" tabindex="-1" aria-labelledby="updateFirstImageModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<form action="#">
+					<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="updateFirstImageModalLabel">Choisir l'image à la une :</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="container-fluid">
+							<div class="d-flex flex-row flex-wrap justify-content-center">
+								{% for picture in trick.pictures %}
+								<div>
+									<img width="120px" src="{{ asset('uploads/images/200/'~ picture.filename) }}" alt="{{ picture.alt }} pour illustrer le trick {{ trick.name }}">
+									<div class="custom-control custom-radio text-center">
+										<input type="radio" id="first_picture_{{ loop.index }}" name="first_picture" class="custom-control-input" value="{{ picture.id }}">
+										<label class="custom-control-label" for="first_picture_{{ loop.index }}"></label>
+									</div>
+								</div>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+						<a 
+							href="{{ path('trick_update_first_image', {slug: trick.slug, uuid: trick.uuid}) }}"
+							id="update-first-image" class="btn btn-primary"
+							data-token="{{ csrf_token('update-first-image-token-'~ trick.uuid) }}"
+						>
+							Enregistrer
+						</a>
+					</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		{###########################################################################################}
 
         
 
@@ -141,5 +183,5 @@
 {% endblock %}
 
 {% block javascripts %}
-	<script src="{{ asset('js/trick-new.js') }}"></script>
+	<script src="{{ asset('js/trick-update.js') }}"></script>
 {% endblock %}
