@@ -19,6 +19,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TrickController extends AbstractController
 {
+    const NUMBER_LAST_COMMENTS = 5;
+    const OFFSET_LOADED_COMMENTS = self::NUMBER_LAST_COMMENTS;
+    const LIMIT_LOADED_COMMENTS = 5;
+
     /**
      * Display the page of one trick.
      *
@@ -51,7 +55,7 @@ class TrickController extends AbstractController
 
         return $this->render('trick/index.html.twig', [
             'trick' => $trick,
-            'comments' => $commentRepository->getLastComments($trick, 5),
+            'comments' => $commentRepository->getLastComments($trick, self::NUMBER_LAST_COMMENTS),
             'form' => $form->createView(),
         ]);
     }
@@ -78,9 +82,9 @@ class TrickController extends AbstractController
      *      methods={"GET"}
      * )
      */
-    public function loadMoreComments(Trick $trick, CommentRepository $commentRepository, int $offset = 5): JsonResponse
+    public function loadMoreComments(Trick $trick, CommentRepository $commentRepository, int $offset = self::OFFSET_LOADED_COMMENTS): JsonResponse
     {
-        $comments = $commentRepository->getArrayPaginatedComments($trick, $offset, 5);
+        $comments = $commentRepository->getArrayPaginatedComments($trick, $offset, self::LIMIT_LOADED_COMMENTS);
 
         return $this->json(
             $comments,
