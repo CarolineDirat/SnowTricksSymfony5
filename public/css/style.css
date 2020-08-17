@@ -160,6 +160,10 @@ nav {
   box-shadow: 0 0 0 0.2rem rgba(131, 173, 216, 0.25);
 }
 
+.card.tricks {
+  border: none;
+}
+
 .navbar-brand,
 h1,
 h2 {
