@@ -8,13 +8,14 @@ $(function () {
     
     let updateFirstImage = $('#update-first-image');
 
-    $('#trick-update input[type="radio"]').click(function(e) {
-        updateFirstImage.data('value', $(this).attr('value'));
+    $('.input-radio-first-picture').click(function() {
+        let $this = $(this);
+        updateFirstImage.data('value', $this.attr('value'));
     });
 
     let displayNewFirstPicture = function(data){
-        $('#trick-update picture:first-child').attr('srcset', '/../uploads/images/540/' + data.filename);
-        $('#trick-update picture:nth-child(2)').attr('srcset', '/../uploads/images/720/' + data.filename);
+        $('#trick-update picture source:first-child').attr('srcset', '/../uploads/images/540/' + data.filename);
+        $('#trick-update picture source:nth-child(2)').attr('srcset', '/../uploads/images/720/' + data.filename);
         $('#trick-update picture img').attr('src', '/../uploads/images/960/' + data.filename);
         $('#trick-update picture img').attr('alt', data.alt + 'photo pour illustrer le trick ' + data.trickName);
     };
@@ -61,7 +62,7 @@ $(function () {
     });
 
     //////////////////////////////////////////////////////////////////////////////////////////
-    //                                  UPDATE VIDEO
+    //                                  UPDATE VIDEO FOR SCREEN > 720px
     //////////////////////////////////////////////////////////////////////////////////////////
 
     let updateVideoLinks = $('.update-video-link');
@@ -96,6 +97,7 @@ $(function () {
             address = 'www.dailymotion.com/embed/video/';
         }
         $('#video-display-' + data.videoId + ' iframe').attr('src', 'https://' + address + data.code);
+        $('#video-display-mobile-' + data.videoId + ' iframe').attr('src', 'https://' + address + data.code);
     };
 
     // AJAX request
@@ -118,6 +120,15 @@ $(function () {
         }).fail(function(data){
             alert(data.responseJSON.message);
         });
+    });
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //                                  UPDATE VIDEO FOR SCREEN > 720px
+    //////////////////////////////////////////////////////////////////////////////////////////
+    
+    $('.update-video-button-mobile').click(function(){
+        $('#collapseVideosUpdate').collapse('hide');
+        $('#updateVideoModal-' + $(this).data('videoid')).modal('show');
     });
 
 });
