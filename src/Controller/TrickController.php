@@ -10,6 +10,7 @@ use App\FormHandler\TrickFormHandler;
 use App\Repository\CommentRepository;
 use App\Repository\PictureRepository;
 use App\Repository\TrickRepository;
+use App\Repository\VideoRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -294,6 +295,48 @@ class TrickController extends AbstractController
                     'filename' => 'default.jpg',
                     'alt' => '',
                     'trickName' => $trick->getName(),
+                ],
+                200,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        return $this->json(
+            ['message' => 'Accès refusé.'],
+            403,
+            ['Content-Type' => 'application/json']
+        );
+    }
+
+    /**
+     * Update trick video.
+     *
+     * @Route("modifier/trick-video/{slug}/{uuid}", name="trick_update_video", methods={"POST"})
+     * 
+     * @isGranted("ROLE_USER")
+     */
+    public function updateVideo(
+        Trick $trick,
+        Request $request,
+        VideoRepository $videoRepository
+    ): JsonResponse {
+        $data = json_decode($request->getContent(), true);
+        if ($this->isCsrfTokenValid('update-video-token-' . $trick->getUuid(), $data['_token'])) {
+            $videoId = $data['videoId'];
+            $video = $videoRepository->find($videoId);
+            $video
+                ->setService($data['service'])
+                ->setCode($data['code'])
+            ;
+            
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->json(
+                [
+                    'message' => 'La vidéo a été modifiée.',
+                    'service' => $video->getService(),
+                    'code' => $video->getCode(),
+                    'videoId' => $video->getId(),
                 ],
                 200,
                 ['Content-Type' => 'application/json']

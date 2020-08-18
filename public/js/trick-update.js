@@ -60,4 +60,64 @@ $(function () {
         });
     });
 
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //                                  UPDATE VIDEO
+    //////////////////////////////////////////////////////////////////////////////////////////
+
+    let updateVideoLinks = $('.update-video-link');
+
+    // data for AJAX request are on data attributes of the link witch send AJAX request
+    // when input values change, these data attribute must change too
+    $('.update-service-video input').change(function(){
+        let $this = $(this);
+        $this
+            .closest('.modal-body')
+            .next('.modal-footer')
+            .children('a.update-video-link')
+            .data('service', $this.closest('.update-service-video').find('input[type=radio]:checked').val())
+        ;
+    });
+    $('input.update-code-video').change(function(){
+        $(this)
+            .closest('.modal-body')
+            .next('.modal-footer')
+            .children('a.update-video-link')
+            .data('code', $(this).val())
+        ;
+    });
+
+    // function to update display of the video with new data
+    let updateVideo = function(data) {
+        let address = 'www.youtube.com/embed/';
+        if ('vimeo' === data.service.toLowerCase()) {
+            address = 'player.vimeo.com/video/';
+        }
+        if ('dailymotion' === data.service.toLowerCase()) {
+            address = 'www.dailymotion.com/embed/video/';
+        }
+        $('#video-display-' + data.videoId + ' iframe').attr('src', 'https://' + address + data.code);
+    };
+
+    // AJAX request
+    updateVideoLinks.click(function(e) {
+        e.preventDefault();
+        $('#updateVideoModal-' + $(this).data('videoid')).modal('hide');
+        $.ajax({
+            url: $(this).attr('href'), 
+            method: 'POST',
+            dataType: 'json',
+            data: JSON.stringify({
+                '_token': $(this).data('token'),
+                'videoId': $(this).data('videoid'),
+                'service': $(this).data('service'),
+                'code': $(this).data('code'),
+            })
+        }).done(function(data){
+            console.log(data);
+            updateVideo(data);
+        }).fail(function(data){
+            alert(data.responseJSON.message);
+        });
+    });
+
 });
