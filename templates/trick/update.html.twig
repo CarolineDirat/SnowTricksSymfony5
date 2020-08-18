@@ -21,14 +21,16 @@
 				<img src="{{ asset('uploads/images/960/' ~ firstPicture) }}" class="img-fluid" alt="{{ firstPicture }} photo pour illustrer le trick de snowboard {{ trick.name }}"/>
 			</picture>
 			<div id="first-image-icons" class="align-self-start d-flex flex-nowrap">
-				<button type="button" class="btn btn-outline-primary btn-sm mr-2" data-toggle="modal" data-target="#updateFirstImageModal" data-toggle="tooltip" data-placement="bottom" title="Modifier l'image à la une">
+				<button type="button" class="btn btn-outline-primary btn-sm mr-2" 
+					data-toggle="modal" data-target="#updateFirstImageModal" 
+					data-toggle="tooltip" data-placement="bottom" title="Modifier l'image à la une">
 					<i class="fas fa-pencil-alt"></i>
 				</button>
 				<a href="{{ path('trick_delete_first_image', {slug: trick.slug, uuid: trick.uuid}) }}" 
 					id="delete-first-image" class="btn btn-outline-primary btn-sm mr-2" 
-					data-token="{{ csrf_token('delete-first-image-token-' ~ trick.uuid) }}"  
+					data-token="{{ csrf_token('delete-first-image-token-' ~ trick.uuid) }}" 
 					data-toggle="tooltip" data-placement="bottom" title="Supprimer l'image à la une">
-						<i class="fas fa-trash-alt"></i>
+					<i class="fas fa-trash-alt"></i>
 				</a>
 			</div>
 		</div>
@@ -47,13 +49,14 @@
 							<form action="#">
 								<div class="d-flex flex-row flex-wrap justify-content-center">
 									{% if trick.pictures|length == 0 %}
-										<p> Ajouter une ou plusieurs photos pour pouvoir en mettre une à la une ;)</p>
+										<p>	Ajouter une ou plusieurs photos pour pouvoir en mettre une à la une ;)</p>
 									{% endif %}
 									{% for picture in trick.pictures %}
 										<div>
 											<img width="120px" src="{{ asset('uploads/images/200/'~ picture.filename) }}" alt="{{ picture.alt }} pour illustrer le trick {{ trick.name }}">
 											<div class="custom-control custom-radio text-center">
-												<input type="radio" id="first_picture_{{ loop.index }}" name="first_picture" class="custom-control-input" value="{{ picture.id }}">
+												<input type="radio" id="first_picture_{{ loop.index }}" 
+													name="first_picture" class="custom-control-input" value="{{ picture.id }}">
 												<label class="custom-control-label" for="first_picture_{{ loop.index }}"></label>
 											</div>
 										</div>
@@ -65,8 +68,10 @@
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
 						{% if trick.pictures|length > 0 %}
-							<a href="{{ path('trick_update_first_image', {slug: trick.slug, uuid: trick.uuid}) }}" id="update-first-image" class="btn btn-primary" data-token="{{ csrf_token('update-first-image-token-'~ trick.uuid) }}">
-								Enregistrer
+							<a href="{{ path('trick_update_first_image', {slug: trick.slug, uuid: trick.uuid}) }}" 
+								id="update-first-image" class="btn btn-primary" 
+								data-token="{{ csrf_token('update-first-image-token-'~ trick.uuid) }}">
+									Enregistrer
 							</a>
 						{% endif %}
 					</div>
@@ -75,12 +80,55 @@
 		</div>
 		{###########################################################################################}
 		{{ form_start(form) }}
-		{# medias #}
-		{# pictures and videos #}
-			<div class="row d-flex mt-2">
-
+		{# MEDIAS #}
+		{# modal pages to update videos #}
+		{% for video in form.videos %}
+			<div class="modal fade" id="updateVideoModal-{{ video.vars.value.id }}" tabindex="-1" aria-labelledby="videoModalLabel-{{ video.vars.value.id }}" aria-hidden="true"> 
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="videoModalLabel-{{ video.vars.value.id }}">Modifier la vidéo :</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<div class="container-fluid">
+								<div class="form mb-3">
+									<div class="pl-3 text-left">
+										{{ form_label(video.service) }}
+										{{ form_widget(video.service, {'attr': {'class': 'update-service-video'}}) }}
+									</div>
+									<div class="px-3 mt-4 text-left">
+										{{ form_label(video.code) }}
+										<span class="modal-info-code" data-toggle="modal" data-target="#modal-help-code-video">
+											<i class="fas fa-question-circle"></i>
+										</span>
+										{{ form_widget(video.code, {'attr': {'class': 'update-code-video'}}) }}
+									</div>
+								</div>
+							</div>
+							{# modal page to help to know how found the video code #}
+							{{ include('fragments/_help_video_code.html.twig')}}
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+							<a href="{{ path('trick_update_video', {slug: trick.slug, uuid: trick.uuid}) }}" type="button" 
+							class="btn btn-primary update-video-link" data-token="{{ csrf_token('update-video-token-' ~ trick.uuid) }}" 
+							data-service="{{ video.vars.value.service }}" data-code="{{ video.vars.value.code }}" 
+							data-videoid="{{ video.vars.value.id }}">
+								Enregistrer
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+		{# display pictures and videos #}
+		<div class="row d-flex mt-2">
 			{# width > 720px #}
-			<div class="d-none d-md-block col-sm-12 col-md-7 col-lg-6 text-left">
+			<div
+				class="d-none d-md-block col-sm-12 col-md-7 col-lg-6 text-left">
 				{# display pictures #}
 				{% for picture in trick.pictures %}
 					<div class="d-inline-block mb-2">
@@ -99,7 +147,8 @@
 					<button class="btn btn-add btn-sm">Ajouter une photo</button>
 				</div>
 			</div>
-			<div class="d-none d-md-block col-sm-12 col-md-5 col-lg-6 text-right">
+			<div
+				class="d-none d-md-block col-sm-12 col-md-5 col-lg-6 text-right">
 				{# display videos #}
 				{% for video in form.videos %}
 					{# display video and it's pencil and trash icons #}
@@ -108,57 +157,13 @@
 						{# icons to update or delete a video #}
 						<div class="d-flex flex-nowrap justify-content-center">
 							<button type="button" class="btn btn-outline-primary btn-sm mr-2" 
-								data-toggle="modal" data-target="#updateVideoModal-{{ video.vars.value.id }}"
+								data-toggle="modal" data-target="#updateVideoModal-{{ video.vars.value.id }}" 
 								data-toggle="tooltip" data-placement="bottom" title="Modifier la vidéo ci-dessus">
 								<i class="fas fa-pencil-alt"></i>
 							</button>
-							<button class="btn btn-outline-primary btn-sm mr-2" data-delete 
-									data-trick="{{ trick.name }}" 
-									data-toggle="tooltip" data-placement="bottom" title="Supprimer la vidéo ci-dessus">
+							<button class="btn btn-outline-primary btn-sm mr-2" data-delete data-trick="{{ trick.name }}" data-toggle="tooltip" data-placement="bottom" title="Supprimer la vidéo ci-dessus">
 								<i class="fas fa-trash-alt"></i>
 							</button>
-						</div>
-					</div>
-					{# modal page to update video #}
-					<div class="modal fade" id="updateVideoModal-{{ video.vars.value.id }}" tabindex="-1" aria-labelledby="videoModalLabel-{{ video.vars.value.id }}" aria-hidden="true">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="videoModalLabel-{{ video.vars.value.id }}">Modifier la vidéo :</h5>
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
-								<div class="modal-body">
-									<div class="container-fluid">
-										<div class="form mb-3">
-											<div class="pl-3 text-left">
-												{{ form_label(video.service) }} 
-												{{ form_widget(video.service, {'attr': {'class': 'update-service-video'}}) }}
-											</div>
-											<div class="px-3 mt-4 text-left">
-												{{ form_label(video.code) }}
-												<span class="modal-info-code" data-toggle="modal" data-target="#modal-help-code-video">
-													<i class="fas fa-question-circle"></i>
-												</span>
-												{{ form_widget(video.code, {'attr': {'class': 'update-code-video'}}) }}
-											</div>
-										</div>
-									</div>
-									{# modal page to help to know how found the video code #}
-									{{ include('fragments/_help_video_code.html.twig')}}
-								</div>
-								<div class="modal-footer">
-									<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-									<a href="{{ path('trick_update_video', {slug: trick.slug, uuid: trick.uuid}) }}" 
-										type="button" class="btn btn-primary update-video-link"
-										data-token="{{ csrf_token('update-video-token-' ~ trick.uuid) }}"
-										data-service="{{ video.vars.value.service }}" data-code="{{ video.vars.value.code }}" 
-										data-videoid="{{ video.vars.value.id }}">
-										Enregistrer
-									</a>
-								</div>
-							</div>
 						</div>
 					</div>
 				{% endfor %}
@@ -166,9 +171,9 @@
 					<button class="btn btn-add btn-sm">Ajouter une vidéo</button>
 				</div>
 			</div>
-
 			{# width < 720px #}
-			<div class="d-block d-md-none col-12 text-center mt-3">
+			<div
+				class="d-block d-md-none col-12 text-center mt-3">
 				{# display pictures #}
 				{% if trick.pictures|length > 0 %}
 					<p>
@@ -181,7 +186,8 @@
 					{% for picture in trick.pictures %}
 						{# display picture #}
 						<div class="d-inline-block">
-							<img src="{{ asset('uploads/images/200/' ~ picture.filename) }}" alt="{{ picture.alt }} , photo pour illustrer le trick de snowboard {{ trick.name }}" class="img-thumbnail rounded"/>
+							<img
+							src="{{ asset('uploads/images/200/' ~ picture.filename) }}" alt="{{ picture.alt }} , photo pour illustrer le trick de snowboard {{ trick.name }}" class="img-thumbnail rounded"/>
 							{# icons to delete or update a picture #}
 							<div class="d-flex flex-nowrap justify-content-center">
 								<button class="btn btn-outline-primary btn-sm mr-2" data-toggle="tooltip" data-placement="bottom" title="Modifier la photo ci-dessus">
@@ -198,7 +204,8 @@
 					<button class="btn btn-add btn-sm">Ajouter une photo</button>
 				</div>
 			</div>
-			<div class="d-block d-md-none col-12 text-center">
+			<div
+				class="d-block d-md-none col-12 text-center">
 				{# display videos #}
 				{% if trick.videos|length > 0 %}
 					<p>
@@ -210,12 +217,14 @@
 				<div class="collapse" id="collapseVideosUpdate">
 					{% for video in form.videos %}
 						{# display video #}
-						<div class="d-inline-block mt-2">
+						<div id="video-display-mobile-{{ video.vars.value.id }}" class="d-inline-block mt-2">
 							{{ include('fragments/_iframe.html.twig', {service: video.vars.value.service, code: video.vars.value.code, width: 210, height: 118}) }}
 							{# icons ; pencil and trash #}
-							<div class="d-flex flex-nowrap justify-content-center">
+							<div
+								class="d-flex flex-nowrap justify-content-center">
 								{# icon to update the video #}
-								<button class="btn btn-outline-primary btn-sm mr-2" 
+								<button class="btn btn-outline-primary btn-sm mr-2 update-video-button-mobile" 
+									data-videoid="{{ video.vars.value.id }}" 
 									data-toggle="tooltip" data-placement="bottom" title="Modifier la vidéo ci-dessus">
 									<i class="fas fa-pencil-alt"></i>
 								</button>
