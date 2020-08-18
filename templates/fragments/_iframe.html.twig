@@ -1,9 +1,9 @@
-{% if video.service|lower == 'youtube' %}
+{% if service|lower == 'youtube' %}
     {% set address  = 'www.youtube.com/embed/' %}
-{% elseif video.service|lower == 'vimeo' %}
+{% elseif service|lower == 'vimeo' %}
     {% set address = 'player.vimeo.com/video/' %}
-{% elseif video.service|lower == 'dailymotion' %}
+{% elseif service|lower == 'dailymotion' %}
     {% set address = 'www.dailymotion.com/embed/video/' %}
 {% endif %}
 
-<iframe width="{{ width }}" height="{{ height }}" src="https://{{ address }}{{ video.code }}" title="Vidéo pour illustrer le trick de snowboard {{ trick.name }}"></iframe>
+<iframe width="{{ width }}" height="{{ height }}" src="https://{{ address }}{{ code }}" title="Vidéo pour illustrer le trick de snowboard {{ trick.name }}"></iframe>
