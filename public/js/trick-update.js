@@ -79,11 +79,12 @@ $(function () {
         ;
     });
     $('input.update-code-video').change(function(){
-        $(this)
+        let $this = $(this);
+        $this
             .closest('.modal-body')
             .next('.modal-footer')
             .children('a.update-video-link')
-            .data('code', $(this).val())
+            .data('code', $this.val())
         ;
     });
 
@@ -121,14 +122,4 @@ $(function () {
             alert(data.responseJSON.message);
         });
     });
-
-    //////////////////////////////////////////////////////////////////////////////////////////
-    //                                  UPDATE VIDEO FOR SCREEN > 720px
-    //////////////////////////////////////////////////////////////////////////////////////////
-    
-    $('.update-video-button-mobile').click(function(){
-        $('#collapseVideosUpdate').collapse('hide');
-        $('#updateVideoModal-' + $(this).data('videoid')).modal('show');
-    });
-
 });
