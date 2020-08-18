@@ -74,16 +74,17 @@
 			</div>
 		</div>
 		{###########################################################################################}
-
+		{{ form_start(form) }}
 		{# medias #}
 		{# pictures and videos #}
-			<div
-			class="row d-flex mt-2"> {# width > 720px #}
+			<div class="row d-flex mt-2">
+			{# width > 720px #}
 			<div class="d-none d-md-block col-sm-12 col-md-7 col-lg-6 text-left">
+				{# display pictures #}
 				{% for picture in trick.pictures %}
 					<div class="d-inline-block mb-2">
 						<img width="160px" src="{{ asset('uploads/images/200/' ~ picture.filename) }}" alt="{{ picture.alt }} photo pour illustrer le trick de snowboard {{ trick.name }}." class="img-thumbnail rounded"/>
-						{{ include('fragments/_icons-media.html.twig', { hrefUpdate: '#', hrefDelete: '#', media: 'photo'}) }}
+						{{ include('fragments/_icons-media.html.twig', {media: 'photo'}) }}
 					</div>
 				{% endfor %}
 				<div class="row justify-content-center mt-2">
@@ -91,10 +92,60 @@
 				</div>
 			</div>
 			<div class="d-none d-md-block col-sm-12 col-md-5 col-lg-6 text-right">
-				{% for video in trick.videos %}
+				{# display videos #}
+				{% for video in form.videos %}
+					{# display video and it's pencil and trash icons #}
 					<div class="d-inline-block mb-2">
-						{{ include('fragments/_iframe.html.twig', {width: 210, height: 118}) }}
-						{{ include('fragments/_icons-media.html.twig', { hrefUpdate: '#', hrefDelete: '#', media: 'vidéo'}) }}
+						{{ include('fragments/_iframe.html.twig', {service: video.vars.value.service, code: video.vars.value.code, width: 210, height: 118}) }}
+						{# icons to update or delete a video #}
+						<div class="d-flex flex-nowrap justify-content-center">
+						<button type="button" class="btn btn-outline-primary btn-sm mr-2" 
+							data-toggle="modal" data-target="#updateVideoModal-{{ video.vars.value.id }}"
+							data-toggle="tooltip" data-placement="bottom" title="Modifier la vidéo ci-dessus">
+							<i class="fas fa-pencil-alt"></i>
+						</button>
+						<button class="btn btn-outline-primary btn-sm mr-2" data-delete 
+								data-trick="{{ trick.name }}" 
+								data-toggle="tooltip" data-placement="bottom" title="Supprimer la vidéo ci-dessus">
+							<i class="fas fa-trash-alt"></i>
+						</button>
+					</div>
+					</div>
+					{# modal page to update video #}
+					<div class="modal fade" id="updateVideoModal-{{ video.vars.value.id }}" tabindex="-1" aria-labelledby="videoModalLabel-{{ video.vars.value.id }}" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="videoModalLabel-{{ video.vars.value.id }}">Modifier la vidéo :</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<div class="container-fluid">
+									<div class="form mb-3">
+										<div class="pl-3 text-left">
+											{{ form_label(video.service) }} 
+											{{ form_widget(video.service) }}
+										</div>
+										<div class="px-3 mt-4 text-left">
+											{{ form_label(video.code) }}
+											<span class="modal-info-code" data-toggle="modal" data-target="#modal-help-code-video">
+												<i class="fas fa-question-circle"></i>
+											</span>
+											{{ form_widget(video.code) }}
+										</div>
+									</div>
+								</div>
+								{# modal page to help to know how found the video code #}
+    							{{ include('fragments/_help_video_code.html.twig')}}
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+								<button type="button" class="btn btn-primary">Enregistrer</button>
+							</div>
+							</div>
+						</div>
 					</div>
 				{% endfor %}
 				<div class="row justify-content-center mt-2">
@@ -103,6 +154,7 @@
 			</div>
 			{# width < 720px #}
 			<div class="d-block d-md-none col-12 text-center mt-3">
+				{# display pictures #}
 				{% if trick.pictures|length > 0 %}
 					<p>
 						<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapsePicturesUpdate" aria-expanded="false" aria-controls="collapsePictures">
@@ -114,7 +166,7 @@
 					{% for picture in trick.pictures %}
 						<div class="d-inline-block">
 							<img src="{{ asset('uploads/images/200/' ~ picture.filename) }}" alt="{{ picture.alt }} , photo pour illustrer le trick de snowboard {{ trick.name }}" class="img-thumbnail rounded"/>
-							{{ include('fragments/_icons-media.html.twig', { hrefUpdate: '#', hrefDelete: '#', media: 'photo'}) }}
+							{{ include('fragments/_icons-media.html.twig', {media: 'photo'}) }}
 						</div>
 					{% endfor %}
 				</div>
@@ -123,6 +175,7 @@
 				</div>
 			</div>
 			<div class="d-block d-md-none col-12 text-center">
+				{# display videos #}
 				{% if trick.videos|length > 0 %}
 					<p>
 						<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseVideosUpdate" aria-expanded="false" aria-controls="collapseVideos">
@@ -131,21 +184,18 @@
 					</p>
 				{% endif %}
 				<div class="collapse" id="collapseVideosUpdate">
-					{% for video in trick.videos %}
+					{% for video in form.videos %}
 						<div class="d-inline-block mt-2">
-							{{ include('fragments/_iframe.html.twig', {width: 210, height: 118}) }}
-							{{ include('fragments/_icons-media.html.twig', { hrefUpdate: '#', hrefDelete: '#', media: 'vidéo'}) }}
+							{{ include('fragments/_iframe.html.twig', {service: video.vars.value.service, code: video.vars.value.code, width: 210, height: 118}) }}
+							{{ include('fragments/_icons-media.html.twig', {media: 'vidéo'}) }}
 						</div>
 					{% endfor %}
-
 				</div>
 				<div class="row justify-content-center">
 					<button class="btn btn-add btn-sm">Ajouter une vidéo</button>
 				</div>
 			</div>
 		</div>
-
-		{{ form_start(form) }}
 
 		{# description #}
 		<hr class="mt-5">
