@@ -362,4 +362,40 @@ class TrickController extends AbstractController
             ['Content-Type' => 'application/json']
         );
     }
+
+    /**
+     * Delete trick video.
+     *
+     * @Route("supprimer/trick-video/{slug}/{uuid}", name="trick_delete_video", methods={"DELETE"})
+     * 
+     * @isGranted("ROLE_USER")
+     */
+    public function deleteVideo(
+        Trick $trick,
+        Request $request,
+        VideoRepository $videoRepository
+    ): JsonResponse {
+        $data = json_decode($request->getContent(), true);
+        if ($this->isCsrfTokenValid('delete-video-token-' . $trick->getUuid(), $data['_token'])) {
+            $videoId = $data['videoId'];
+            $video = $videoRepository->find($videoId);
+            $trick->removeVideo($video);
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->json(
+                [
+                    'message' => 'La vidéo a été supprimée.',
+                    'videoId' => $videoId,
+                ],
+                200,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        return $this->json(
+            ['message' => 'Accès refusé.'],
+            403,
+            ['Content-Type' => 'application/json']
+        );
+    }
 }

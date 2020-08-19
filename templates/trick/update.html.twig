@@ -78,9 +78,12 @@
 			</div>
 		</div>
 		{###########################################################################################}
+
 		{{ form_start(form) }}
+
 		{# MEDIAS #}
-		{# modal pages to update videos #}
+
+		{# modal pages to update a video #}
 		{% for video in form.videos %}
 			<div class="modal fade" id="updateVideoModal-{{ video.vars.value.id }}" tabindex="-1" aria-labelledby="videoModalLabel-{{ video.vars.value.id }}" aria-hidden="true"> 
 				<div class="modal-dialog modal-dialog-centered">
@@ -123,8 +126,41 @@
 				</div>
 			</div>
 		{% endfor %}
+
+		{# modal pages to delete a video #}
+		{% for video in form.videos %}
+			<div class="modal fade" id="deleteVideoModal-{{ video.vars.value.id }}" tabindex="-1" 
+				aria-labelledby="deleteVideoModalLabel-{{ video.vars.value.id }}" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title font-weight-bold" id="deleteVideoModalLabel-{{ video.vars.value.id }}">Attention ! C'est action est définitive !</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<div class="row justify-content-center">
+								<h5> Est-vous sûr de vouloir supprimer cette vidéo ? </h5>
+								{{ include('fragments/_iframe.html.twig', {service: video.vars.value.service, code: video.vars.value.code, width: 210, height: 118}) }}
+							</div>
+							</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary " data-dismiss="modal">Fermer</button>
+							<a href="{{ path('trick_delete_video', {slug: trick.slug, uuid: trick.uuid}) }}" 
+								type="button" class="btn btn-primary delete-video-link" data-videoid="{{ video.vars.value.id }}"
+								data-token="{{ csrf_token('delete-video-token-' ~ trick.uuid) }}">
+								Supprimer
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+
 		{# display pictures and videos #}
 		<div class="row d-flex mt-2">
+
 			{# width > 720px #}
 			<div
 				class="d-none d-md-block col-sm-12 col-md-7 col-lg-6 text-left">
@@ -146,8 +182,7 @@
 					<button class="btn btn-add btn-sm">Ajouter une photo</button>
 				</div>
 			</div>
-			<div
-				class="d-none d-md-block col-sm-12 col-md-5 col-lg-6 text-right">
+			<div class="d-none d-md-block col-sm-12 col-md-5 col-lg-6 text-right">
 				{# display videos #}
 				{% for video in form.videos %}
 					{# display video and it's pencil and trash icons #}
@@ -160,8 +195,10 @@
 								data-toggle="tooltip" data-placement="bottom" title="Modifier la vidéo ci-dessus">
 								<i class="fas fa-pencil-alt"></i>
 							</button>
-							<button class="btn btn-outline-primary btn-sm mr-2" data-delete data-trick="{{ trick.name }}" data-toggle="tooltip" data-placement="bottom" title="Supprimer la vidéo ci-dessus">
-								<i class="fas fa-trash-alt"></i>
+							<button type="button" class="btn btn-outline-primary btn-sm mr-2" 
+								data-toggle="modal" data-target="#deleteVideoModal-{{ video.vars.value.id }}"
+								data-toggle="tooltip" data-placement="bottom" title="Supprimer la vidéo ci-dessus">
+									<i class="fas fa-trash-alt"></i>
 							</button>
 						</div>
 					</div>
@@ -198,7 +235,7 @@
 						</div>
 					{% endfor %}
 				</div>
-				<div class="row justify-content-center m-3">
+				<div class="row justify-content-center mb-1">
 					<button class="btn btn-add btn-sm">Ajouter une photo</button>
 				</div>
 			</div>
@@ -206,7 +243,7 @@
 				{# display videos #}
 				{% if trick.videos|length > 0 %}
 					<p>
-						<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseVideosUpdate" aria-expanded="false" aria-controls="collapseVideos">
+						<button class="btn btn-primary mt-3" type="button" data-toggle="collapse" data-target="#collapseVideosUpdate" aria-expanded="false" aria-controls="collapseVideos">
 							Voir Vidéos
 						</button>
 					</p>
@@ -214,7 +251,7 @@
 				<div class="collapse" id="collapseVideosUpdate">
 					{% for video in form.videos %}
 						{# display video #}
-						<div id="video-display-mobile-{{ video.vars.value.id }}" class="d-inline-block mt-2">
+						<div id="video-display-mobile-{{ video.vars.value.id }}" class="d-inline-block mb-2">
 							{{ include('fragments/_iframe.html.twig', {service: video.vars.value.service, code: video.vars.value.code, width: 210, height: 118}) }}
 							{# icons : pencil and trash #}
 							<div class="d-flex flex-nowrap justify-content-center">
@@ -226,8 +263,10 @@
 									<i class="fas fa-pencil-alt"></i>
 								</button>
 								{# icon to delete the video #}
-								<button class="btn btn-outline-primary btn-sm mr-2" data-delete data-trick="{{ trick.name }}" data-toggle="tooltip" data-placement="bottom" title="Supprimer la vidéo ci-dessus">
-									<i class="fas fa-trash-alt"></i>
+								<button  type="button" class="btn btn-outline-primary btn-sm mr-2" 
+									data-toggle="modal" data-target="#deleteVideoModal-{{ video.vars.value.id }}" 
+									data-toggle="tooltip" data-placement="bottom" title="Supprimer la vidéo ci-dessus">
+										<i class="fas fa-trash-alt"></i>
 								</button>
 							</div>
 						</div>

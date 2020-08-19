@@ -56,13 +56,12 @@ $(function () {
         }).done(function(data) {
             displayNewFirstPicture(data);
         }).fail(function(data){
-            console.log(data);
             alert(data.responseJSON.message);
         });
     });
 
     //////////////////////////////////////////////////////////////////////////////////////////
-    //                                  UPDATE VIDEO FOR SCREEN > 720px
+    //                                  UPDATE VIDEO
     //////////////////////////////////////////////////////////////////////////////////////////
 
     let updateVideoLinks = $('.update-video-link');
@@ -116,9 +115,41 @@ $(function () {
                 'code': $(this).data('code'),
             })
         }).done(function(data){
-            console.log(data);
             updateVideo(data);
         }).fail(function(data){
+            alert(data.responseJSON.message);
+        });
+    });
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //                                  DELETE VIDEO 
+    //////////////////////////////////////////////////////////////////////////////////////////
+
+    let deleteVideoLinks = $('.delete-video-link');
+
+    let deleteVideo = function(data) {
+        // screen > 720px
+        $('#video-display-' + data.videoId).remove();
+        // screen < 720px
+        $('#video-display-mobile-' + data.videoId).remove();
+    };
+
+    deleteVideoLinks.click(function(e) {
+        e.preventDefault();
+        $('#deleteVideoModal-' + $(this).data('videoid')).modal('hide');   
+        $.ajax({
+            url: $(this).attr('href'), 
+            method: 'DELETE',
+            dataType: 'json',
+            data: JSON.stringify({
+                '_token': $(this).data('token'),
+                'videoId': $(this).data('videoid')
+            })
+        }).done(function(data) {
+            console.log(data);
+            deleteVideo(data);
+        }).fail(function(data){
+            console.log(data);
             alert(data.responseJSON.message);
         });
     });
