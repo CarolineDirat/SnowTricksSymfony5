@@ -48,7 +48,7 @@ $(function () {
         e.preventDefault();    
         $.ajax({
             url: $(this).attr('href'), 
-            method: 'POST',
+            method: 'DELETE',
             dataType: 'json',
             data: JSON.stringify({
                 '_token': $(this).data('token'),

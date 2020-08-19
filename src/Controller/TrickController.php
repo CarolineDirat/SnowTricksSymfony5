@@ -290,7 +290,7 @@ class TrickController extends AbstractController
     /**
      * Delete trick first image.
      *
-     * @Route("supprimer/trick-image/{slug}/{uuid}", name="trick_delete_first_image", methods={"POST"})
+     * @Route("supprimer/trick-image/{slug}/{uuid}", name="trick_delete_first_image", methods={"DELETE"})
      * 
      * @isGranted("ROLE_USER")
      */
