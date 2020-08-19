@@ -106,16 +106,6 @@
 										{{ form_widget(video.code, {'attr': {'class': 'update-code-video'}}) }}
 									</div>
 								</div>
-								<hr class="my-4">
-								<div class="row">
-									<h5 class="font-weight-bold col-12">Où trouver le code de la vidéo ?</h5>
-									<div class="col-12 mt-4"><h6 class="badge badge-dark">Sur YouTube :</h6></div>	
-									<img class="img-fluid" src="{{ asset('images/help-code-youtube.png') }}" alt="Comment trouver le code de la video sur YouTube ? Le code dans l'URL après 'v='"/>
-									<div class="col-12 mt-2"><h6 class="badge badge-dark">Sur Vimeo :</h6></div>
-									<img class="img-fluid" src="{{ asset('images/help-code-vimeo.png') }}" alt="Comment trouver le code de la video sur YouTube ? Dernière partie de l'URL, après le dernier slash '/'"/>
-									<div class="col-12 mt-2"><h6 class="badge badge-dark">Sur Dailymotion :</h6></div>
-									<img class="img-fluid" src="{{ asset('images/help-code-dailymotion.png') }}" alt="Comment trouver le code de la video sur YouTube ? Dernière partie de l'URL, après le dernier slash '/'"/>
-								</div>
 							</div>
 						</div>
 						<div class="modal-footer">
@@ -127,6 +117,8 @@
 								Enregistrer
 							</a>
 						</div>
+						{# modal page to know where find the video code #}
+						{{ include('fragments/_help_video_code.html.twig') }}
 					</div>
 				</div>
 			</div>
