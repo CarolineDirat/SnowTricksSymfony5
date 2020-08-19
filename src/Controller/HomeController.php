@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\TrickRepository;
+use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,9 +11,16 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
-    const NUMBER_FIRST_TRICKS = 8;
-    const OFFSET_LOADED_TRICKS = self::NUMBER_FIRST_TRICKS;
-    const LIMIT_LOADED_TRICKS = 4;
+    private array $constants;
+
+    public function __construct(ContainerInterface $container)
+    {
+        $this->constants = parse_ini_file(
+            $container->get('parameter_bag')->get('kernel.project_dir').'/constants.ini',
+            true,
+            INI_SCANNER_TYPED
+        );
+    }
 
     /**
      * Display the home page.
@@ -21,7 +29,10 @@ class HomeController extends AbstractController
      */
     public function index(TrickRepository $trickRepository): Response
     {
-        $tricks = $trickRepository->getPaginatedTricks(0, self::NUMBER_FIRST_TRICKS);
+        $tricks = $trickRepository->getPaginatedTricks(
+            0,
+            $this->constants['tricks']['number_first_displayed']
+        );
 
         return $this->render('home/index.html.twig', ['tricks' => $tricks]);
     }
@@ -33,7 +44,10 @@ class HomeController extends AbstractController
      */
     public function onlyTricks(TrickRepository $trickRepository): Response
     {
-        $tricks = $trickRepository->getPaginatedTricks(0, self::NUMBER_FIRST_TRICKS);
+        $tricks = $trickRepository->getPaginatedTricks(
+            0,
+            $this->constants['tricks']['number_first_displayed']
+        );
 
         return $this->render('home/tricks.html.twig', ['tricks' => $tricks]);
     }
@@ -47,9 +61,12 @@ class HomeController extends AbstractController
      *      methods={"GET"}
      * )
      */
-    public function loadMoreTricks(TrickRepository $trickRepository, int $offset = self::OFFSET_LOADED_TRICKS): JsonResponse
+    public function loadMoreTricks(TrickRepository $trickRepository, int $offset = null): JsonResponse
     {
-        $tricks = $trickRepository->getArrayPaginatedTricks($offset, self::LIMIT_LOADED_TRICKS);
+        if (empty($offset)) {
+            $offset = $this->constants['tricks']['number_first_displayed'];
+        }
+        $tricks = $trickRepository->getArrayPaginatedTricks($offset, $this->constants['tricks']['limit_loaded']);
 
         return $this->json(
             $tricks,

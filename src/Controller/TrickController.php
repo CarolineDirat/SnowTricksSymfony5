@@ -11,6 +11,7 @@ use App\Repository\CommentRepository;
 use App\Repository\PictureRepository;
 use App\Repository\TrickRepository;
 use App\Repository\VideoRepository;
+use Psr\Container\ContainerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -21,9 +22,16 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TrickController extends AbstractController
 {
-    const NUMBER_LAST_COMMENTS = 5;
-    const OFFSET_LOADED_COMMENTS = self::NUMBER_LAST_COMMENTS;
-    const LIMIT_LOADED_COMMENTS = 5;
+    private array $constants;
+
+    public function __construct(ContainerInterface $container)
+    {
+        $this->constants = parse_ini_file(
+            $container->get('parameter_bag')->get('kernel.project_dir').'/constants.ini',
+            true,
+            INI_SCANNER_TYPED
+        );
+    }
 
     /**
      * Display the page of one trick.
@@ -57,7 +65,10 @@ class TrickController extends AbstractController
 
         return $this->render('trick/index.html.twig', [
             'trick' => $trick,
-            'comments' => $commentRepository->getLastComments($trick, self::NUMBER_LAST_COMMENTS),
+            'comments' => $commentRepository->getLastComments(
+                $trick,
+                $this->constants['comments']['number_last_displayed']
+            ),
             'form' => $form->createView(),
         ]);
     }
@@ -84,9 +95,12 @@ class TrickController extends AbstractController
      *      methods={"GET"}
      * )
      */
-    public function loadMoreComments(Trick $trick, CommentRepository $commentRepository, int $offset = self::OFFSET_LOADED_COMMENTS): JsonResponse
+    public function loadMoreComments(Trick $trick, CommentRepository $commentRepository, int $offset = null): JsonResponse
     {
-        $comments = $commentRepository->getArrayPaginatedComments($trick, $offset, self::LIMIT_LOADED_COMMENTS);
+        if (empty($offset)) {
+            $offset = $this->constants['comments']['number_last_displayed'];
+        }
+        $comments = $commentRepository->getArrayPaginatedComments($trick, $offset, $this->constants['comments']['limit_loaded']);
 
         return $this->json(
             $comments,
@@ -328,7 +342,6 @@ class TrickController extends AbstractController
                 ->setService($data['service'])
                 ->setCode($data['code'])
             ;
-            
             $this->getDoctrine()->getManager()->flush();
 
             return $this->json(
