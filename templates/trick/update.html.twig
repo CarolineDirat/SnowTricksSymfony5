@@ -5,8 +5,7 @@
 {% endblock %}
 
 {% block body %}
-	<section
-		id="trick-update" class="container">
+	<section id="trick-update" class="container">
 		{# trick name and first picture #}
 		<div class="row">
 			<h1 class="col-12 text-center mt-5">Modifier le trick :</h1>
@@ -56,7 +55,7 @@
 											<img width="120px" src="{{ asset('uploads/images/200/'~ picture.filename) }}" alt="{{ picture.alt }} pour illustrer le trick {{ trick.name }}">
 											<div class="custom-control custom-radio text-center">
 												<input type="radio" id="first_picture_{{ loop.index }}" 
-													name="first_picture" class="custom-control-input" value="{{ picture.id }}">
+													name="first_picture" class="custom-control-input input-radio-first-picture" value="{{ picture.id }}">
 												<label class="custom-control-label" for="first_picture_{{ loop.index }}"></label>
 											</div>
 										</div>
@@ -180,8 +179,7 @@
 				</div>
 			</div>
 			{# width < 720px #}
-			<div
-				class="d-block d-md-none col-12 text-center mt-3">
+			<div class="d-block d-md-none col-12 text-center mt-3">
 				{# display pictures #}
 				{% if trick.pictures|length > 0 %}
 					<p>
@@ -212,8 +210,7 @@
 					<button class="btn btn-add btn-sm">Ajouter une photo</button>
 				</div>
 			</div>
-			<div
-				class="d-block d-md-none col-12 text-center">
+			<div class="d-block d-md-none col-12 text-center">
 				{# display videos #}
 				{% if trick.videos|length > 0 %}
 					<p>
@@ -227,12 +224,12 @@
 						{# display video #}
 						<div id="video-display-mobile-{{ video.vars.value.id }}" class="d-inline-block mt-2">
 							{{ include('fragments/_iframe.html.twig', {service: video.vars.value.service, code: video.vars.value.code, width: 210, height: 118}) }}
-							{# icons ; pencil and trash #}
-							<div
-								class="d-flex flex-nowrap justify-content-center">
+							{# icons : pencil and trash #}
+							<div class="d-flex flex-nowrap justify-content-center">
 								{# icon to update the video #}
-								<button class="btn btn-outline-primary btn-sm mr-2 update-video-button-mobile" 
+								<button type="button" class="btn btn-outline-primary btn-sm mr-2 update-video-button-mobile" 
 									data-videoid="{{ video.vars.value.id }}" 
+									data-toggle="modal" data-target="#updateVideoModal-{{ video.vars.value.id }}"
 									data-toggle="tooltip" data-placement="bottom" title="Modifier la vidéo ci-dessus">
 									<i class="fas fa-pencil-alt"></i>
 								</button>
