@@ -83,6 +83,9 @@
 
 		{# MEDIAS #}
 
+		{# modal page to know where find the video code #}
+		{{ include('fragments/_help_video_code.html.twig') }}
+
 		{# modal pages to update a video #}
 		{% for video in form.videos %}
 			<div class="modal fade" id="updateVideoModal-{{ video.vars.value.id }}" tabindex="-1" aria-labelledby="videoModalLabel-{{ video.vars.value.id }}" aria-hidden="true"> 
@@ -103,11 +106,28 @@
 									</div>
 									<div class="px-3 mt-4 text-left">
 										{{ form_label(video.code) }}
-										<span class="modal-info-code" data-toggle="modal" data-target="#modal-help-code-video">
-											<i class="fas fa-question-circle"></i>
+										<span class="modal-info-code" data-toggle="collapse" data-target="#collapse-help-code-video" 
+											aria-expanded="false" aria-controls="collapse-help-code-video">
+												<i class="fas fa-question-circle"></i>
 										</span>
 										{{ form_widget(video.code, {'attr': {'class': 'update-code-video'}}) }}
 									</div>
+								</div>
+								<hr>
+								<div class="row collapse" id="collapse-help-code-video">
+									<h5 class="col-12 font-weight-bold text-danger">Dans l'url de la vidéo :</h5>
+									<div class="col-12 mt-2">
+										<h6 class="badge badge-info">Sur YouTube :</h6>
+									</div>	
+									<img class="img-fluid mt-n2" src="{{ asset('images/help-code-youtube.png') }}" alt="Comment trouver le code de la video sur YouTube ? Le code dans l'URL après 'v='"/>
+									<div class="col-12 mt-1">
+										<h6 class="badge badge-info">Sur Vimeo :</h6>
+									</div>
+									<img class="img-fluid mt-n2" src="{{ asset('images/help-code-vimeo.png') }}" alt="Comment trouver le code de la video sur YouTube ? Dernière partie de l'URL, après le dernier slash '/'"/>
+									<div class="col-12 mt-1">
+										<h6 class="badge badge-info">Sur Dailymotion :</h6>
+									</div>
+									<img class="img-fluid mt-n2" src="{{ asset('images/help-code-dailymotion.png') }}" alt="Comment trouver le code de la video sur YouTube ? Dernière partie de l'URL, après le dernier slash '/'"/>
 								</div>
 							</div>
 						</div>
@@ -120,8 +140,6 @@
 								Enregistrer
 							</a>
 						</div>
-						{# modal page to know where find the video code #}
-						{{ include('fragments/_help_video_code.html.twig') }}
 					</div>
 				</div>
 			</div>
@@ -162,27 +180,27 @@
 		<div class="row d-flex mt-2">
 
 			{# width > 720px #}
-			<div
-				class="d-none d-md-block col-sm-12 col-md-7 col-lg-6 text-left">
+			<div class="d-none d-md-block col-sm-12 col-md-7 col-lg-6 text-left">
 				{# display pictures #}
 				{% for picture in trick.pictures %}
 					<div class="d-inline-block mb-2">
 						<img width="160px" src="{{ asset('uploads/images/200/' ~ picture.filename) }}" alt="{{ picture.alt }} photo pour illustrer le trick de snowboard {{ trick.name }}." class="img-thumbnail rounded"/>
 						<div class="d-flex flex-nowrap justify-content-center">
-							<button class="btn btn-outline-primary btn-sm mr-2" data-toggle="tooltip" data-placement="bottom" title="Modifier la photo ci-dessus">
+							<button type="button" class="btn btn-outline-primary btn-sm mr-2" data-toggle="tooltip" data-placement="bottom" title="Modifier la photo ci-dessus">
 								<i class="fas fa-pencil-alt"></i>
 							</button>
-							<button class="btn btn-outline-primary btn-sm mr-2" data-delete data-trick="{{ trick.name }}" data-toggle="tooltip" data-placement="bottom" title="Supprimer la photo ci-dessus">
+							<button type="button" class="btn btn-outline-primary btn-sm mr-2" data-delete data-trick="{{ trick.name }}" data-toggle="tooltip" data-placement="bottom" title="Supprimer la photo ci-dessus">
 								<i class="fas fa-trash-alt"></i>
 							</button>
 						</div>
 					</div>
 				{% endfor %}
 				<div class="row justify-content-center mt-2">
-					<button class="btn btn-add btn-sm">Ajouter une photo</button>
+					<button type="button" class="btn btn-add btn-sm">Ajouter une photo</button>
 				</div>
 			</div>
-			<div class="d-none d-md-block col-sm-12 col-md-5 col-lg-6 text-right">
+			<div class="d-none d-md-block col-sm-12 col-md-5 col-lg-6 text-right trick-update-videos" 
+				data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}">
 				{# display videos #}
 				{% for video in form.videos %}
 					{# display video and it's pencil and trash icons #}
@@ -203,8 +221,8 @@
 						</div>
 					</div>
 				{% endfor %}
-				<div class="row justify-content-center mt-2">
-					<button class="btn btn-add btn-sm">Ajouter une vidéo</button>
+				<div class="row justify-content-center mt-2 add_video_link large-screen">
+					<button type="button" class="btn btn-add btn-sm" data-screen="large">Ajouter une vidéo</button>
 				</div>
 			</div>
 			{# width < 720px #}
@@ -212,7 +230,7 @@
 				{# display pictures #}
 				{% if trick.pictures|length > 0 %}
 					<p>
-						<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapsePicturesUpdate" aria-expanded="false" aria-controls="collapsePictures">
+						<button type="button" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapsePicturesUpdate" aria-expanded="false" aria-controls="collapsePictures">
 							Voir Photos
 						</button>
 					</p>
@@ -225,10 +243,10 @@
 							src="{{ asset('uploads/images/200/' ~ picture.filename) }}" alt="{{ picture.alt }} , photo pour illustrer le trick de snowboard {{ trick.name }}" class="img-thumbnail rounded"/>
 							{# icons to delete or update a picture #}
 							<div class="d-flex flex-nowrap justify-content-center">
-								<button class="btn btn-outline-primary btn-sm mr-2" data-toggle="tooltip" data-placement="bottom" title="Modifier la photo ci-dessus">
+								<button type="button" class="btn btn-outline-primary btn-sm mr-2" data-toggle="tooltip" data-placement="bottom" title="Modifier la photo ci-dessus">
 									<i class="fas fa-pencil-alt"></i>
 								</button>
-								<button class="btn btn-outline-primary btn-sm mr-2" data-delete data-trick="{{ trick.name }}" data-toggle="tooltip" data-placement="bottom" title="Supprimer la photo ci-dessus">
+								<button type="button" class="btn btn-outline-primary btn-sm mr-2" data-delete data-trick="{{ trick.name }}" data-toggle="tooltip" data-placement="bottom" title="Supprimer la photo ci-dessus">
 									<i class="fas fa-trash-alt"></i>
 								</button>
 							</div>
@@ -236,19 +254,19 @@
 					{% endfor %}
 				</div>
 				<div class="row justify-content-center mb-1">
-					<button class="btn btn-add btn-sm">Ajouter une photo</button>
+					<button type="button" class="btn btn-add btn-sm">Ajouter une photo</button>
 				</div>
 			</div>
-			<div class="d-block d-md-none col-12 text-center">
+			<div id="trick-update-video-mobile" class="d-block d-md-none col-12 trick-update-videos">
 				{# display videos #}
 				{% if trick.videos|length > 0 %}
-					<p>
-						<button class="btn btn-primary mt-3" type="button" data-toggle="collapse" data-target="#collapseVideosUpdate" aria-expanded="false" aria-controls="collapseVideos">
+					<p class="d-flex justify-content-center">
+						<button type="button" class="btn btn-primary mt-3" data-toggle="collapse" data-target="#collapseVideosUpdate" aria-expanded="false" aria-controls="collapseVideos">
 							Voir Vidéos
 						</button>
 					</p>
 				{% endif %}
-				<div class="collapse" id="collapseVideosUpdate">
+				<div class="row collapse justify-content-center" id="collapseVideosUpdate">
 					{% for video in form.videos %}
 						{# display video #}
 						<div id="video-display-mobile-{{ video.vars.value.id }}" class="d-inline-block mb-2">
@@ -272,8 +290,8 @@
 						</div>
 					{% endfor %}
 				</div>
-				<div class="row justify-content-center">
-					<button class="btn btn-add btn-sm">Ajouter une vidéo</button>
+				<div class="row justify-content-center add_video_link small-screen">
+					<button type="button" class="btn btn-add btn-sm " data-screen="small" >Ajouter une vidéo</button>
 				</div>
 			</div>
 		</div>

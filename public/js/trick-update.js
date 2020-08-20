@@ -64,6 +64,12 @@ $(function () {
     //                                  UPDATE VIDEO
     //////////////////////////////////////////////////////////////////////////////////////////
 
+    $('#modal-help-code-video div.modal-footer button').click(function(e){
+        $(this).removeData('dismiss');
+        e.preventDefault();
+        //$('#modal-help-code-video').modal('hide');
+    });
+
     let updateVideoLinks = $('.update-video-link');
 
     // data for AJAX request are on data attributes of the link witch send AJAX request
@@ -152,5 +158,50 @@ $(function () {
             console.log(data);
             alert(data.responseJSON.message);
         });
+    });
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //                                  ADD VIDEO FORM IN THE RIGHT PLACE ;)
+    //////////////////////////////////////////////////////////////////////////////////////////
+
+    let collectionHolderVideosUpdatePage = $('.trick-update-videos');
+    let addVideoButtonUpdatePage = $('.add_video_link button');
+
+    // count the current form inputs we have (e.g. 2), use that as the new
+    // index when inserting a new item (e.g. 2)
+    collectionHolderVideosUpdatePage.data('index', collectionHolderVideosUpdatePage.find('input').length);
+
+    // function to add a new video form
+    var addVideoFormUpdatePage = function(collectionHolder, screen) {
+        // Get the data-prototype
+        var prototype = collectionHolder.data('prototype');
+        // get the new index
+        var index = collectionHolder.data('index');
+
+        var newForm = prototype;
+
+        // Replace '__name__' in the prototype's HTML to
+        // instead be a number based on how many items we have
+        newForm = newForm.replace(/__name__/g, index);
+
+        // increase the index with one for the next item
+        collectionHolder.data('index', index + 1);
+
+        // Display the form in the page
+        $('.add_video_link.'+ screen + '-screen').before(newForm);
+
+        // custom videos classes
+        index = collectionHolder.data('index');
+        $('#trick_videos_' + (index - 1)).addClass('form-row video pb-2 pt-1 my-2 text-left');
+        $('#trick_videos_' + (index - 1) + ' fieldset').addClass('pl-3 col-12 col-sm-12 col-lg-6 mb-0');
+        $('#trick_videos_' + (index - 1) + ' div.form-group').addClass('col-12 col-sm-12 col-lg-6 mt-3 mb-0');
+        $('#trick_videos_' + (index - 1) + ' div.form-group label').after('<span class="modal-info-code ml-2 mb-1" data-toggle="modal" data-target="#modal-help-code-video"><i class="fas fa-question-circle"></i></span>');
+
+        $('#trick_videos_' + (index - 1)).hide().slideDown('slow');
+    };
+    
+    addVideoButtonUpdatePage.on('click', function(e) {
+        // add a new video form
+        addVideoFormUpdatePage(collectionHolderVideosUpdatePage, $(this).data('screen'));
     });
 });
