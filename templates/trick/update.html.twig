@@ -6,11 +6,51 @@
 
 {% block body %}
 	<section id="trick-update" class="container">
-		{# trick name and first picture #}
+
+		{# TRICK NAME #}
 		<div class="row">
 			<h1 class="col-12 text-center mt-5">Modifier le trick :</h1>
-			<h2 class="col-12 text-center mt-2 mb-3">{{ trick.name|upper }}</h2>
+			<h2 class="col-12 text-center mt-2 mb-3">
+				<span>{{ trick.name|upper }}</span>
+				<button type="button" class="btn btn-outline-primary btn-sm" 
+					data-toggle="modal" data-target="#updateNameModal" 
+					data-toggle="tooltip" data-placement="bottom" title="Corriger ou compléter le nom du trick">
+					<i class="fas fa-pencil-alt"></i>
+				</button>
+			</h2>
 		</div>
+		{{ form_start(form) }}
+		{# modale page to update trick name #}
+		<div class="modal fade" id="updateNameModal" tabindex="-1" aria-labelledby="updateNameModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title font-weight-bold" id="updateNameModalLabel">Corriger ou compléter le nom du trick :</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="container-fluid">
+							<div class="form-group row">
+								{{ form_label(form.name, 'Nom du trick : ') }}
+								{{ form_widget(form.name) }}
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+						<a href="{{ path('trick_update_name', {slug: trick.slug, uuid: trick.uuid}) }}" type="button" 
+							id="update-trick-name" class="btn btn-primary" 
+							data-token="{{ csrf_token('update-name-token-' ~ trick.uuid) }}">
+							Enregistrer
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		{# FIRST IMAGE #}
 		<div class="row d-flex flex-nowrap justify-content-center first-image mt-3">
 			{% set firstPicture = trick.firstPicture ? trick.firstPicture.filename : (trick.pictures|length > 0 ? trick.pictures[0].filename : 'default.jpg') %}
 			{% set firstPictureAlt = trick.firstPicture ? trick.firstPicture.alt : null %}
@@ -33,7 +73,7 @@
 				</a>
 			</div>
 		</div>
-		{################### Modal Page to change the trick's first image ########################}
+		{# Modal Page to change the trick's first image #}
 		<div class="modal fade" id="updateFirstImageModal" tabindex="-1" aria-labelledby="updateFirstImageModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -77,9 +117,6 @@
 				</div>
 			</div>
 		</div>
-		{###########################################################################################}
-
-		{{ form_start(form) }}
 
 		{# MEDIAS #}
 

@@ -398,4 +398,38 @@ class TrickController extends AbstractController
             ['Content-Type' => 'application/json']
         );
     }
+
+    /**
+     * Update trick name.
+     *
+     * @Route("modifier/trick-name/{slug}/{uuid}", name="trick_update_name", methods={"POST"})
+     * 
+     * @isGranted("ROLE_USER")
+     */
+    public function updateName(
+        Trick $trick,
+        Request $request
+    ): JsonResponse {
+        $data = json_decode($request->getContent(), true);
+        if ($this->isCsrfTokenValid('update-name-token-' . $trick->getUuid(), $data['_token'])) {
+            $name = $data['newName'];
+            $trick->setName($name);
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->json(
+                [
+                    'message' => 'Le nom du trick a été modifiée.',
+                    'newName' => $name,
+                ],
+                200,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        return $this->json(
+            ['message' => 'Accès refusé.'],
+            403,
+            ['Content-Type' => 'application/json']
+        );
+    }
 }

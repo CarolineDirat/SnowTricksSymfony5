@@ -1,6 +1,37 @@
 /*eslint quotes: ["error", "single", { "avoidEscape": true }]*/
 
 $(function () {
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //                                  UPDATE NAME
+    //////////////////////////////////////////////////////////////////////////////////////////
+
+    let updateTrickName = $("#update-trick-name");
+
+    let displayNewName = function(data) {
+        $('#updateNameModal input').val(data.newName);
+        $('#trick-update h2 span').text((data.newName).toUpperCase());
+    };
+
+    updateTrickName.click(function(e) {
+        e.preventDefault();
+        $('#updateNameModal').modal('hide');    
+        $.ajax({
+            url: $(this).attr('href'), 
+            method: 'POST',
+            dataType: 'json',
+            data: JSON.stringify({
+                '_token': $(this).data('token'),
+                'newName' : $('#updateNameModal input').val(),
+            }),
+        }).done(function(data) {
+            console.log(data);
+            displayNewName(data);
+        }).fail(function(data){
+            console.log(data);
+            alert(data.message);
+        });
+    });
     
     //////////////////////////////////////////////////////////////////////////////////////////
     //                                  UPDATE FIRST IMAGE
