@@ -70,7 +70,7 @@ $(function () {
     });
 
     //////////////////////////////////////////////////////////////////////////////////////////
-    //                            ADD A FORMS VIDEO
+    //                            ADD A FORM VIDEO
     //////////////////////////////////////////////////////////////////////////////////////////
 
     let collectionHolderVideos = $('div.videos');
@@ -97,7 +97,7 @@ $(function () {
         // Display the form in the page
         collectionHolderVideos.append(newForm);
 
-        // custom tags classes
+        // custom videos classes
         index = collectionHolderVideos.data('index');
         $('#trick_videos_' + (index - 1)).addClass('form-row video pb-2 pt-1 mt-2');
         $('#trick_videos_' + (index - 1) + ' fieldset').addClass('pl-3 col-sm-6 col-md-5 col-lg-4 col-xl-3 mb-0');
