@@ -107,8 +107,9 @@ class TrickRepository extends ServiceEntityRepository
     {
         $pictures = $trick->getPictures();
         $filenames = [];
+        $imagesDirectories = $container->get('app.images_folders_names');
         // the same picture is multiple, corresponding to different widths, in several folders
-        foreach (['960', '720', '540', '200'] as $value) {
+        foreach ($imagesDirectories as $value) {
             foreach ($pictures as $picture) {
                 $filenames[] = $container->get('app.images_directory').$value.'/'.$picture->getFilename();
             }
