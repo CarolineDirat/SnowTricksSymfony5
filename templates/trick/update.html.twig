@@ -264,6 +264,41 @@
 			</div>
 		{% endfor %}
 
+		{# modal pages to delete pictures #}
+		{% for picture in form.pictures %}
+			{% set pictureId = picture.vars.value.id %}
+			<div class="modal fade" id="deletePictureModal-{{ pictureId }}" tabindex="-1" 
+				aria-labelledby="deletePictureModalLabel-{{ pictureId }}" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title font-weight-bold" id="deletePictureModalLabel-{{ pictureId }}">
+								Attention ! C'est action est définitive !
+							</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<div class="row justify-content-center">
+								<h5> Est-vous sûr de vouloir supprimer cette image ? </h5>
+								<img src="{{ asset('uploads/images/200/' ~ picture.vars.value.filename) }}" class="img-thumbnail img-fluid rounded"
+									alt="{{ picture.vars.value.alt }} photo pour illustrer le trick de snowboard {{ trick.name }}."/>
+							</div>
+							</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary " data-dismiss="modal">Fermer</button>
+							<a href="{{ path('trick_delete_picture', {slug: trick.slug, uuid: trick.uuid}) }}" 
+								type="button" class="btn btn-primary delete-picture-link" data-pictureid="{{ pictureId }}"
+								data-token="{{ csrf_token('delete-picture-token-' ~ pictureId) }}">
+								Supprimer
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+
 		
 		{# DISPLAY MEDIAS #}
 		<div class="row d-flex mt-2">
@@ -278,11 +313,12 @@
 							alt="{{ picture.vars.value.alt }} photo pour illustrer le trick de snowboard {{ trick.name }}." class="img-thumbnail rounded"/>
 						<div class="d-flex flex-nowrap justify-content-center">
 							<button type="button" class="btn btn-outline-primary btn-sm mr-2" 
-								data-toggle="modal" data-target="#updatePictureModal-{{ picture.vars.value.id }}"
+								data-toggle="modal" data-target="#updatePictureModal-{{ pictureId }}"
 								data-toggle="tooltip" data-placement="bottom" title="Modifier la photo ci-dessus">
 								<i class="fas fa-pencil-alt"></i>
 							</button>
 							<button type="button" class="btn btn-outline-primary btn-sm mr-2" 
+								data-toggle="modal" data-target="#deletePictureModal-{{ pictureId }}"
 								data-toggle="tooltip" data-placement="bottom" title="Supprimer la photo ci-dessus">
 								<i class="fas fa-trash-alt"></i>
 							</button>
@@ -339,11 +375,12 @@
 							{# icons to delete or update a picture #}
 							<div class="d-flex flex-nowrap justify-content-center">
 								<button type="button" class="btn btn-outline-primary btn-sm mr-2" 
-									data-toggle="modal" data-target="#updatePictureModal-{{ picture.vars.value.id }}"
+									data-toggle="modal" data-target="#updatePictureModal-{{ pictureId }}"
 									data-toggle="tooltip" data-placement="bottom" title="Modifier la photo ci-dessus">
 										<i class="fas fa-pencil-alt"></i>
 								</button>
 								<button type="button" class="btn btn-outline-primary btn-sm mr-2" 
+									data-toggle="modal" data-target="#deletePictureModal-{{ pictureId }}"
 									data-toggle="tooltip" data-placement="bottom" title="Supprimer la photo ci-dessus">
 										<i class="fas fa-trash-alt"></i>
 								</button>

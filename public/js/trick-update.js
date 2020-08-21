@@ -287,4 +287,37 @@ $(function () {
         });
     });
 
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //                                  DELETE PICTURE 
+    //////////////////////////////////////////////////////////////////////////////////////////
+
+    let deletePictureLinks = $('.delete-picture-link');
+
+    let deletePicture = function(data) {
+        // screen > 720px
+        $('#picture-display-' + data.pictureId).closest('div').remove();
+        // screen < 720px
+        $('#picture-display-mobile-' + data.pictureId).closest('div').remove();
+    };
+
+    deletePictureLinks.click(function(e) {
+        e.preventDefault();
+        $('#deletePictureModal-' + $(this).data('pictureid')).modal('hide');   
+        $.ajax({
+            url: $(this).attr('href'), 
+            method: 'DELETE',
+            dataType: 'json',
+            data: JSON.stringify({
+                '_token': $(this).data('token'),
+                'pictureId': $(this).data('pictureid')
+            })
+        }).done(function(data) {
+            console.log(data);
+            deletePicture(data);
+        }).fail(function(data){
+            console.log(data);
+            alert(data.responseJSON.message);
+        });
+    });
+
 });

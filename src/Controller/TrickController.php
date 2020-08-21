@@ -221,7 +221,7 @@ class TrickController extends AbstractController
      * )
      * @isGranted("ROLE_USER")
      */
-    public function update(Trick $trick, string $slug, Request $request): Response
+    public function update(Trick $trick, string $slug): Response
     {
         // check slug
         if ($slug !== $trick->getSlug()) {
@@ -499,4 +499,45 @@ class TrickController extends AbstractController
             ['Content-Type' => 'application/json']
         );
     }
+
+    /**
+     * Delete trick picture.
+     *
+     * @Route("supprimer/trick-picture/{slug}/{uuid}", name="trick_delete_picture", methods={"DELETE"})
+     * 
+     * @isGranted("ROLE_USER")
+     */
+     public function deletePicture(
+        Trick $trick,
+        Request $request,
+        PictureRepository $pictureRepository,
+        ParameterBagInterface $container
+    ): JsonResponse {
+        $data = json_decode($request->getContent(), true);
+        $pictureId = $data['pictureId'];
+        if ($this->isCsrfTokenValid('delete-picture-token-' . $pictureId, $data['_token'])) {
+            $picture = $pictureRepository->find($pictureId);
+            // delete files of the delete picture
+            $pictureRepository->deletePictureFiles($picture, $container);
+            // delete picture from database
+            $trick->removePicture($picture);
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->json(
+                [
+                    'message' => 'L\'image a été supprimée.',
+                    'pictureId' => $pictureId,
+                ],
+                200,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        return $this->json(
+            ['message' => 'Accès refusé.'],
+            403,
+            ['Content-Type' => 'application/json']
+        );
+    }
+
 }
