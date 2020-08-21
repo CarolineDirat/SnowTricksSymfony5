@@ -42,7 +42,7 @@ class Picture
      * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="pictures")
      * @ORM\JoinColumn(nullable=false)
      */
-    private ?Trick $trick;
+    private ?Trick $trick = null;
 
     public function getId(): ?int
     {
