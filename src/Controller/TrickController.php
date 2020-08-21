@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Form\CommentType;
+use App\Form\PictureType;
 use App\Form\TrickType;
 use App\FormHandler\CommentFormHandler;
 use App\FormHandler\TrickFormHandler;
@@ -11,10 +13,13 @@ use App\Repository\CommentRepository;
 use App\Repository\PictureRepository;
 use App\Repository\TrickRepository;
 use App\Repository\VideoRepository;
+use App\Service\ImageProcessInterface;
 use Psr\Container\ContainerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -420,6 +425,68 @@ class TrickController extends AbstractController
                 [
                     'message' => 'Le nom du trick a été modifiée.',
                     'newName' => $name,
+                ],
+                200,
+                ['Content-Type' => 'application/json']
+            );
+        }
+
+        return $this->json(
+            ['message' => 'Accès refusé.'],
+            403,
+            ['Content-Type' => 'application/json']
+        );
+    }
+
+    /**
+     * Update trick picture.
+     *
+     * @Route("modifier/trick-picture/{slug}/{uuid}/{picture_id}", name="trick_update_picture", methods={"POST"})
+     * @Entity("picture", expr="repository.find(picture_id)")
+     *
+     * @isGranted("ROLE_USER")
+     */
+    public function updatePicture(
+        Trick $trick,
+        Picture $picture,
+        Request $request,
+        PictureRepository $pictureRepository,
+        ParameterBagInterface $container,
+        ImageProcessInterface $imageProcess
+    ): JsonResponse {
+        $token = $request->request->get('token');
+        if ($this->isCsrfTokenValid('update-picture-token-'.$picture->getId(), $token)) {
+            // process new picture :  create files and define filename                
+            $nameForm = $request->request->get('nameForm');
+            $file = $request->files->get('trick')['pictures'][$nameForm]['file'];
+            $alt = $request->request->get('trick')['pictures'][$nameForm]['alt'];
+            // process file
+            if ($file instanceof UploadedFile) {
+                $filename = uniqid($trick->getSlug().'-', true); // file name without extension
+                // Resize the picture file to severals widths (cf service.yaml),
+                // and move files in their corresponding directory named with each width
+                $fullFilename = $imageProcess->execute($file, $filename);
+                // delete files of the replaced picture
+                $pictureRepository->deletePictureFiles($picture, $container);
+                // define new file name of picture
+                $picture->setFilename($fullFilename);
+            } else {
+                return $this->json(
+                    ['message' => 'Echec de l\'upload.'],
+                    403,
+                    ['Content-Type' => 'application/json']
+                );
+            }
+            $picture->setAlt($alt);
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->json(
+                [
+                    'message' => 'La photo a été modifiée.',
+                    'filename' => $picture->getFilename(),
+                    'alt' => $picture->getAlt(),
+                    'pictureId' => $picture->getId(),
+                    'trick' => $trick->getName(),
                 ],
                 200,
                 ['Content-Type' => 'application/json']

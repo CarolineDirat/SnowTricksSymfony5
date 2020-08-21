@@ -235,4 +235,56 @@ $(function () {
         // add a new video form
         addVideoFormUpdatePage(collectionHolderVideosUpdatePage, $(this).data('screen'));
     });
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //                                  UPDATE PICTURE
+    //////////////////////////////////////////////////////////////////////////////////////////
+
+    // FILE BROWSE : customizing the strings with HTML
+    var translateBrowse = function() {
+        $('label.custom-file-label').attr('data-browse', 'Parcourir mes fichiers');
+    };
+    translateBrowse();
+
+    // functions to display new picture
+    let updatePicture = function(data, id) {
+        $(id)
+            .attr('src', '/../uploads/images/200/' + data.filename)
+            .attr('alt', data.alt + ' photo pour illustrer le trick de snowboard ' + data.trick)
+        ;
+    };
+    let displayPictures = function(data) {
+        updatePicture(data, '#picture-display-' + data.pictureId);
+        updatePicture(data, '#picture-display-mobile-' + data.pictureId);
+        updatePicture(data, '#updatePictureModal-' + data.pictureId + ' img');
+    };
+    
+    // AJAX REQUEST to update a picture
+    let updatePictureLinks = $('.update-picture-link');
+
+    updatePictureLinks.click(function(e) {
+        e.preventDefault();
+        let pictureId =  $(this).data('pictureid');
+        $('#updatePictureModal-' + pictureId).modal('hide');
+        let formData = new FormData($('#update-picture-form-' + pictureId)[0]);
+        formData.append('nameForm', $('#update-picture-form-' + pictureId).attr('name'));       
+
+        $.ajax({
+            url: $(this).attr('href'), 
+            method: 'POST',
+            enctype: 'multipart/form-data',
+            data: formData,
+            dataType: 'json',
+            processData: false,
+		    contentType: false,
+            cache: false,
+        }).done(function(data){
+            console.log(data);
+            displayPictures(data);
+        }).fail(function(data){
+            console.log(data);
+            alert('ajax failed');
+        });
+    });
+
 });

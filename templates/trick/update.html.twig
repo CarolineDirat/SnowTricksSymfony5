@@ -19,7 +19,9 @@
 				</button>
 			</h2>
 		</div>
+
 		{{ form_start(form) }}
+
 		{# modale page to update trick name #}
 		<div class="modal fade" id="updateNameModal" tabindex="-1" aria-labelledby="updateNameModalLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered">
@@ -73,6 +75,7 @@
 				</a>
 			</div>
 		</div>
+
 		{# Modal Page to change the trick's first image #}
 		<div class="modal fade" id="updateFirstImageModal" tabindex="-1" aria-labelledby="updateFirstImageModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
@@ -117,6 +120,7 @@
 				</div>
 			</div>
 		</div>
+
 
 		{# MEDIAS #}
 
@@ -213,20 +217,73 @@
 			</div>
 		{% endfor %}
 
-		{# display pictures and videos #}
+		{# modal pages to update a picture #}
+		{% for picture in form.pictures %}
+			{% set pictureId = picture.vars.value.id %}
+			<div class="modal fade update-picture-modal" id="updatePictureModal-{{ pictureId }}" 
+				tabindex="-1" aria-labelledby="updatePictureModalLabel-{{ pictureId }}" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="updatePictureModalLabel-{{ pictureId }}">Modifier l'image : </h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+					<div class="modal-body">
+						<div class="container-fluid">
+							<div class="row justify-content-center">
+								<p class="mb-0">Attention ! Cette image sera écrasée par le nouveau fichier.</p>
+								<img width="160px" class="img-thumbnail rounded" src="{{ asset('uploads/images/200/' ~ picture.vars.value.filename) }}" 
+									alt="{{ picture.vars.value.alt }} photo pour illustrer le trick de snowboard {{ trick.name }}." />
+							</div>
+							{{ form_start(picture, {'enctype': 'multipart/form-data', 
+								'attr': {'class': 'update-picture-form','id': 'update-picture-form-' ~ pictureId }}) }}
+							<div class="row picture pt-2">
+								<div class="col-12">
+									{{ form_row(picture.file, {'id': 'input-file-update-picture-' ~ pictureId}) }}
+								</div>
+								<div class="col-12 my-2">
+									{{ form_label(picture.alt, "Une brève description de l'image :") }}
+									{{ form_widget(picture.alt, {'attr': {'required': true}, 'id': 'input-alt-update-picture-' ~ pictureId}) }}
+								</div>
+								<input type="hidden" id="update-picture-token-{{ pictureId }}" name="token" value="{{ csrf_token('update-picture-token-' ~ pictureId) }}"/>
+							</div>
+							{{ form_end(picture) }}
+						</div>
+					</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+							<a href="{{ path('trick_update_picture', {slug: trick.slug, uuid: trick.uuid, picture_id: pictureId}) }}" 
+								 type="button" class="btn btn-primary update-picture-link" data-pictureid="{{ pictureId }}">
+									Enregistrer
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+
+		
+		{# DISPLAY MEDIAS #}
 		<div class="row d-flex mt-2">
 
 			{# width > 720px #}
 			<div class="d-none d-md-block col-sm-12 col-md-7 col-lg-6 text-left">
 				{# display pictures #}
-				{% for picture in trick.pictures %}
+				{% for picture in form.pictures %}
+					{% set pictureId = picture.vars.value.id %}
 					<div class="d-inline-block mb-2">
-						<img width="160px" src="{{ asset('uploads/images/200/' ~ picture.filename) }}" alt="{{ picture.alt }} photo pour illustrer le trick de snowboard {{ trick.name }}." class="img-thumbnail rounded"/>
+						<img width="160px" id="picture-display-{{ pictureId }}" src="{{ asset('uploads/images/200/' ~ picture.vars.value.filename) }}" 
+							alt="{{ picture.vars.value.alt }} photo pour illustrer le trick de snowboard {{ trick.name }}." class="img-thumbnail rounded"/>
 						<div class="d-flex flex-nowrap justify-content-center">
-							<button type="button" class="btn btn-outline-primary btn-sm mr-2" data-toggle="tooltip" data-placement="bottom" title="Modifier la photo ci-dessus">
+							<button type="button" class="btn btn-outline-primary btn-sm mr-2" 
+								data-toggle="modal" data-target="#updatePictureModal-{{ picture.vars.value.id }}"
+								data-toggle="tooltip" data-placement="bottom" title="Modifier la photo ci-dessus">
 								<i class="fas fa-pencil-alt"></i>
 							</button>
-							<button type="button" class="btn btn-outline-primary btn-sm mr-2" data-delete data-trick="{{ trick.name }}" data-toggle="tooltip" data-placement="bottom" title="Supprimer la photo ci-dessus">
+							<button type="button" class="btn btn-outline-primary btn-sm mr-2" 
+								data-toggle="tooltip" data-placement="bottom" title="Supprimer la photo ci-dessus">
 								<i class="fas fa-trash-alt"></i>
 							</button>
 						</div>
@@ -273,18 +330,22 @@
 					</p>
 				{% endif %}
 				<div class="collapse mb-4" id="collapsePicturesUpdate">
-					{% for picture in trick.pictures %}
+					{% for picture in form.pictures %}
+						{% set pictureId = picture.vars.value.id %}
 						{# display picture #}
 						<div class="d-inline-block">
-							<img
-							src="{{ asset('uploads/images/200/' ~ picture.filename) }}" alt="{{ picture.alt }} , photo pour illustrer le trick de snowboard {{ trick.name }}" class="img-thumbnail rounded"/>
+							<img src="{{ asset('uploads/images/200/' ~ picture.vars.value.filename) }}"  id="picture-display-mobile-{{ pictureId }}"
+								alt="{{ picture.vars.value.alt }} , photo pour illustrer le trick de snowboard {{ trick.name }}" class="img-thumbnail rounded"/>
 							{# icons to delete or update a picture #}
 							<div class="d-flex flex-nowrap justify-content-center">
-								<button type="button" class="btn btn-outline-primary btn-sm mr-2" data-toggle="tooltip" data-placement="bottom" title="Modifier la photo ci-dessus">
-									<i class="fas fa-pencil-alt"></i>
+								<button type="button" class="btn btn-outline-primary btn-sm mr-2" 
+									data-toggle="modal" data-target="#updatePictureModal-{{ picture.vars.value.id }}"
+									data-toggle="tooltip" data-placement="bottom" title="Modifier la photo ci-dessus">
+										<i class="fas fa-pencil-alt"></i>
 								</button>
-								<button type="button" class="btn btn-outline-primary btn-sm mr-2" data-delete data-trick="{{ trick.name }}" data-toggle="tooltip" data-placement="bottom" title="Supprimer la photo ci-dessus">
-									<i class="fas fa-trash-alt"></i>
+								<button type="button" class="btn btn-outline-primary btn-sm mr-2" 
+									data-toggle="tooltip" data-placement="bottom" title="Supprimer la photo ci-dessus">
+										<i class="fas fa-trash-alt"></i>
 								</button>
 							</div>
 						</div>

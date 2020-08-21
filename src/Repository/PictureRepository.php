@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Picture;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * @method Picture|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +19,23 @@ class PictureRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Picture::class);
+    }
+
+    /**
+     * deletePictureFiles
+     * 
+     * Method called when a picture is deleted or updated, to delete it's pictures files.
+     */
+    public function deletePictureFiles(Picture $picture, ParameterBagInterface $container): void
+    {
+        // the same picture is multiple, corresponding to different widths, in several folders
+        $filenames = [];
+        $imagesDirectories = $container->get('app.images_folders_names');
+        foreach ($imagesDirectories as $value) {
+            $filenames[] = $container->get('app.images_directory').$value.'/'.$picture->getFilename();
+        }
+        $filesystem = new Filesystem();
+        $filesystem->remove($filenames);
     }
 
     // /**
