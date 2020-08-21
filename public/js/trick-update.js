@@ -195,21 +195,21 @@ $(function () {
     //                                  ADD VIDEO FORM IN THE RIGHT PLACE ;)
     //////////////////////////////////////////////////////////////////////////////////////////
 
-    let collectionHolderVideosUpdatePage = $('.trick-update-videos');
+    let collectionHolderVideosUpdatePage = $('.update-trick-videos');
     let addVideoButtonUpdatePage = $('.add_video_link button');
 
     // count the current form inputs we have (e.g. 2), use that as the new
     // index when inserting a new item (e.g. 2)
-    collectionHolderVideosUpdatePage.data('index', collectionHolderVideosUpdatePage.find('input').length);
+    collectionHolderVideosUpdatePage.data('index', $('.update-video-modal').length);
 
     // function to add a new video form
-    var addVideoFormUpdatePage = function(collectionHolder, screen) {
+    let addVideoFormUpdatePage = function(collectionHolder, screen) {
         // Get the data-prototype
-        var prototype = collectionHolder.data('prototype');
+        let prototype = collectionHolder.data('prototype');
         // get the new index
-        var index = collectionHolder.data('index');
+        let index = collectionHolder.data('index');
 
-        var newForm = prototype;
+        let newForm = prototype;
 
         // Replace '__name__' in the prototype's HTML to
         // instead be a number based on how many items we have
@@ -318,6 +318,50 @@ $(function () {
             console.log(data);
             alert(data.responseJSON.message);
         });
+    });
+
+    //////////////////////////////////////////////////////////////////////////////////////////
+    //                                  ADD PICTURE FORM IN THE RIGHT PLACE ;)
+    //////////////////////////////////////////////////////////////////////////////////////////
+
+    let collectionHolderPicturesUpdatePage = $('.update-trick-pictures');
+    let addPictureButtonUpdatePage = $('.add-picture-link button');
+
+    // count the current form inputs we have (e.g. 2), use that as the new
+    // index when inserting a new item (e.g. 2)
+    collectionHolderPicturesUpdatePage.data('index', $('.update-picture-modal').length);
+
+    // function to add a new video form
+    let addPictureFormUpdatePage = function(collectionHolder, screen) {
+        // Get the data-prototype
+        let prototype = collectionHolder.data('prototype');
+        // get the new index
+        let index = collectionHolder.data('index');
+
+        let newForm = prototype;
+
+        // Replace '__name__' in the prototype's HTML to
+        // instead be a number based on how many items we have
+        newForm = newForm.replace(/__name__/g, index);
+
+        // increase the index with one for the next item
+        collectionHolder.data('index', index + 1);
+
+        // Display the form in the page
+        $('.add-picture-link.'+ screen + '-screen').before(newForm);
+        translateBrowse();
+
+        // custom picture classes
+        $('#trick_pictures_' + index).addClass('row picture my-2 pt-2');
+        $('#trick_pictures_' + index + ' div.form-group:first').wrap('<div class="col-12"></div>');
+        $('#trick_pictures_' + index + ' div.form-group:last').addClass('my-2 col-12');
+
+        $('#trick_pictures_' + index).hide().slideDown('slow');
+    };
+    
+    addPictureButtonUpdatePage.on('click', function(e) {
+        // add a new picture form
+        addPictureFormUpdatePage(collectionHolderPicturesUpdatePage, $(this).data('screen'));
     });
 
 });

@@ -129,7 +129,7 @@
 
 		{# modal pages to update a video #}
 		{% for video in form.videos %}
-			<div class="modal fade" id="updateVideoModal-{{ video.vars.value.id }}" tabindex="-1" aria-labelledby="videoModalLabel-{{ video.vars.value.id }}" aria-hidden="true"> 
+			<div class="modal fade update-video-modal" id="updateVideoModal-{{ video.vars.value.id }}" tabindex="-1" aria-labelledby="videoModalLabel-{{ video.vars.value.id }}" aria-hidden="true"> 
 				<div class="modal-dialog modal-dialog-centered">
 					<div class="modal-content">
 						<div class="modal-header">
@@ -304,7 +304,8 @@
 		<div class="row d-flex mt-2">
 
 			{# width > 720px #}
-			<div class="d-none d-md-block col-sm-12 col-md-7 col-lg-6 text-left">
+			<div class="d-none d-md-block col-sm-12 col-md-7 col-lg-6 text-left update-trick-pictures" 
+				data-prototype="{{ form_widget(form.pictures.vars.prototype)|e('html_attr') }}">
 				{# display pictures #}
 				{% for picture in form.pictures %}
 					{% set pictureId = picture.vars.value.id %}
@@ -325,11 +326,11 @@
 						</div>
 					</div>
 				{% endfor %}
-				<div class="row justify-content-center mt-2">
-					<button type="button" class="btn btn-add btn-sm">Ajouter une photo</button>
+				<div class="row justify-content-center mt-2 add-picture-link large-screen" >
+					<button type="button" class="btn btn-add btn-sm" data-screen="large">Ajouter une photo</button>
 				</div>
 			</div>
-			<div class="d-none d-md-block col-sm-12 col-md-5 col-lg-6 text-right trick-update-videos" 
+			<div class="d-none d-md-block col-sm-12 col-md-5 col-lg-6 text-right update-trick-videos" 
 				data-prototype="{{ form_widget(form.videos.vars.prototype)|e('html_attr') }}">
 				{# display videos #}
 				{% for video in form.videos %}
@@ -365,7 +366,7 @@
 						</button>
 					</p>
 				{% endif %}
-				<div class="collapse mb-4" id="collapsePicturesUpdate">
+				<div class="collapse mb-4 update-trick-pictures" id="collapsePicturesUpdate">
 					{% for picture in form.pictures %}
 						{% set pictureId = picture.vars.value.id %}
 						{# display picture #}
@@ -388,11 +389,11 @@
 						</div>
 					{% endfor %}
 				</div>
-				<div class="row justify-content-center mb-1">
-					<button type="button" class="btn btn-add btn-sm">Ajouter une photo</button>
+				<div class="row justify-content-center mb-1 add-picture-link small-screen">
+					<button type="button" class="btn btn-add btn-sm" data-screen="small">Ajouter une photo</button>
 				</div>
 			</div>
-			<div id="trick-update-video-mobile" class="d-block d-md-none col-12 trick-update-videos">
+			<div id="trick-update-video-mobile" class="d-block d-md-none col-12 update-trick-videos">
 				{# display videos #}
 				{% if trick.videos|length > 0 %}
 					<p class="d-flex justify-content-center">
