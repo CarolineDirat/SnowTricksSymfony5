@@ -42,11 +42,11 @@ class TrickController extends AbstractController
      * Display the page of one trick.
      *
      * @Route("/trick/{slug}/{uuid}", name="display_trick")
+     * @Entity("trick", expr="repository.findWithLastComments(uuid)")
      */
     public function display(
         Trick $trick,
         string $slug,
-        CommentRepository $commentRepository,
         Request $request,
         CommentFormHandler $commentFormHandler
     ): Response {
@@ -70,10 +70,6 @@ class TrickController extends AbstractController
 
         return $this->render('trick/index.html.twig', [
             'trick' => $trick,
-            'comments' => $commentRepository->getLastComments(
-                $trick,
-                $this->constants['comments']['number_last_displayed']
-            ),
             'form' => $form->createView(),
         ]);
     }

@@ -135,7 +135,7 @@
 			<hr class="my-5">
 		{% endif %}
 		<div id="comments" class="row">
-			{% for comment in comments %}
+			{% for comment in trick.comments %}
 				<div class="card comments col-12 col-sm-12 ">
 					<div class="row no-gutters">
 						{% set filename = comment.user.profile ? comment.user.profile : 'default.jpg' %}

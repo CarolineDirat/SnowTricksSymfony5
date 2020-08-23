@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Trick;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Psr\Container\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -16,9 +17,16 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class TrickRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private array $constants;
+
+    public function __construct(ManagerRegistry $registry, ParameterBagInterface $container)
     {
         parent::__construct($registry, Trick::class);
+        $this->constants = parse_ini_file(
+            $container->get('kernel.project_dir').'/constants.ini',
+            true,
+            INI_SCANNER_TYPED
+        );
     }
 
     /**
@@ -97,6 +105,28 @@ class TrickRepository extends ServiceEntityRepository
         }
 
         return $tricksWithFirstPicture; // witch is now with pictures
+    }
+    
+    /**
+     * findWithLastFiveComments
+     * get a tricks with it's last 5 comments
+     *
+     * @param  string $uuid
+     * @return Trick
+     */
+    public function findWithLastComments(string $uuid): ?Trick
+    {
+        $number = $this->constants['comments']['number_last_displayed'];
+        $trick = $this->findOneBy(['uuid' => $uuid]);
+        $lastFiveComments = array_slice(array_reverse($trick->getComments()->toArray()), 0, $number);
+        foreach ($trick->getComments() as $comment) {
+            $trick->removeComment($comment);
+        }
+        foreach ($lastFiveComments as $comment) {
+            $trick->addComment($comment);
+        }
+
+        return $trick;
     }
 
     /**
