@@ -16,19 +16,9 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class TrickRepository extends ServiceEntityRepository
 {
-    private array $constants;
-
-    private CommentRepository $commentRepository;
-
-    public function __construct(ManagerRegistry $registry, ParameterBagInterface $container, CommentRepository $commentRepository)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Trick::class);
-        $this->commentRepository = $commentRepository;
-        $this->constants = parse_ini_file(
-            $container->get('kernel.project_dir').'/constants.ini',
-            true,
-            INI_SCANNER_TYPED
-        );
     }
 
     /**
@@ -107,43 +97,6 @@ class TrickRepository extends ServiceEntityRepository
         }
 
         return $tricksWithFirstPicture; // witch is now with pictures
-    }
-    
-    /**
-     * findWithLastFiveComments
-     * get a tricks with it's last x comments
-     * it returns an trick entity (lazy) and and a trick as array with only it's last x comments
-    */
-    public function findWithLastComments(string $uuid): array
-    {
-        $number = $this->constants['comments']['number_last_displayed']; // number of last comments = x
-
-        $trick = $this->findOneBy(['uuid' => $uuid]);     
-
-        $trickArray = $this
-            ->createQueryBuilder('t')
-            ->where('t.uuid = :uuid')
-            ->setParameter('uuid', $trick->getUuid()->getBytes())
-            ->getQuery()
-            ->getArrayResult();
-
-        $trickArray[0]['pictures'] = $trick->getPictures()->toArray();
-        $trickArray[0]['videos'] = $trick->getVideos()->toArray();
-        $trickArray[0]['groupTrick'] = $trick->getGroupTrick();
-        $trickArray[0]['firstPicture'] = $trick->getFirstPicture();
-        
-        $comments = $this->commentRepository
-            ->createQueryBuilder('c')
-            ->andWhere('c.trick = :trick')
-            ->setParameter('trick', $trick)
-            ->orderBy('c.createdAt', 'DESC')
-            ->setMaxResults($number)
-            ->getQuery()
-            ->getResult();
-
-        $trickArray[0]['comments'] = $comments;
-
-        return ['trickArray' => $trickArray[0], 'trickEntity' => $trick];
     }
 
     /**

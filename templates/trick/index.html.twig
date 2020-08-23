@@ -136,6 +136,7 @@
 		{% endif %}
 		<div id="comments" class="row">
 			{% for comment in trick.comments %}
+				{% if loop.index0 < numberLastComments %}
 				<div class="card comments col-12 col-sm-12 ">
 					<div class="row no-gutters">
 						{% set filename = comment.user.profile ? comment.user.profile : 'default.jpg' %}
@@ -150,12 +151,14 @@
 									<small class="text-muted">Posté le
 										{{ comment.createdAt|date('d/m/Y') }}
 										à
-										{{ comment.createdAt|date('H:i:s') }}</small>
+										{{ comment.createdAt|date('H:i:s') }}
+									</small>
 								</p>
 							</div>
 						</div>
 					</div>
 				</div>
+				{% endif %}
 			{% endfor %}
 		</div>
 		<div class="row">

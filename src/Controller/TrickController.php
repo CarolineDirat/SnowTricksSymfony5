@@ -44,14 +44,11 @@ class TrickController extends AbstractController
      * @Route("/trick/{slug}/{uuid}", name="display_trick")
      */
     public function display(
+        Trick $trick,
         string $slug,
-        string $uuid,
-        TrickRepository $trickRepository,
         Request $request,
         CommentFormHandler $commentFormHandler
     ): Response {
-        $tricks = $trickRepository->findWithLastComments($uuid);
-        $trick = $tricks['trickEntity'];
         // check slug
         if ($slug !== $trick->getSlug()) {
             return $this->redirectToRoute('display_trick', [
@@ -71,7 +68,8 @@ class TrickController extends AbstractController
         }
 
         return $this->render('trick/index.html.twig', [
-            'trick' => $tricks['trickArray'],
+            'trick' => $trick,
+            'numberLastComments' => $this->constants['comments']['number_last_displayed'],
             'form' => $form->createView(),
         ]);
     }
