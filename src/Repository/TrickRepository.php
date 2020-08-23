@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\Trick;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -19,9 +18,12 @@ class TrickRepository extends ServiceEntityRepository
 {
     private array $constants;
 
-    public function __construct(ManagerRegistry $registry, ParameterBagInterface $container)
+    private CommentRepository $commentRepository;
+
+    public function __construct(ManagerRegistry $registry, ParameterBagInterface $container, CommentRepository $commentRepository)
     {
         parent::__construct($registry, Trick::class);
+        $this->commentRepository = $commentRepository;
         $this->constants = parse_ini_file(
             $container->get('kernel.project_dir').'/constants.ini',
             true,
@@ -109,24 +111,39 @@ class TrickRepository extends ServiceEntityRepository
     
     /**
      * findWithLastFiveComments
-     * get a tricks with it's last 5 comments
-     *
-     * @param  string $uuid
-     * @return Trick
-     */
-    public function findWithLastComments(string $uuid): ?Trick
+     * get a tricks with it's last x comments
+     * it returns an trick entity (lazy) and and a trick as array with only it's last x comments
+    */
+    public function findWithLastComments(string $uuid): array
     {
-        $number = $this->constants['comments']['number_last_displayed'];
-        $trick = $this->findOneBy(['uuid' => $uuid]);
-        $lastFiveComments = array_slice(array_reverse($trick->getComments()->toArray()), 0, $number);
-        foreach ($trick->getComments() as $comment) {
-            $trick->removeComment($comment);
-        }
-        foreach ($lastFiveComments as $comment) {
-            $trick->addComment($comment);
-        }
+        $number = $this->constants['comments']['number_last_displayed']; // number of last comments = x
 
-        return $trick;
+        $trick = $this->findOneBy(['uuid' => $uuid]);     
+
+        $trickArray = $this
+            ->createQueryBuilder('t')
+            ->where('t.uuid = :uuid')
+            ->setParameter('uuid', $trick->getUuid()->getBytes())
+            ->getQuery()
+            ->getArrayResult();
+
+        $trickArray[0]['pictures'] = $trick->getPictures()->toArray();
+        $trickArray[0]['videos'] = $trick->getVideos()->toArray();
+        $trickArray[0]['groupTrick'] = $trick->getGroupTrick();
+        $trickArray[0]['firstPicture'] = $trick->getFirstPicture();
+        
+        $comments = $this->commentRepository
+            ->createQueryBuilder('c')
+            ->andWhere('c.trick = :trick')
+            ->setParameter('trick', $trick)
+            ->orderBy('c.createdAt', 'DESC')
+            ->setMaxResults($number)
+            ->getQuery()
+            ->getResult();
+
+        $trickArray[0]['comments'] = $comments;
+
+        return ['trickArray' => $trickArray[0], 'trickEntity' => $trick];
     }
 
     /**
