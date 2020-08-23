@@ -16,9 +16,16 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class TrickRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private array $constants;
+
+    public function __construct(ManagerRegistry $registry, ParameterBagInterface $container)
     {
         parent::__construct($registry, Trick::class);
+        $this->constants = parse_ini_file(
+            $container->get('kernel.project_dir').'/constants.ini',
+            true,
+            INI_SCANNER_TYPED
+        );
     }
 
     /**
@@ -97,6 +104,28 @@ class TrickRepository extends ServiceEntityRepository
         }
 
         return $tricksWithFirstPicture; // witch is now with pictures
+    }
+
+    /**
+     * findWithLastFiveComments
+     * get a tricks with it's last 5 comments.
+     *
+     * @return Trick
+     */
+    public function findWithLastComments(string $uuid): ?Trick
+    {
+        $number = $this->constants['comments']['number_last_displayed'];
+        $trick = $this->findOneBy(['uuid' => $uuid]);
+        $comments = $trick->getComments();
+        $nbComments = $comments->count();
+        $lastComments = $nbComments > 5 ? $comments->slice($nbComments - $number) : $comments->slice(0);
+        $lastComments = array_reverse($lastComments);
+        $trick->getComments()->clear();
+        foreach ($lastComments as $comment) {
+            $trick->addComment($comment);
+        }
+
+        return $trick;
     }
 
     /**

@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\TrickRepository;
-use DateTime;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -79,7 +78,7 @@ class Trick
     private ?Collection $videos;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick", orphanRemoval=true, cascade={"persist","remove"})
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick", orphanRemoval=true, cascade={"persist","remove"}, fetch="EXTRA_LAZY")
      */
     private ?Collection $comments;
 

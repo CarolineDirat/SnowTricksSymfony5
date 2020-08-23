@@ -20,11 +20,6 @@ class CommentRepository extends ServiceEntityRepository
         parent::__construct($registry, Comment::class);
     }
 
-    public function getLastComments(Trick $trick, int $number): array
-    {
-        return array_slice(array_reverse($trick->getComments()->toArray()), 0, $number);
-    }
-
     /**
      * get $limit comments from $offset.
      */
