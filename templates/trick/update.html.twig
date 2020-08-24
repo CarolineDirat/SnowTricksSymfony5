@@ -451,12 +451,37 @@
 					{{ form_widget(form.groupTrick, {'attr': {'class': 'mb-4 mb-md-0 ml-4 col-6 col-sm-4'}}) }}
 				</div>
 				<div class="row justify-content-end mb-5 ">
-					<a href="{{ path('trick_delete', {uuid: trick.uuid}) }}" type="button" class="btn btn-delete mt-2 mr-2">Supprimer le Trick</a>
+					<button type="button" class="btn btn-delete mt-2 mr-2"
+						data-toggle="modal" data-target="#modalDeleteTrickFromUpdatePage-{{ trick.id }}">
+							Supprimer le Trick
+					</button>
 					<button type="submit" class="btn btn-primary mr-2 mt-2">Enregistrer le modifications</button>
 				</div>
 			</div>
 		</div>
 		{# Modal Page to delete the trick #}
+		<div class="modal fade" id="modalDeleteTrickFromUpdatePage-{{ trick.id }}" tabindex="-1" aria-labelledby="modalDeleteTrickFromUpdatePageLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="modalDeleteTrickFromUpdatePageLabel">Attention ! Cette action est définitive !</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						Êtes-vous sûr.e de vouloir supprimer le trick <span class="font-weight-bold">{{ trick.name }}</span> ?
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+						<form action="{{ url('trick_delete', {uuid: trick.uuid}) }}" method="POST">
+							<input type="hidden" name="token" value="{{ csrf_token('delete-trick-'~ trick.id) }}"/>
+    						<button type="submit" class="btn btn-delete">Supprimer</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
 		{###################################}
 
 
