@@ -303,6 +303,8 @@ $(function () {
         $('#picture-display-' + data.pictureId).closest('div').remove();
         // screen < 720px
         $('#picture-display-mobile-' + data.pictureId).closest('div').remove();
+        // in first image form
+        $('#first-image-radio-' + data.pictureId).remove();
     };
 
     deletePictureLinks.click(function(e) {

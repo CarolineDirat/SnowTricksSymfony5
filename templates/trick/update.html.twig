@@ -94,7 +94,7 @@
 										<p>	Ajouter une ou plusieurs photos pour pouvoir en mettre une à la une ;)</p>
 									{% endif %}
 									{% for picture in trick.pictures %}
-										<div>
+										<div id="first-image-radio-{{ picture.id }}">
 											<img width="120px" src="{{ asset('uploads/images/200/'~ picture.filename) }}" alt="{{ picture.alt }} pour illustrer le trick {{ trick.name }}">
 											<div class="custom-control custom-radio text-center">
 												<input type="radio" id="first_picture_{{ loop.index }}" 
