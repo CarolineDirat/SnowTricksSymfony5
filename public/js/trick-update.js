@@ -24,12 +24,17 @@ $(function () {
                 '_token': $(this).data('token'),
                 'newName' : $('#updateNameModal input').val(),
             }),
+            statusCode: {
+                500: function() {
+                  alert('Attention ! Ce nom de trick n\'est pas valide. Peut-être est-il déjà utilisé ?');
+                },
+                403: function(data) {
+                  alert(data.message);
+                }
+              }
         }).done(function(data) {
             console.log(data);
             displayNewName(data);
-        }).fail(function(data){
-            console.log(data);
-            alert(data.message);
         });
     });
     
