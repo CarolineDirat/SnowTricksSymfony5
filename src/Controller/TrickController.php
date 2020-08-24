@@ -333,6 +333,14 @@ class TrickController extends AbstractController
         VideoRepository $videoRepository
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
+        dump($data);
+        if ("" === $data['code']) {
+            return $this->json(
+                ['message' => 'Attention ! Le code de la vidéo ne peut être vide.'],
+                409,
+                ['Content-Type' => 'application/json']
+            );
+        }
         if ($this->isCsrfTokenValid('update-video-token-'.$trick->getUuid(), $data['_token'])) {
             $videoId = $data['videoId'];
             $video = $videoRepository->find($videoId);

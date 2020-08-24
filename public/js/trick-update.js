@@ -155,11 +155,24 @@ $(function () {
                 'videoId': $(this).data('videoid'),
                 'service': $(this).data('service'),
                 'code': $(this).data('code'),
-            })
+            }),
+            statusCode: {
+                409: function(error) {
+                    console.log(error);
+                    alert(error.responseJSON.message);
+                },
+                403: function(error) {
+                    console.log(error);
+                    alert(error.responseJSON.message);
+                },
+                500: function(error) {
+                    console.log(error);
+                    alert(error.responseText);
+                },
+            }
         }).done(function(data){
+            console.log(data);
             updateVideo(data);
-        }).fail(function(data){
-            alert(data.responseJSON.message);
         });
     });
 
