@@ -296,12 +296,23 @@ $(function () {
             processData: false,
 		    contentType: false,
             cache: false,
+            statusCode: {
+                409: function(error) {
+                    console.log(error);
+                    alert(error.responseJSON.message);
+                },
+                403: function(error) {
+                    console.log(error);
+                    alert(error.responseJSON.message);
+                },
+                500: function(error) {
+                    console.log(error);
+                    alert(error.responseJSON.title);
+                }
+            }
         }).done(function(data){
             console.log(data);
             displayPictures(data);
-        }).fail(function(data){
-            console.log(data);
-            alert('ajax failed');
         });
     });
 

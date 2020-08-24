@@ -457,10 +457,40 @@ class TrickController extends AbstractController
     ): JsonResponse {
         $token = $request->request->get('token');
         if ($this->isCsrfTokenValid('update-picture-token-'.$picture->getId(), $token)) {
-            // process new picture :  create files and define filename
+            // get data
             $nameForm = $request->request->get('nameForm');
             $file = $request->files->get('trick')['pictures'][$nameForm]['file'];
             $alt = $request->request->get('trick')['pictures'][$nameForm]['alt'];
+            // constraints validations
+            list($width, $height) = getimagesize($file->getPathName());
+            if (!in_array($file->getClientMimeType(), ['image/png', 'image/jpeg', 'image/gif', 'image/webp'])) {
+                return $this->json(
+                    ['message' => 'Le fichier n\'est pas accepté. Ses types mimes acceptés sont image/png, image/jpeg, image/gif et image/webp. (Et sa taille est limitée à 10M.)'],
+                    409,
+                    ['Content-Type' => 'application/json']
+                );
+            }
+            if ($width < 300) {
+                return $this->json(
+                    ['message' => 'Le fichier n\'est pas accepté. Il doit faire au minimum 300px de largeur. (Et sa taille est limitée à 10M.)'],
+                    409,
+                    ['Content-Type' => 'application/json']
+                );
+            }
+            if (0.67 > $width/$height) {
+                return $this->json(
+                    ['message' => 'Le fichier n\'est pas accepté. Le ratio largeur/hauteur doit faire au minimum de 0,67. (Et sa taille est limitée à 10M.)'],
+                    409,
+                    ['Content-Type' => 'application/json']
+                );
+            }
+            if (strlen($alt) > 100) {
+                return $this->json(
+                    ['message' => 'Attention ! La description ne doit pas dépasser 100 caractères'],
+                    409,
+                    ['Content-Type' => 'application/json']
+                );
+            }
             // process file
             if ($file instanceof UploadedFile) {
                 $filename = uniqid($trick->getSlug().'-', true); // file name without extension
@@ -478,6 +508,7 @@ class TrickController extends AbstractController
                     ['Content-Type' => 'application/json']
                 );
             }
+            // process picture
             $picture->setAlt($alt);
             $this->getDoctrine()->getManager()->flush();
 
