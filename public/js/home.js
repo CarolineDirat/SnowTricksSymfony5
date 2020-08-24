@@ -9,7 +9,7 @@ $(function () {
     
     let deleteTrick = function(e, deleteLink) {
         e.preventDefault();
-        $('#modalDelete div.modal-body').text('Êtes-vous sûr.e de vouloir supprimer le trick ' + deleteLink.data('trick') + ' ?');
+        $('#modalDelete div.modal-body').html('Êtes-vous sûr.e de vouloir supprimer le trick <span class="font-weight-bold">' + deleteLink.data('trick') + '</span> ?');
         $('#confirmDeleteTrickModal').one('click', function(e){
             $('#modalDelete').modal('hide');    
             $.ajax({
