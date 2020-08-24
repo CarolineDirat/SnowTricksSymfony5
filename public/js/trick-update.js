@@ -275,6 +275,7 @@ $(function () {
         updatePicture(data, '#picture-display-' + data.pictureId);
         updatePicture(data, '#picture-display-mobile-' + data.pictureId);
         updatePicture(data, '#updatePictureModal-' + data.pictureId + ' img');
+        updatePicture(data, '#deletePictureModal-' + data.pictureId + ' img');
     };
     
     // AJAX REQUEST to update a picture
