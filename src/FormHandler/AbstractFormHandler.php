@@ -23,12 +23,12 @@ abstract class AbstractFormHandler implements FormHandlerInterface
         throw new InvalidArguments('Invalid argument in CommentFormHandler::checkEntity()');
     }
 
-    public function isHandled(Request $request, FormInterface $form, object $entity): bool
+    public function isHandled(Request $request, FormInterface $form): bool
     {
         $form->handleRequest($request);
         $this->setForm($form);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->process($this->checkEntity($entity));
+            $this->process($this->checkEntity($form->getData()));
 
             return true;
         }
