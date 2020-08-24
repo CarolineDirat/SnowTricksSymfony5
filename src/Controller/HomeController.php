@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\TrickRepository;
+use App\Service\ConstantsIni;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,13 +14,9 @@ class HomeController extends AbstractController
 {
     private array $constants;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(ConstantsIni $constantsIni)
     {
-        $this->constants = parse_ini_file(
-            $container->get('parameter_bag')->get('kernel.project_dir').'/constants.ini',
-            true,
-            INI_SCANNER_TYPED
-        );
+        $this->constants = $constantsIni->getConstantsIni();
     }
 
     /**

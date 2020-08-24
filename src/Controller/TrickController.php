@@ -11,9 +11,9 @@ use App\Repository\CommentRepository;
 use App\Repository\PictureRepository;
 use App\Repository\TrickRepository;
 use App\Repository\VideoRepository;
+use App\Service\ConstantsIni;
 use App\Service\FormFactory;
 use App\Service\ImageProcessInterface;
-use Psr\Container\ContainerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,17 +26,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TrickController extends AbstractController
 {
-    private array $constants;
-
     private FormFactory $formFactory;
 
-    public function __construct(ContainerInterface $container, FormFactory $formFactory)
+    public function __construct(FormFactory $formFactory)
     {
-        $this->constants = parse_ini_file(
-            $container->get('parameter_bag')->get('kernel.project_dir').'/constants.ini',
-            true,
-            INI_SCANNER_TYPED
-        );
         $this->formFactory = $formFactory;
     }
 
@@ -97,12 +90,17 @@ class TrickController extends AbstractController
      *      methods={"GET"}
      * )
      */
-    public function loadMoreComments(Trick $trick, CommentRepository $commentRepository, int $offset = null): JsonResponse
-    {
+    public function loadMoreComments(
+        Trick $trick,
+        CommentRepository $commentRepository,
+        ConstantsIni $constantsIni,
+        int $offset = null
+    ): JsonResponse {
+        $constantsIni = $constantsIni->getConstantsIni();
         if (empty($offset)) {
-            $offset = $this->constants['comments']['number_last_displayed'];
+            $offset = $constantsIni['comments']['number_last_displayed'];
         }
-        $comments = $commentRepository->getArrayPaginatedComments($trick, $offset, $this->constants['comments']['limit_loaded']);
+        $comments = $commentRepository->getArrayPaginatedComments($trick, $offset, $constantsIni['comments']['limit_loaded']);
 
         return $this->json(
             $comments,
@@ -132,7 +130,7 @@ class TrickController extends AbstractController
         // 'delete-trick-token258941367' is the same value used in the template to generate the token
         if ($this->isCsrfTokenValid('delete-trick-token258941367', $data['_token'])) {
             $entityManager = $this->getDoctrine()->getManager();
-            $trickRepository->deletePicturesFiles($trick, $container);
+            $trickRepository->deletePicturesFiles($trick);
             $entityManager->remove($trick);
             $entityManager->flush();
 
@@ -163,14 +161,13 @@ class TrickController extends AbstractController
     public function delete(
         Trick $trick,
         Request $request,
-        TrickRepository $trickRepository,
-        ParameterBagInterface $container
+        TrickRepository $trickRepository
     ): Response {
         $trickName = $trick->getName();
         $submittedToken = $request->request->get('token');
         if ($this->isCsrfTokenValid('delete-trick-'.$trick->getId(), $submittedToken)) {
             $entityManager = $this->getDoctrine()->getManager();
-            $trickRepository->deletePicturesFiles($trick, $container);
+            $trickRepository->deletePicturesFiles($trick);
             $entityManager->remove($trick);
             $entityManager->flush();
             $this->addFlash(

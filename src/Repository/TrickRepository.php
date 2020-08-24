@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Trick;
+use App\Service\ConstantsIni;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -18,14 +19,13 @@ class TrickRepository extends ServiceEntityRepository
 {
     private array $constants;
 
-    public function __construct(ManagerRegistry $registry, ParameterBagInterface $container)
+    private ParameterBagInterface $container;
+
+    public function __construct(ManagerRegistry $registry, ParameterBagInterface $container, ConstantsIni $constantsIni)
     {
         parent::__construct($registry, Trick::class);
-        $this->constants = parse_ini_file(
-            $container->get('kernel.project_dir').'/constants.ini',
-            true,
-            INI_SCANNER_TYPED
-        );
+        $this->container = $container;
+        $this->constants = $constantsIni->getConstantsIni();
     }
 
     /**
@@ -132,15 +132,15 @@ class TrickRepository extends ServiceEntityRepository
      * deletePicturesFiles
      * Method called when a trick is delete, to delete it's pictures files.
      */
-    public function deletePicturesFiles(Trick $trick, ParameterBagInterface $container): void
+    public function deletePicturesFiles(Trick $trick): void
     {
         $pictures = $trick->getPictures();
         $filenames = [];
-        $imagesDirectories = $container->get('app.images_folders_names');
+        $imagesDirectories = $this->container->get('app.images_folders_names');
         // the same picture is multiple, corresponding to different widths, in several folders
         foreach ($imagesDirectories as $value) {
             foreach ($pictures as $picture) {
-                $filenames[] = $container->get('app.images_directory').$value.'/'.$picture->getFilename();
+                $filenames[] = $this->container->get('app.images_directory').$value.'/'.$picture->getFilename();
             }
         }
         $filesystem = new Filesystem();
