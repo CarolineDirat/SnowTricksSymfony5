@@ -6,6 +6,7 @@ use App\Entity\Trick;
 use App\Service\ConstantsIni;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -21,11 +22,18 @@ class TrickRepository extends ServiceEntityRepository
 
     private ParameterBagInterface $container;
 
-    public function __construct(ManagerRegistry $registry, ParameterBagInterface $container, ConstantsIni $constantsIni)
-    {
+    private CommentRepository $commentRepository;
+
+    public function __construct(
+        ManagerRegistry $registry,
+        ParameterBagInterface $container,
+        ConstantsIni $constantsIni,
+        CommentRepository $commentRepository
+    ) {
         parent::__construct($registry, Trick::class);
         $this->container = $container;
         $this->constants = $constantsIni->getConstantsIni();
+        $this->commentRepository = $commentRepository;
     }
 
     /**
@@ -107,24 +115,44 @@ class TrickRepository extends ServiceEntityRepository
     }
 
     /**
-     * findWithLastFiveComments
-     * get a tricks with it's last 5 comments.
+     * findOneWithNLastFiveComments
+     * get a tricks with it's last N comments.
+     * Only N comments are requested (with extra_lazy on trick's comments)
+     * (N is defined in constants.ini)
      *
      * @return Trick
      */
-    public function findWithLastComments(string $uuid): ?Trick
+    public function findOneWithNLastComments(string $uuid): ?Trick
     {
         $number = $this->constants['comments']['number_last_displayed'];
         $trick = $this->findOneBy(['uuid' => $uuid]);
+
+        /* first way : 
         $comments = $trick->getComments();
         $nbComments = $comments->count();
-        $lastComments = $nbComments > 5 ? $comments->slice($nbComments - $number) : $comments->slice(0);
-        $lastComments = array_reverse($lastComments);
+        $NlastComments = $nbComments > $number ? $comments->slice($nbComments - $number) : $comments->slice(0);
+        $NlastComments = array_reverse($NlastComments);
         $trick->getComments()->clear();
         foreach ($lastComments as $comment) {
             $trick->addComment($comment);
         }
-
+        */
+        
+        // second way: (one less request)
+        $NlastComments = $this
+            ->commentRepository
+            ->createQueryBuilder('c')
+            ->where('c.trick = :trick')
+            ->setParameter('trick', $trick)
+            ->orderBy('c.createdAt','DESC')
+            ->setMaxResults($number)
+            ->getQuery()
+            ->getResult();
+        $trick->getComments()->clear();
+        foreach ($NlastComments as $comment) {
+            $trick->addComment($comment);
+        }
+        
         return $trick;
     }
 
@@ -170,6 +198,23 @@ class TrickRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('t')
             ->andWhere('t.exampleField = :val')
             ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+    */
+
+    /*
+    public function findOneWithCommentsOrderByDesc(string $uuid): Trick
+    {    
+        $uuid = Uuid::fromString($uuid)->getBytes();
+
+        return $this->createQueryBuilder('t')
+            ->select('t, c')
+            ->join('t.comments', 'c')
+            ->andWhere('t.uuid = :uuid')
+            ->orderBy('c.createdAt', 'DESC')
+            ->setParameter('uuid', $uuid)
             ->getQuery()
             ->getOneOrNullResult()
         ;

@@ -37,13 +37,16 @@ class TrickController extends AbstractController
      * Display the page of one trick.
      *
      * @Route("/trick/{slug}/{uuid}", name="display_trick")
-     * @Entity("trick", expr="repository.findWithLastComments(uuid)")
+     * @Entity("trick", expr="repository.findOneWithNLastComments(uuid)")
+     * 
+     * Entity("trick", expr="repository.findOneWithCommentsOrderByDesc(uuid)")
      */
     public function display(
         Trick $trick,
         string $slug,
         Request $request,
-        CommentFormHandler $commentFormHandler
+        CommentFormHandler $commentFormHandler,
+        ConstantsIni $constantsIni
     ): Response {
         // check slug
         if ($slug !== $trick->getSlug()) {
@@ -61,6 +64,7 @@ class TrickController extends AbstractController
                 'uuid' => $trick->getUuid(),
             ]);
         }
+
 
         return $this->render('trick/index.html.twig', [
             'trick' => $trick,
@@ -214,7 +218,7 @@ class TrickController extends AbstractController
      * )
      * @isGranted("ROLE_USER")
      */
-    public function update(Trick $trick, string $slug): Response
+    public function update(Trick $trick, string $slug, Request $request): Response
     {
         // check slug
         if ($slug !== $trick->getSlug()) {
@@ -225,6 +229,11 @@ class TrickController extends AbstractController
         }
 
         $form = $this->createForm(TrickType::class, $trick);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $trick = $form->getData();
+            dd($trick);
+        }
 
         return $this->render('trick/update.html.twig', [
             'trick' => $trick,
@@ -334,7 +343,7 @@ class TrickController extends AbstractController
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         dump($data);
-        if ("" === $data['code']) {
+        if ('' === $data['code']) {
             return $this->json(
                 ['message' => 'Attention ! Le code de la vidéo ne peut être vide.'],
                 409,
@@ -477,7 +486,7 @@ class TrickController extends AbstractController
                     ['Content-Type' => 'application/json']
                 );
             }
-            if (0.67 > $width/$height) {
+            if (0.67 > $width / $height) {
                 return $this->json(
                     ['message' => 'Le fichier n\'est pas accepté. Le ratio largeur/hauteur doit faire au minimum de 0,67. (Et sa taille est limitée à 10M.)'],
                     409,
