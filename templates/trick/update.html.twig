@@ -6,10 +6,15 @@
 
 {% block body %}
 	<section id="trick-update" class="container">
+			<div class="row justify-content-center">
+				<div class="col-11 col-sm-11 col-md-8 mt-4 text-center">
+					{{ form_errors(form) }}
+				</div>
+			</div>
 
 		{# TRICK NAME #}
 		<div class="row">
-			<h1 class="col-12 text-center mt-5">Modifier le trick :</h1>
+			<h1 class="col-12 text-center mt-4">Modifier le trick :</h1>
 			<h2 class="col-12 text-center mt-2 mb-3">
 				<span>{{ trick.name|upper }}</span>
 				<button type="button" class="btn btn-outline-primary btn-sm" 
@@ -90,9 +95,6 @@
 		</div>
 
 		{# PICTURES #}
-
-		{# modal page to know where find the video code #}
-		{{ include('fragments/_help_video_code.html.twig') }}
 
 		{# modal pages to update a picture #}
 		{% for picture in form.pictures %}
@@ -209,6 +211,9 @@
 		</div>
 
 		{# VIDEOS #}
+
+		{# modal page to know where find the video code #}
+		{{ include('fragments/_help_video_code.html.twig') }}
 
 		{# modal pages to update a video #}
 		{% for video in form.videos %}
@@ -457,7 +462,7 @@
 							Supprimer le Trick
 					</button>
 					{{ form_end(form) }}
-					<button type="submit" class="btn btn-primary mr-2 mt-2">Enregistrer les modifications</button>
+					<input type="submit" class="btn btn-primary mr-2 mt-2" value="Enregistrer les modifications"/>
 				</div>
 			</div>
 		</div>

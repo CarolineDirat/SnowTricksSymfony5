@@ -43,4 +43,9 @@ class FormFactory
 
         return $this->formFactory->create(TrickType::class, $trick);
     }
+
+    public function createUpdateTrickForm(Trick $trick): FormInterface
+    {
+        return $this->formFactory->create(TrickType::class, $trick);
+    }
 }

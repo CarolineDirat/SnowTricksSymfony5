@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Picture;
 use App\Entity\Trick;
-use App\Form\TrickType;
 use App\FormHandler\CommentFormHandler;
 use App\FormHandler\TrickFormHandler;
 use App\Repository\CommentRepository;
@@ -14,12 +13,11 @@ use App\Repository\VideoRepository;
 use App\Service\ConstantsIni;
 use App\Service\FormFactory;
 use App\Service\ImageProcessInterface;
-use DateTimeImmutable;
+use App\Service\ProcessTrickUpdateForm;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -127,8 +125,7 @@ class TrickController extends AbstractController
     public function deleteFromAJAXRequest(
         Trick $trick,
         Request $request,
-        TrickRepository $trickRepository,
-        ParameterBagInterface $container
+        TrickRepository $trickRepository
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         $trickName = $trick->getName();
@@ -223,8 +220,7 @@ class TrickController extends AbstractController
         Trick $trick,
         string $slug,
         Request $request,
-        PictureRepository $pictureRepository,
-        ImageProcessInterface $imageProcess
+        ProcessTrickUpdateForm $processTrickUpdateForm
     ): Response {
         // check slug
         if ($slug !== $trick->getSlug()) {
@@ -233,66 +229,19 @@ class TrickController extends AbstractController
                 'uuid' => $trick->getUuid(),
             ]);
         }
-        $form = $this->createForm(TrickType::class, $trick);
+        // trick form
+        $form = $this->formFactory->createUpdateTrickForm($trick);
         $form->handleRequest($request);
-        dump($trick);
         if ($form->isSubmitted() && $form->isValid()) {
-            $trick->setUpdatedAt(new DateTimeImmutable());
-            dump($trick);
-            // processing of added pictures
-            $addedPictures = $trick->getPictures();
-            $addedPicturesForm = $form->get('pictures');
-            foreach ($addedPictures as $key => $picture) {
-                $file = $addedPicturesForm[$key]->get('file')->getData();
-                if ($file instanceof UploadedFile) {
-                    $filename = uniqid($trick->getSlug().'-', true); // file name without extension
-                    // Resize the picture file to severals widths (cf service.yaml),
-                    // and move files in their corresponding directory named with each width
-                    try {
-                        $fullFilename = $imageProcess->execute($file, $filename);
-                        $picture->setFilename($fullFilename)->setTrick($trick);
-                        $trick->addPicture($picture);
-                    } catch (FileException $e) {
-                        // ... handle exception if something happens during file upload or process
-                        $this->addFlash('upload', $e->getMessage());
-                        $trick->removePicture($picture);
-                    }
-                } else {
-                    $trick->removePicture($picture);
-                }
-            }
-            dump($trick);
-            // The pictures that the Trick already has are missing because the form pictures
-            // (used by AJAX request to update pictures)
-            // is out of trick form in trick/update.html.twig
-            // (we cannot nest forms in HTML5)
-            $pictures = $pictureRepository->findBy(['trick' => $trick]);
-            dump($pictures);
-            foreach ($pictures as $picture) {
-                $trick->addPicture($picture);
-            }
-
-            //process videos
-            $videos = $trick->getVideos();
-            foreach ($videos as $video) {
-                if (empty($video->getService()) || empty($video->getCode())) {
-                    $trick->removeVideo($video);
-                } else {
-                    $video->setTrick($trick);
-                    $trick->addVideo($video);
-                }
-            }
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($trick);
-            $entityManager->flush();
-            $this->addFlash('notice', 'Le trick <'.$trick->getName()."> vient d'être modifié");
-            dump($trick);
+            $processTrickUpdateForm->process($form);
 
             return $this->redirectToRoute('display_trick', [
-                'slug' => $trick->getSlug(),
-                'uuid' => $trick->getUuid(),
-            ]);
+                    'slug' => $trick->getSlug(),
+                    'uuid' => $trick->getUuid(),
+                ]);
+        } 
+        if($form->isSubmitted()) {
+            $form = $processTrickUpdateForm->errorsHandler($form);
         }
 
         return $this->render('trick/update.html.twig', [
