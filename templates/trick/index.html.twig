@@ -6,6 +6,13 @@
 
 {% block body %}
 	<section id="trick-read" class="container">
+		{% for message in app.flashes('notice') %}
+        <div class="row justify-content-center">
+            <div class="alert alert-primary my-4 font-weight-bold col-11 col-sm-11 col-md-8 col-xl-4 text-center">
+                {{ message }}
+            </div>
+        </div>
+        {% endfor %}
 		{# trick name and first picture #}
 		<div class="row d-flex">
 			<h1 class="col-12 text-center">{{ trick.name }}</h1>

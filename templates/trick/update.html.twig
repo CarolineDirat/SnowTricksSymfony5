@@ -18,43 +18,11 @@
 					<i class="fas fa-pencil-alt"></i>
 				</button>
 			</h2>
-		</div>
-
-		{{ form_start(form) }}
-
-		{# modale page to update trick name #}
-		<div class="modal fade" id="updateNameModal" tabindex="-1" aria-labelledby="updateNameModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title font-weight-bold" id="updateNameModalLabel">Corriger ou compléter le nom du trick :</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<div class="container-fluid">
-							<div class="form-group row">
-								{{ form_label(form.name, 'Nom du trick : ') }}
-								{{ form_widget(form.name) }}
-							</div>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-						<a href="{{ path('trick_update_name', {slug: trick.slug, uuid: trick.uuid}) }}" type="button" 
-							id="update-trick-name" class="btn btn-primary" 
-							data-token="{{ csrf_token('update-name-token-' ~ trick.uuid) }}">
-							Enregistrer
-						</a>
-					</div>
-				</div>
-			</div>
-		</div>
+		</div>		
 
 		{# FIRST IMAGE #}
 		<div class="row d-flex flex-nowrap justify-content-center first-image mt-3">
-			{% set firstPicture = trick.firstPicture ? trick.firstPicture.filename : (trick.pictures|length > 0 ? trick.pictures[0].filename : 'default.jpg') %}
+			{% set firstPicture = trick.firstPicture ? trick.firstPicture.filename : (trick.pictures|length > 0 ? trick.pictures.first.filename : 'default.jpg') %}
 			{% set firstPictureAlt = trick.firstPicture ? trick.firstPicture.alt : null %}
 			<picture>
 				<source srcset="{{ asset('uploads/images/540/' ~ firstPicture) }}" media="(max-width: 578px)">
@@ -121,11 +89,126 @@
 			</div>
 		</div>
 
-
-		{# MEDIAS #}
+		{# PICTURES #}
 
 		{# modal page to know where find the video code #}
 		{{ include('fragments/_help_video_code.html.twig') }}
+
+		{# modal pages to update a picture #}
+		{% for picture in form.pictures %}
+			{% set pictureId = picture.vars.value.id %}
+			<div class="modal fade update-picture-modal" id="updatePictureModal-{{ pictureId }}" 
+				tabindex="-1" aria-labelledby="updatePictureModalLabel-{{ pictureId }}" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="updatePictureModalLabel-{{ pictureId }}">Modifier l'image : </h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+					<div class="modal-body">
+						<div class="container-fluid">
+							<div class="row justify-content-center">
+								<p class="mb-0">Attention ! Cette image sera écrasée par le nouveau fichier.</p>
+								<img width="160px" class="img-thumbnail rounded" src="{{ asset('uploads/images/200/' ~ picture.vars.value.filename) }}" 
+									alt="{{ picture.vars.value.alt }} photo pour illustrer le trick de snowboard {{ trick.name }}." />
+							</div>
+							{{ form_start(picture, {'enctype': 'multipart/form-data', 
+								'attr': {'class': 'update-picture-form','id': 'update-picture-form-' ~ pictureId }}) }}
+							<div class="row picture pt-2">
+								<div class="col-12">
+									{{ form_row(picture.file, {'id': 'input-file-update-picture-' ~ pictureId}) }}
+								</div>
+								<div class="col-12 my-2">
+									{{ form_label(picture.alt, "Une brève description de l'image :") }}
+									{{ form_widget(picture.alt, {'attr': {'required': true}, 'id': 'input-alt-update-picture-' ~ pictureId}) }}
+								</div>
+								<input type="hidden" id="update-picture-token-{{ pictureId }}" name="token" value="{{ csrf_token('update-picture-token-' ~ pictureId) }}"/>
+							</div>
+							{{ form_end(picture) }}
+						</div>
+					</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+							<a href="{{ path('trick_update_picture', {slug: trick.slug, uuid: trick.uuid, picture_id: pictureId}) }}" 
+								 type="button" class="btn btn-primary update-picture-link" data-pictureid="{{ pictureId }}">
+									Enregistrer
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+
+		{# modal pages to delete pictures #}
+		{% for picture in form.pictures %}
+			{% set pictureId = picture.vars.value.id %}
+			<div class="modal fade" id="deletePictureModal-{{ pictureId }}" tabindex="-1" 
+				aria-labelledby="deletePictureModalLabel-{{ pictureId }}" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title font-weight-bold" id="deletePictureModalLabel-{{ pictureId }}">
+								Attention ! C'est action est définitive !
+							</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<div class="row justify-content-center">
+								<h5> Est-vous sûr de vouloir supprimer cette image ? </h5>
+								<img src="{{ asset('uploads/images/200/' ~ picture.vars.value.filename) }}" class="img-thumbnail img-fluid rounded"
+									alt="{{ picture.vars.value.alt }} photo pour illustrer le trick de snowboard {{ trick.name }}."/>
+							</div>
+							</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary " data-dismiss="modal">Fermer</button>
+							<a href="{{ path('trick_delete_picture', {slug: trick.slug, uuid: trick.uuid}) }}" 
+								type="button" class="btn btn-primary delete-picture-link" data-pictureid="{{ pictureId }}"
+								data-token="{{ csrf_token('delete-picture-token-' ~ pictureId) }}">
+								Supprimer
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+
+		{{ form_start(form) }}
+
+		{# modale page to update trick name #}
+		<div class="modal fade" id="updateNameModal" tabindex="-1" aria-labelledby="updateNameModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title font-weight-bold" id="updateNameModalLabel">Corriger ou compléter le nom du trick :</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="container-fluid">
+							<div class="form-group row">
+								{{ form_label(form.name, 'Nom du trick : ') }}
+								{{ form_widget(form.name) }}
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+						<a href="{{ path('trick_update_name', {slug: trick.slug, uuid: trick.uuid}) }}" type="button" 
+							id="update-trick-name" class="btn btn-primary" 
+							data-token="{{ csrf_token('update-name-token-' ~ trick.uuid) }}">
+							Enregistrer
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		{# VIDEOS #}
 
 		{# modal pages to update a video #}
 		{% for video in form.videos %}
@@ -217,88 +300,6 @@
 			</div>
 		{% endfor %}
 
-		{# modal pages to update a picture #}
-		{% for picture in form.pictures %}
-			{% set pictureId = picture.vars.value.id %}
-			<div class="modal fade update-picture-modal" id="updatePictureModal-{{ pictureId }}" 
-				tabindex="-1" aria-labelledby="updatePictureModalLabel-{{ pictureId }}" aria-hidden="true">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="updatePictureModalLabel-{{ pictureId }}">Modifier l'image : </h5>
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-					<div class="modal-body">
-						<div class="container-fluid">
-							<div class="row justify-content-center">
-								<p class="mb-0">Attention ! Cette image sera écrasée par le nouveau fichier.</p>
-								<img width="160px" class="img-thumbnail rounded" src="{{ asset('uploads/images/200/' ~ picture.vars.value.filename) }}" 
-									alt="{{ picture.vars.value.alt }} photo pour illustrer le trick de snowboard {{ trick.name }}." />
-							</div>
-							{{ form_start(picture, {'enctype': 'multipart/form-data', 
-								'attr': {'class': 'update-picture-form','id': 'update-picture-form-' ~ pictureId }}) }}
-							<div class="row picture pt-2">
-								<div class="col-12">
-									{{ form_row(picture.file, {'id': 'input-file-update-picture-' ~ pictureId}) }}
-								</div>
-								<div class="col-12 my-2">
-									{{ form_label(picture.alt, "Une brève description de l'image :") }}
-									{{ form_widget(picture.alt, {'attr': {'required': true}, 'id': 'input-alt-update-picture-' ~ pictureId}) }}
-								</div>
-								<input type="hidden" id="update-picture-token-{{ pictureId }}" name="token" value="{{ csrf_token('update-picture-token-' ~ pictureId) }}"/>
-							</div>
-							{{ form_end(picture) }}
-						</div>
-					</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-							<a href="{{ path('trick_update_picture', {slug: trick.slug, uuid: trick.uuid, picture_id: pictureId}) }}" 
-								 type="button" class="btn btn-primary update-picture-link" data-pictureid="{{ pictureId }}">
-									Enregistrer
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		{% endfor %}
-
-		{# modal pages to delete pictures #}
-		{% for picture in form.pictures %}
-			{% set pictureId = picture.vars.value.id %}
-			<div class="modal fade" id="deletePictureModal-{{ pictureId }}" tabindex="-1" 
-				aria-labelledby="deletePictureModalLabel-{{ pictureId }}" aria-hidden="true">
-				<div class="modal-dialog modal-dialog-centered">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title font-weight-bold" id="deletePictureModalLabel-{{ pictureId }}">
-								Attention ! C'est action est définitive !
-							</h5>
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-						<div class="modal-body">
-							<div class="row justify-content-center">
-								<h5> Est-vous sûr de vouloir supprimer cette image ? </h5>
-								<img src="{{ asset('uploads/images/200/' ~ picture.vars.value.filename) }}" class="img-thumbnail img-fluid rounded"
-									alt="{{ picture.vars.value.alt }} photo pour illustrer le trick de snowboard {{ trick.name }}."/>
-							</div>
-							</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary " data-dismiss="modal">Fermer</button>
-							<a href="{{ path('trick_delete_picture', {slug: trick.slug, uuid: trick.uuid}) }}" 
-								type="button" class="btn btn-primary delete-picture-link" data-pictureid="{{ pictureId }}"
-								data-token="{{ csrf_token('delete-picture-token-' ~ pictureId) }}">
-								Supprimer
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		{% endfor %}
-
 		
 		{# DISPLAY MEDIAS #}
 		<div class="row d-flex mt-2">
@@ -307,11 +308,11 @@
 			<div class="d-none d-md-block col-sm-12 col-md-7 col-lg-6 text-left update-trick-pictures" 
 				data-prototype="{{ form_widget(form.pictures.vars.prototype)|e('html_attr') }}">
 				{# display pictures #}
-				{% for picture in form.pictures %}
-					{% set pictureId = picture.vars.value.id %}
+				{% for picture in trick.pictures %}
+					{% set pictureId = picture.id %}
 					<div class="d-inline-block mb-2">
-						<img width="160px" id="picture-display-{{ pictureId }}" src="{{ asset('uploads/images/200/' ~ picture.vars.value.filename) }}" 
-							alt="{{ picture.vars.value.alt }} photo pour illustrer le trick de snowboard {{ trick.name }}." class="img-thumbnail rounded"/>
+						<img width="160px" id="picture-display-{{ pictureId }}" src="{{ asset('uploads/images/200/' ~ picture.filename) }}" 
+							alt="{{ picture.alt }} photo pour illustrer le trick de snowboard {{ trick.name }}." class="img-thumbnail rounded"/>
 						<div class="d-flex flex-nowrap justify-content-center">
 							<button type="button" class="btn btn-outline-primary btn-sm mr-2" 
 								data-toggle="modal" data-target="#updatePictureModal-{{ pictureId }}"
@@ -455,10 +456,13 @@
 						data-toggle="modal" data-target="#modalDeleteTrickFromUpdatePage-{{ trick.id }}">
 							Supprimer le Trick
 					</button>
-					<button type="submit" class="btn btn-primary mr-2 mt-2">Enregistrer le modifications</button>
+					{{ form_end(form) }}
+					<button type="submit" class="btn btn-primary mr-2 mt-2">Enregistrer les modifications</button>
 				</div>
 			</div>
 		</div>
+
+
 		{# Modal Page to delete the trick #}
 		<div class="modal fade" id="modalDeleteTrickFromUpdatePage-{{ trick.id }}" tabindex="-1" aria-labelledby="modalDeleteTrickFromUpdatePageLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered">

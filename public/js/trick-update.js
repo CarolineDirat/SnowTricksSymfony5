@@ -187,6 +187,8 @@ $(function () {
         $('#video-display-' + data.videoId).remove();
         // screen < 720px
         $('#video-display-mobile-' + data.videoId).remove();
+        // delete video form
+        $('#updateVideoModal-' + data.videoId).remove();
     };
 
     deleteVideoLinks.click(function(e) {
@@ -352,6 +354,20 @@ $(function () {
         });
     });
 
+     //////////////////////////////////////////////////////////////////////////////////////////
+    //                   DISPLAY CHOSEN FILE NAME IN IT'S INPUT TAG
+    //////////////////////////////////////////////////////////////////////////////////////////
+
+    let displayFilename = function () {
+        $('.custom-file-input').change(function () {
+            let $label = $(this).next();
+            $.each($(this.files), function (index, file) {
+                $label.text(file.name);
+            });
+        });
+    };
+    displayFilename();
+
     //////////////////////////////////////////////////////////////////////////////////////////
     //                                  ADD PICTURE FORM IN THE RIGHT PLACE ;)
     //////////////////////////////////////////////////////////////////////////////////////////
@@ -381,7 +397,6 @@ $(function () {
 
         // Display the form in the page
         $('.add-picture-link.'+ screen + '-screen').before(newForm);
-        translateBrowse();
 
         // custom picture classes
         $('#trick_pictures_' + index).addClass('row picture my-2 pt-2');
@@ -394,6 +409,7 @@ $(function () {
     addPictureButtonUpdatePage.on('click', function(e) {
         // add a new picture form
         addPictureFormUpdatePage(collectionHolderPicturesUpdatePage, $(this).data('screen'));
+        translateBrowse();
+        displayFilename();
     });
-
 });
