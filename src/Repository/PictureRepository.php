@@ -22,8 +22,8 @@ class PictureRepository extends ServiceEntityRepository
     }
 
     /**
-     * deletePictureFiles
-     * 
+     * deletePictureFiles.
+     *
      * Method called when a picture is deleted or updated, to delete it's pictures files.
      */
     public function deletePictureFiles(Picture $picture, ParameterBagInterface $container): void

@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Repository\TrickRepository;
 use App\Service\ConstantsIni;
-use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;

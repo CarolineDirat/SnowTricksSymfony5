@@ -118,7 +118,7 @@ class TrickRepository extends ServiceEntityRepository
      * findOneWithNLastFiveComments
      * get a tricks with it's last N comments.
      * Only N comments are requested (with extra_lazy on trick's comments)
-     * (N is defined in constants.ini)
+     * (N is defined in constants.ini).
      *
      * @return Trick
      */
@@ -127,7 +127,7 @@ class TrickRepository extends ServiceEntityRepository
         $number = $this->constants['comments']['number_last_displayed'];
         $trick = $this->findOneBy(['uuid' => $uuid]);
 
-        /* first way : 
+        /* first way :
         $comments = $trick->getComments();
         $nbComments = $comments->count();
         $NlastComments = $nbComments > $number ? $comments->slice($nbComments - $number) : $comments->slice(0);
@@ -137,14 +137,14 @@ class TrickRepository extends ServiceEntityRepository
             $trick->addComment($comment);
         }
         */
-        
+
         // second way: (one less request)
         $NlastComments = $this
             ->commentRepository
             ->createQueryBuilder('c')
             ->where('c.trick = :trick')
             ->setParameter('trick', $trick)
-            ->orderBy('c.createdAt','DESC')
+            ->orderBy('c.createdAt', 'DESC')
             ->setMaxResults($number)
             ->getQuery()
             ->getResult();
@@ -152,7 +152,7 @@ class TrickRepository extends ServiceEntityRepository
         foreach ($NlastComments as $comment) {
             $trick->addComment($comment);
         }
-        
+
         return $trick;
     }
 
@@ -206,7 +206,7 @@ class TrickRepository extends ServiceEntityRepository
 
     /*
     public function findOneWithCommentsOrderByDesc(string $uuid): Trick
-    {    
+    {
         $uuid = Uuid::fromString($uuid)->getBytes();
 
         return $this->createQueryBuilder('t')
