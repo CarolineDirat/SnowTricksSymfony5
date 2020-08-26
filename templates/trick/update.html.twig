@@ -199,7 +199,7 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal" >Fermer</button>
 						<a href="{{ path('trick_update_name', {slug: trick.slug, uuid: trick.uuid}) }}" type="button" 
 							id="update-trick-name" class="btn btn-primary" 
 							data-token="{{ csrf_token('update-name-token-' ~ trick.uuid) }}">
@@ -247,7 +247,7 @@
 									<h5 class="col-12 font-weight-bold text-danger">Dans l'url de la vidéo :</h5>
 									<div class="col-12 mt-2">
 										<h6 class="badge badge-info">Sur YouTube :</h6>
-									</div>	
+									</div>
 									<img class="img-fluid mt-n2" src="{{ asset('images/help-code-youtube.png') }}" alt="Comment trouver le code de la video sur YouTube ? Le code dans l'URL après 'v='"/>
 									<div class="col-12 mt-1">
 										<h6 class="badge badge-info">Sur Vimeo :</h6>
@@ -462,7 +462,7 @@
 							Supprimer le Trick
 					</button>
 					{{ form_end(form) }}
-					<input type="submit" class="btn btn-primary mr-2 mt-2" value="Enregistrer les modifications"/>
+					<input type="submit" class="btn btn-primary mr-2 mt-2" id="submit-trick-update-form" value="Enregistrer les modifications"/>
 				</div>
 			</div>
 		</div>

@@ -2,6 +2,13 @@
 
 $(function () {
 
+    // disables the enter key which must not submit the form
+    $("form").bind("keypress", function (e) {
+        if (e.keyCode == 13) {
+            return false;
+        }
+    });
+
     // delete unless fields from form_end when the trick doesn't have pictures
     $('fieldset.form-group').has('div#trick_pictures').remove();
 
@@ -9,6 +16,11 @@ $(function () {
     //                                  UPDATE NAME
     //////////////////////////////////////////////////////////////////////////////////////////
 
+    // input field must keep the trick name
+    $('#updateNameModal').on('hidden.bs.modal', function (e) {
+        $('#updateNameModal input').val($('#trick-update h2 span').text());
+    });
+    
     let updateTrickName = $("#update-trick-name");
 
     let displayNewName = function(data) {
@@ -29,15 +41,16 @@ $(function () {
             }),
             statusCode: {
                 500: function() {
-                  alert('Attention ! Ce nom de trick n\'est pas valide. Peut-être est-il déjà utilisé ?');
+                    alert('Attention ! Ce nom de trick n\'est pas valide. Peut-être est-il déjà utilisé ?');
                 },
                 403: function(data) {
-                  alert(data.message);
+                    alert(data.message);
                 }
               }
         }).done(function(data) {
             console.log(data);
             displayNewName(data);
+            $('#updateNameModal input').val(data.newName);
         });
     });
     
@@ -103,10 +116,11 @@ $(function () {
     //                                  UPDATE VIDEO
     //////////////////////////////////////////////////////////////////////////////////////////
 
+    
+    
     $('#modal-help-code-video div.modal-footer button').click(function(e){
         $(this).removeData('dismiss');
         e.preventDefault();
-        //$('#modal-help-code-video').modal('hide');
     });
 
     let updateVideoLinks = $('.update-video-link');
