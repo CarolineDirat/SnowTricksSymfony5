@@ -52,14 +52,22 @@ class PictureHandler extends AbstractEntityHandler
         $alt = $data['alt'];
         // validation
         list($width, $height) = getimagesize($file->getPathName());
-        if (!in_array($file->getClientMimeType(), ['image/png', 'image/jpeg', 'image/gif', 'image/webp'])) {
-            return 'Le fichier n\'est pas accepté. Ses types mimes acceptés sont image/png, image/jpeg, image/gif et image/webp. (Et sa taille est limitée à 10M.)';
+        if (!in_array(
+            $file->getClientMimeType(),
+            ['image/png', 'image/jpeg', 'image/gif', 'image/webp'])
+        ) {
+            return 'Le fichier n\'est pas accepté. 
+                Ses types mimes acceptés sont image/png, image/jpeg, image/gif et image/webp. 
+                (Et sa taille est limitée à 10M.)';
         }
         if ($width < 300) {
-            return 'Le fichier n\'est pas accepté. Il doit faire au minimum 300px de largeur. (Et sa taille est limitée à 10M.)';
+            return 'Le fichier n\'est pas accepté. 
+                Il doit faire au minimum 300px de largeur. (Et sa taille est limitée à 10M.)';
         }
         if (0.67 > $width / $height) {
-            return 'Le fichier n\'est pas accepté. Le ratio largeur/hauteur doit faire au minimum de 0,67. (Et sa taille est limitée à 10M.)';
+            return 'Le fichier n\'est pas accepté. 
+                Le ratio largeur/hauteur doit faire au minimum de 0,67. 
+                (Et sa taille est limitée à 10M.)';
         }
         if (strlen($alt) > 100) {
             return 'Attention ! La description ne doit pas dépasser 100 caractères';
@@ -74,18 +82,17 @@ class PictureHandler extends AbstractEntityHandler
         $file = $data['file'];
         $alt = $data['alt'];
         // process file and filename
-        if ($file instanceof UploadedFile) {
-            $filename = uniqid($trick->getSlug().'-', true); // file name without extension
-            // Resize the picture file to severals widths (cf service.yaml),
-            // and move files in their corresponding directory named with each width
-            $fullFilename = $this->imageProcess->execute($file, $filename);
-            // delete files of the replaced picture
-            $this->pictureRepository->deletePictureFiles($picture);
-            // define new file name of picture
-            $picture->setFilename($fullFilename);
-        } else {
+        if (!($file instanceof UploadedFile)) {
             return null;
         }
+        $filename = uniqid($trick->getSlug().'-', true); // file name without extension
+        // Resize the picture file to severals widths (cf service.yaml),
+        // and move files in their corresponding directory named with each width
+        $fullFilename = $this->imageProcess->execute($file, $filename);
+        // delete files of the replaced picture
+        $this->pictureRepository->deletePictureFiles($picture);
+        // define new file name of picture
+        $picture->setFilename($fullFilename);
         // process alt
         $picture->setAlt($alt);
         $this->managerRegistry->getManager()->flush();
