@@ -3,7 +3,7 @@
 $(function () {
 
     // disables the enter key which must not submit the form
-    $("form").bind("keypress", function (e) {
+    $('form').bind('keypress', function (e) {
         if (e.keyCode == 13) {
             return false;
         }
@@ -22,7 +22,7 @@ $(function () {
         $('#updateNameModal input').val($('#trick-update h2 span').text());
     });
     
-    let updateTrickName = $("#update-trick-name");
+    let updateTrickName = $('#update-trick-name');
 
     let displayNewName = function(data) {
         $('#updateNameModal input').val(data.newName);
@@ -49,7 +49,6 @@ $(function () {
                 }
               }
         }).done(function(data) {
-            console.log(data);
             displayNewName(data);
             $('#updateNameModal input').val(data.newName);
         });
@@ -313,7 +312,7 @@ $(function () {
             data: formData,
             dataType: 'json',
             processData: false,
-		    contentType: false,
+            contentType: false,
             cache: false,
             statusCode: {
                 409: function(error) {
