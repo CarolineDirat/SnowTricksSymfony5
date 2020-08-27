@@ -100,7 +100,11 @@ class TrickController extends AbstractController
         if (empty($offset)) {
             $offset = $constantsIni['comments']['number_last_displayed'];
         }
-        $comments = $commentRepository->getArrayPaginatedComments($trick, $offset, $constantsIni['comments']['limit_loaded']);
+        $comments = $commentRepository->getArrayPaginatedComments(
+            $trick,
+            $offset,
+            $constantsIni['comments']['limit_loaded']
+        );
 
         return $this->json(
             $comments,
