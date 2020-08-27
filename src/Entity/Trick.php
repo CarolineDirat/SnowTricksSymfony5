@@ -81,7 +81,13 @@ class Trick
     private ?Collection $videos;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick", orphanRemoval=true, cascade={"persist","remove"}, fetch="EXTRA_LAZY")
+     * @ORM\OneToMany(
+     *      targetEntity=Comment::class,
+     *      mappedBy="trick",
+     *      orphanRemoval=true,
+     *      cascade={"persist","remove"},
+     *      fetch="EXTRA_LAZY"
+     * )
      */
     private ?Collection $comments;
 
