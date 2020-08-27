@@ -268,14 +268,11 @@ class TrickController extends AbstractController
     public function updateFirstImage(
         Trick $trick,
         Request $request,
-        PictureRepository $pictureRepository
+        TrickHandler $trickHandler
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         if ($this->isCsrfTokenValid('update-first-image-token-'.$trick->getUuid(), $data['_token'])) {
-            $pictureId = $data['pictureId'];
-            $firstPicture = $pictureRepository->find($pictureId);
-            $trick->setFirstPicture($firstPicture);
-            $this->getDoctrine()->getManager()->flush();
+            $firstPicture = $trickHandler->updateFirstImage($trick, $data['pictureId']);
 
             return $this->json(
                 [

@@ -2,6 +2,7 @@
 
 namespace App\Service\EntityHandler;
 
+use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Repository\TrickRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -30,5 +31,17 @@ class TrickHandler
     {
         $trick->setFirstPicture(null);
         $this->managerRegistry->getManager()->flush();
+    }
+
+    public function updateFirstImage(Trick $trick, int $pictureId): Picture
+    {
+        foreach ($trick->getPictures() as $picture) {
+            if ($pictureId === $picture->getId()) {
+                $trick->setFirstPicture($picture);
+            }
+        }
+        $this->managerRegistry->getManager()->flush();
+
+        return $trick->getFirstPicture();
     }
 }
