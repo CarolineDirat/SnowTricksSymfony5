@@ -44,4 +44,12 @@ class TrickHandler
 
         return $trick->getFirstPicture();
     }
+
+    public function updateName(Trick $trick, string $name): string
+    {
+        $trick->setName($name);
+        $this->managerRegistry->getManager()->flush();
+
+        return $trick->getName();
+    }
 }

@@ -422,13 +422,12 @@ class TrickController extends AbstractController
      */
     public function updateName(
         Trick $trick,
-        Request $request
+        Request $request,
+        TrickHandler $trickHandler
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         if ($this->isCsrfTokenValid('update-name-token-'.$trick->getUuid(), $data['_token'])) {
-            $name = $data['newName'];
-            $trick->setName($name);
-            $this->getDoctrine()->getManager()->flush();
+            $name = $trickHandler->updateName($trick, $data['newName']);
 
             return $this->json(
                 [
