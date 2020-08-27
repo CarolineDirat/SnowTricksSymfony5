@@ -27,7 +27,7 @@ class VideoHandler extends AbstractEntityHandler
     /**
      * update.
      *
-     * @param array $data   [keys] = videoId, service and code
+     * @param array $data [keys] = videoId, service and code
      */
     public function update(array $data): Video
     {

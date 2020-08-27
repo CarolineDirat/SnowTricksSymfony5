@@ -76,16 +76,15 @@ class ProcessTrickUpdateForm
             }
         }
     }
-    
+
     /**
-     * recoverPictures
-     * 
-     * The pictures that the Trick already has are missing 
+     * recoverPictures.
+     *
+     * The pictures that the Trick already has are missing
      * because the form pictures (used by AJAX request to update pictures with file upload)
      * is out of trick form in trick/update.html.twig
      * (we cannot nest forms in HTML5)
      * So, we get pictures from database to add them
-     * 
      */
     public function recoverPictures(Trick $trick): Trick
     {
@@ -114,7 +113,7 @@ class ProcessTrickUpdateForm
     {
         $trick = $form->getData();
         // if $form is submitted but not valid :
-        // -> we recover the existing errors 
+        // -> we recover the existing errors
         $errors = $form->getErrors(true);
         // -> added pictures not saved have null id
         // so we remove them because they cannot be display on update trick page

@@ -2,8 +2,8 @@
 
 namespace App\Service\EntityHandler;
 
-use App\Entity\Trick;
 use App\Entity\Picture;
+use App\Entity\Trick;
 use App\Repository\PictureRepository;
 use App\Service\ImageProcessInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 class PictureHandler extends AbstractEntityHandler
 {
     private PictureRepository $pictureRepository;
-    
+
     private ImageProcessInterface $imageProcess;
 
     public function __construct(
@@ -41,10 +41,10 @@ class PictureHandler extends AbstractEntityHandler
         $nameForm = $request->request->get('nameForm');
         $file = $request->files->get('trick')['pictures'][$nameForm]['file'];
         $alt = $request->request->get('trick')['pictures'][$nameForm]['alt'];
-        
+
         return ['file' => $file, 'alt' => $alt];
     }
-    
+
     public function isDataPictureValid(Request $request): ?string
     {
         $data = $this->getData($request);
@@ -83,7 +83,6 @@ class PictureHandler extends AbstractEntityHandler
             $this->pictureRepository->deletePictureFiles($picture);
             // define new file name of picture
             $picture->setFilename($fullFilename);
-
         } else {
             return null;
         }
@@ -91,6 +90,6 @@ class PictureHandler extends AbstractEntityHandler
         $picture->setAlt($alt);
         $this->managerRegistry->getManager()->flush();
 
-        return $picture;    
+        return $picture;
     }
 }
