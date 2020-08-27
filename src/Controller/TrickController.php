@@ -11,6 +11,7 @@ use App\Repository\PictureRepository;
 use App\Repository\VideoRepository;
 use App\Service\ConstantsIni;
 use App\Service\EntityHandler\TrickHandler;
+use App\Service\EntityHandler\VideoHandler;
 use App\Service\FormFactory;
 use App\Service\ImageProcessInterface;
 use App\Service\ProcessTrickUpdateForm;
@@ -387,14 +388,12 @@ class TrickController extends AbstractController
     public function deleteVideo(
         Trick $trick,
         Request $request,
-        VideoRepository $videoRepository
+        VideoHandler $videoHandler
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         if ($this->isCsrfTokenValid('delete-video-token-'.$trick->getUuid(), $data['_token'])) {
             $videoId = $data['videoId'];
-            $video = $videoRepository->find($videoId);
-            $trick->removeVideo($video);
-            $this->getDoctrine()->getManager()->flush();
+            $videoHandler->delete($trick, $videoId);
 
             return $this->json(
                 [
