@@ -16,9 +16,12 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class PictureRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private ParameterBagInterface $container;
+
+    public function __construct(ManagerRegistry $registry, ParameterBagInterface $container)
     {
         parent::__construct($registry, Picture::class);
+        $this->container = $container;
     }
 
     /**
@@ -26,13 +29,13 @@ class PictureRepository extends ServiceEntityRepository
      *
      * Method called when a picture is deleted or updated, to delete it's pictures files.
      */
-    public function deletePictureFiles(Picture $picture, ParameterBagInterface $container): void
+    public function deletePictureFiles(Picture $picture): void
     {
         // the same picture is multiple, corresponding to different widths, in several folders
         $filenames = [];
-        $imagesDirectories = $container->get('app.images_folders_names');
+        $imagesDirectories = $this->container->get('app.images_folders_names');
         foreach ($imagesDirectories as $value) {
-            $filenames[] = $container->get('app.images_directory').$value.'/'.$picture->getFilename();
+            $filenames[] = $this->container->get('app.images_directory').$value.'/'.$picture->getFilename();
         }
         $filesystem = new Filesystem();
         $filesystem->remove($filenames);

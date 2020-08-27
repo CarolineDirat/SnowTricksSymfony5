@@ -17,7 +17,6 @@ use App\Service\ProcessTrickUpdateForm;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -239,8 +238,8 @@ class TrickController extends AbstractController
                     'slug' => $trick->getSlug(),
                     'uuid' => $trick->getUuid(),
                 ]);
-        } 
-        if($form->isSubmitted()) {
+        }
+        if ($form->isSubmitted()) {
             $form = $processTrickUpdateForm->errorsHandler($form);
         }
 
@@ -470,7 +469,6 @@ class TrickController extends AbstractController
         Picture $picture,
         Request $request,
         PictureRepository $pictureRepository,
-        ParameterBagInterface $container,
         ImageProcessInterface $imageProcess
     ): JsonResponse {
         $token = $request->request->get('token');
@@ -516,7 +514,7 @@ class TrickController extends AbstractController
                 // and move files in their corresponding directory named with each width
                 $fullFilename = $imageProcess->execute($file, $filename);
                 // delete files of the replaced picture
-                $pictureRepository->deletePictureFiles($picture, $container);
+                $pictureRepository->deletePictureFiles($picture);
                 // define new file name of picture
                 $picture->setFilename($fullFilename);
             } else {
@@ -560,15 +558,14 @@ class TrickController extends AbstractController
     public function deletePicture(
         Trick $trick,
         Request $request,
-        PictureRepository $pictureRepository,
-        ParameterBagInterface $container
+        PictureRepository $pictureRepository
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         $pictureId = $data['pictureId'];
         if ($this->isCsrfTokenValid('delete-picture-token-'.$pictureId, $data['_token'])) {
             $picture = $pictureRepository->find($pictureId);
             // delete files of the delete picture
-            $pictureRepository->deletePictureFiles($picture, $container);
+            $pictureRepository->deletePictureFiles($picture);
             // delete picture from database
             $trick->removePicture($picture);
             $this->getDoctrine()->getManager()->flush();
