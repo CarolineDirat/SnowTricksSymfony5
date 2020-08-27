@@ -4,7 +4,7 @@ $(function () {
 
     // disables the enter key which must not submit the form
     $('form').bind('keypress', function (e) {
-        if (e.keyCode == 13) {
+        if (e.keyCode === 13) {
             return false;
         }
     });
@@ -173,20 +173,16 @@ $(function () {
             }),
             statusCode: {
                 409: function(error) {
-                    console.log(error);
                     alert(error.responseJSON.message);
                 },
                 403: function(error) {
-                    console.log(error);
                     alert(error.responseJSON.message);
                 },
                 500: function(error) {
-                    console.log(error);
                     alert(error.responseText);
                 },
             }
         }).done(function(data){
-            console.log(data);
             updateVideo(data);
         });
     });
