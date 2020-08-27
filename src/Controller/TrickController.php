@@ -450,72 +450,33 @@ class TrickController extends AbstractController
         Trick $trick,
         Picture $picture,
         Request $request,
-        PictureRepository $pictureRepository,
-        ImageProcessInterface $imageProcess
+        PictureHandler $pictureHandler
     ): JsonResponse {
         $token = $request->request->get('token');
         if ($this->isCsrfTokenValid('update-picture-token-'.$picture->getId(), $token)) {
-            // get data
-            $nameForm = $request->request->get('nameForm');
-            $file = $request->files->get('trick')['pictures'][$nameForm]['file'];
-            $alt = $request->request->get('trick')['pictures'][$nameForm]['alt'];
-            // constraints validations
-            list($width, $height) = getimagesize($file->getPathName());
-            if (!in_array($file->getClientMimeType(), ['image/png', 'image/jpeg', 'image/gif', 'image/webp'])) {
+            $message = $pictureHandler->isDataPictureValid($request);
+            if (!empty($message)) {
                 return $this->json(
-                    ['message' => 'Le fichier n\'est pas accepté. Ses types mimes acceptés sont image/png, image/jpeg, image/gif et image/webp. (Et sa taille est limitée à 10M.)'],
+                    ['message' => $message],
                     409,
                     ['Content-Type' => 'application/json']
                 );
             }
-            if ($width < 300) {
-                return $this->json(
-                    ['message' => 'Le fichier n\'est pas accepté. Il doit faire au minimum 300px de largeur. (Et sa taille est limitée à 10M.)'],
-                    409,
-                    ['Content-Type' => 'application/json']
-                );
-            }
-            if (0.67 > $width / $height) {
-                return $this->json(
-                    ['message' => 'Le fichier n\'est pas accepté. Le ratio largeur/hauteur doit faire au minimum de 0,67. (Et sa taille est limitée à 10M.)'],
-                    409,
-                    ['Content-Type' => 'application/json']
-                );
-            }
-            if (strlen($alt) > 100) {
-                return $this->json(
-                    ['message' => 'Attention ! La description ne doit pas dépasser 100 caractères'],
-                    409,
-                    ['Content-Type' => 'application/json']
-                );
-            }
-            // process file
-            if ($file instanceof UploadedFile) {
-                $filename = uniqid($trick->getSlug().'-', true); // file name without extension
-                // Resize the picture file to severals widths (cf service.yaml),
-                // and move files in their corresponding directory named with each width
-                $fullFilename = $imageProcess->execute($file, $filename);
-                // delete files of the replaced picture
-                $pictureRepository->deletePictureFiles($picture);
-                // define new file name of picture
-                $picture->setFilename($fullFilename);
-            } else {
+            $result = $pictureHandler->update($trick, $picture, $request);
+            if (empty($result)) {
                 return $this->json(
                     ['message' => 'Echec de l\'upload.'],
                     403,
                     ['Content-Type' => 'application/json']
                 );
             }
-            // process picture
-            $picture->setAlt($alt);
-            $this->getDoctrine()->getManager()->flush();
 
             return $this->json(
                 [
                     'message' => 'La photo a été modifiée.',
-                    'filename' => $picture->getFilename(),
-                    'alt' => $picture->getAlt(),
-                    'pictureId' => $picture->getId(),
+                    'filename' => $result->getFilename(),
+                    'alt' => $result->getAlt(),
+                    'pictureId' => $result->getId(),
                     'trick' => $trick->getName(),
                 ],
                 200,
