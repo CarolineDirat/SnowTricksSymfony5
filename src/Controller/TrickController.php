@@ -9,6 +9,7 @@ use App\FormHandler\TrickFormHandler;
 use App\Repository\CommentRepository;
 use App\Repository\PictureRepository;
 use App\Service\ConstantsIni;
+use App\Service\EntityHandler\PictureHandler;
 use App\Service\EntityHandler\TrickHandler;
 use App\Service\EntityHandler\VideoHandler;
 use App\Service\FormFactory;
@@ -539,17 +540,12 @@ class TrickController extends AbstractController
     public function deletePicture(
         Trick $trick,
         Request $request,
-        PictureRepository $pictureRepository
+        PictureHandler $pictureHandler
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         $pictureId = $data['pictureId'];
         if ($this->isCsrfTokenValid('delete-picture-token-'.$pictureId, $data['_token'])) {
-            $picture = $pictureRepository->find($pictureId);
-            // delete files of the delete picture
-            $pictureRepository->deletePictureFiles($picture);
-            // delete picture from database
-            $trick->removePicture($picture);
-            $this->getDoctrine()->getManager()->flush();
+            $pictureHandler->delete($trick, $pictureId);
 
             return $this->json(
                 [
