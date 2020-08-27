@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Trick;
+use App\Service\ConstantsIni;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -16,9 +18,22 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class TrickRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
+    private array $constants;
+
+    private ParameterBagInterface $container;
+
+    private CommentRepository $commentRepository;
+
+    public function __construct(
+        ManagerRegistry $registry,
+        ParameterBagInterface $container,
+        ConstantsIni $constantsIni,
+        CommentRepository $commentRepository
+    ) {
         parent::__construct($registry, Trick::class);
+        $this->container = $container;
+        $this->constants = $constantsIni->getConstantsIni();
+        $this->commentRepository = $commentRepository;
     }
 
     /**
@@ -100,18 +115,60 @@ class TrickRepository extends ServiceEntityRepository
     }
 
     /**
+     * findOneWithNLastFiveComments
+     * get a tricks with it's last N comments.
+     * Only N comments are requested (with extra_lazy on trick's comments)
+     * (N is defined in constants.ini).
+     *
+     * @return Trick
+     */
+    public function findOneWithNLastComments(string $uuid): ?Trick
+    {
+        $number = $this->constants['comments']['number_last_displayed'];
+        $trick = $this->findOneBy(['uuid' => $uuid]);
+
+        /* first way :
+        $comments = $trick->getComments();
+        $nbComments = $comments->count();
+        $NlastComments = $nbComments > $number ? $comments->slice($nbComments - $number) : $comments->slice(0);
+        $NlastComments = array_reverse($NlastComments);
+        $trick->getComments()->clear();
+        foreach ($lastComments as $comment) {
+            $trick->addComment($comment);
+        }
+        */
+
+        // second way: (one less request)
+        $NlastComments = $this
+            ->commentRepository
+            ->createQueryBuilder('c')
+            ->where('c.trick = :trick')
+            ->setParameter('trick', $trick)
+            ->orderBy('c.createdAt', 'DESC')
+            ->setMaxResults($number)
+            ->getQuery()
+            ->getResult();
+        $trick->getComments()->clear();
+        foreach ($NlastComments as $comment) {
+            $trick->addComment($comment);
+        }
+
+        return $trick;
+    }
+
+    /**
      * deletePicturesFiles
      * Method called when a trick is delete, to delete it's pictures files.
      */
-    public function deletePicturesFiles(Trick $trick, ParameterBagInterface $container): void
+    public function deletePicturesFiles(Trick $trick): void
     {
         $pictures = $trick->getPictures();
         $filenames = [];
-        $imagesDirectories = $container->get('app.images_folders_names');
+        $imagesDirectories = $this->container->get('app.images_folders_names');
         // the same picture is multiple, corresponding to different widths, in several folders
         foreach ($imagesDirectories as $value) {
             foreach ($pictures as $picture) {
-                $filenames[] = $container->get('app.images_directory').$value.'/'.$picture->getFilename();
+                $filenames[] = $this->container->get('app.images_directory').$value.'/'.$picture->getFilename();
             }
         }
         $filesystem = new Filesystem();
@@ -141,6 +198,23 @@ class TrickRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('t')
             ->andWhere('t.exampleField = :val')
             ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+    */
+
+    /*
+    public function findOneWithCommentsOrderByDesc(string $uuid): Trick
+    {
+        $uuid = Uuid::fromString($uuid)->getBytes();
+
+        return $this->createQueryBuilder('t')
+            ->select('t, c')
+            ->join('t.comments', 'c')
+            ->andWhere('t.uuid = :uuid')
+            ->orderBy('c.createdAt', 'DESC')
+            ->setParameter('uuid', $uuid)
             ->getQuery()
             ->getOneOrNullResult()
         ;

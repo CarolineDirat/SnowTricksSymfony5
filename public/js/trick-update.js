@@ -2,11 +2,27 @@
 
 $(function () {
 
+    // disables the enter key which must not submit the form
+    $('form').bind('keypress', function (e) {
+        if (e.keyCode == 13) {
+            return false;
+        }
+    });
+
+    // delete unless fields from form_end when the trick doesn't have pictures or video
+    $('fieldset.form-group').has('div#trick_pictures').remove();
+    $('fieldset.form-group').has('div#trick_videos').remove();
+
     //////////////////////////////////////////////////////////////////////////////////////////
     //                                  UPDATE NAME
     //////////////////////////////////////////////////////////////////////////////////////////
 
-    let updateTrickName = $("#update-trick-name");
+    // input field must keep the trick name
+    $('#updateNameModal').on('hidden.bs.modal', function (e) {
+        $('#updateNameModal input').val($('#trick-update h2 span').text());
+    });
+    
+    let updateTrickName = $('#update-trick-name');
 
     let displayNewName = function(data) {
         $('#updateNameModal input').val(data.newName);
@@ -24,12 +40,17 @@ $(function () {
                 '_token': $(this).data('token'),
                 'newName' : $('#updateNameModal input').val(),
             }),
+            statusCode: {
+                500: function() {
+                    alert('Attention ! Ce nom de trick n\'est pas valide. Peut-être est-il déjà utilisé ?');
+                },
+                403: function(data) {
+                    alert(data.message);
+                }
+              }
         }).done(function(data) {
-            console.log(data);
             displayNewName(data);
-        }).fail(function(data){
-            console.log(data);
-            alert(data.message);
+            $('#updateNameModal input').val(data.newName);
         });
     });
     
@@ -94,11 +115,10 @@ $(function () {
     //////////////////////////////////////////////////////////////////////////////////////////
     //                                  UPDATE VIDEO
     //////////////////////////////////////////////////////////////////////////////////////////
-
+    
     $('#modal-help-code-video div.modal-footer button').click(function(e){
         $(this).removeData('dismiss');
         e.preventDefault();
-        //$('#modal-help-code-video').modal('hide');
     });
 
     let updateVideoLinks = $('.update-video-link');
@@ -150,11 +170,24 @@ $(function () {
                 'videoId': $(this).data('videoid'),
                 'service': $(this).data('service'),
                 'code': $(this).data('code'),
-            })
+            }),
+            statusCode: {
+                409: function(error) {
+                    console.log(error);
+                    alert(error.responseJSON.message);
+                },
+                403: function(error) {
+                    console.log(error);
+                    alert(error.responseJSON.message);
+                },
+                500: function(error) {
+                    console.log(error);
+                    alert(error.responseText);
+                },
+            }
         }).done(function(data){
+            console.log(data);
             updateVideo(data);
-        }).fail(function(data){
-            alert(data.responseJSON.message);
         });
     });
 
@@ -169,6 +202,8 @@ $(function () {
         $('#video-display-' + data.videoId).remove();
         // screen < 720px
         $('#video-display-mobile-' + data.videoId).remove();
+        // delete video form
+        $('#updateVideoModal-' + data.videoId).remove();
     };
 
     deleteVideoLinks.click(function(e) {
@@ -257,6 +292,7 @@ $(function () {
         updatePicture(data, '#picture-display-' + data.pictureId);
         updatePicture(data, '#picture-display-mobile-' + data.pictureId);
         updatePicture(data, '#updatePictureModal-' + data.pictureId + ' img');
+        updatePicture(data, '#deletePictureModal-' + data.pictureId + ' img');
     };
     
     // AJAX REQUEST to update a picture
@@ -276,14 +312,25 @@ $(function () {
             data: formData,
             dataType: 'json',
             processData: false,
-		    contentType: false,
+            contentType: false,
             cache: false,
+            statusCode: {
+                409: function(error) {
+                    console.log(error);
+                    alert(error.responseJSON.message);
+                },
+                403: function(error) {
+                    console.log(error);
+                    alert(error.responseJSON.message);
+                },
+                500: function(error) {
+                    console.log(error);
+                    alert(error.responseJSON.title);
+                }
+            }
         }).done(function(data){
             console.log(data);
             displayPictures(data);
-        }).fail(function(data){
-            console.log(data);
-            alert('ajax failed');
         });
     });
 
@@ -298,6 +345,8 @@ $(function () {
         $('#picture-display-' + data.pictureId).closest('div').remove();
         // screen < 720px
         $('#picture-display-mobile-' + data.pictureId).closest('div').remove();
+        // in first image form
+        $('#first-image-radio-' + data.pictureId).remove();
     };
 
     deletePictureLinks.click(function(e) {
@@ -319,6 +368,20 @@ $(function () {
             alert(data.responseJSON.message);
         });
     });
+
+     //////////////////////////////////////////////////////////////////////////////////////////
+    //                   DISPLAY CHOSEN FILE NAME IN IT'S INPUT TAG
+    //////////////////////////////////////////////////////////////////////////////////////////
+
+    let displayFilename = function () {
+        $('.custom-file-input').change(function () {
+            let $label = $(this).next();
+            $.each($(this.files), function (index, file) {
+                $label.text(file.name);
+            });
+        });
+    };
+    displayFilename();
 
     //////////////////////////////////////////////////////////////////////////////////////////
     //                                  ADD PICTURE FORM IN THE RIGHT PLACE ;)
@@ -349,7 +412,6 @@ $(function () {
 
         // Display the form in the page
         $('.add-picture-link.'+ screen + '-screen').before(newForm);
-        translateBrowse();
 
         // custom picture classes
         $('#trick_pictures_' + index).addClass('row picture my-2 pt-2');
@@ -362,6 +424,7 @@ $(function () {
     addPictureButtonUpdatePage.on('click', function(e) {
         // add a new picture form
         addPictureFormUpdatePage(collectionHolderPicturesUpdatePage, $(this).data('screen'));
+        translateBrowse();
+        displayFilename();
     });
-
 });

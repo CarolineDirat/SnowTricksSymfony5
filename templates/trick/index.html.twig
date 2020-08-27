@@ -6,6 +6,13 @@
 
 {% block body %}
 	<section id="trick-read" class="container">
+		{% for message in app.flashes('notice') %}
+        <div class="row justify-content-center">
+            <div class="alert alert-primary my-4 font-weight-bold col-11 col-sm-11 col-md-8 col-xl-4 text-center">
+                {{ message }}
+            </div>
+        </div>
+        {% endfor %}
 		{# trick name and first picture #}
 		<div class="row d-flex">
 			<h1 class="col-12 text-center">{{ trick.name }}</h1>
@@ -136,7 +143,6 @@
 		{% endif %}
 		<div id="comments" class="row">
 			{% for comment in trick.comments %}
-				{% if loop.index0 < numberLastComments %}
 				<div class="card comments col-12 col-sm-12 ">
 					<div class="row no-gutters">
 						{% set filename = comment.user.profile ? comment.user.profile : 'default.jpg' %}
@@ -158,13 +164,14 @@
 						</div>
 					</div>
 				</div>
-				{% endif %}
 			{% endfor %}
 		</div>
 		<div class="row">
-			<div class="col-sm-12 text-center mb-5">
-				<a id="load-more-comments" role="button" href="{{ path('load-more-comments', {uuid: trick.uuid, slug: trick.slug}) }}" class="btn btn-primary m-4">Voir plus</a>
-			</div>
+			{% if trick.comments|length > 0 %}
+				<div class="col-sm-12 text-center mb-5">
+					<a id="load-more-comments" role="button" href="{{ path('load-more-comments', {uuid: trick.uuid, slug: trick.slug}) }}" class="btn btn-primary m-4">Voir plus de commentaires</a>
+				</div>
+			{% endif %}
 		</div>
 	</section>
 {% endblock %}

@@ -6,10 +6,15 @@
 
 {% block body %}
 	<section id="trick-update" class="container">
+			<div class="row justify-content-center">
+				<div class="col-11 col-sm-11 col-md-8 mt-4 text-center">
+					{{ form_errors(form) }}
+				</div>
+			</div>
 
 		{# TRICK NAME #}
 		<div class="row">
-			<h1 class="col-12 text-center mt-5">Modifier le trick :</h1>
+			<h1 class="col-12 text-center mt-4">Modifier le trick :</h1>
 			<h2 class="col-12 text-center mt-2 mb-3">
 				<span>{{ trick.name|upper }}</span>
 				<button type="button" class="btn btn-outline-primary btn-sm" 
@@ -18,43 +23,11 @@
 					<i class="fas fa-pencil-alt"></i>
 				</button>
 			</h2>
-		</div>
-
-		{{ form_start(form) }}
-
-		{# modale page to update trick name #}
-		<div class="modal fade" id="updateNameModal" tabindex="-1" aria-labelledby="updateNameModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title font-weight-bold" id="updateNameModalLabel">Corriger ou compléter le nom du trick :</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<div class="container-fluid">
-							<div class="form-group row">
-								{{ form_label(form.name, 'Nom du trick : ') }}
-								{{ form_widget(form.name) }}
-							</div>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-						<a href="{{ path('trick_update_name', {slug: trick.slug, uuid: trick.uuid}) }}" type="button" 
-							id="update-trick-name" class="btn btn-primary" 
-							data-token="{{ csrf_token('update-name-token-' ~ trick.uuid) }}">
-							Enregistrer
-						</a>
-					</div>
-				</div>
-			</div>
-		</div>
+		</div>		
 
 		{# FIRST IMAGE #}
 		<div class="row d-flex flex-nowrap justify-content-center first-image mt-3">
-			{% set firstPicture = trick.firstPicture ? trick.firstPicture.filename : (trick.pictures|length > 0 ? trick.pictures[0].filename : 'default.jpg') %}
+			{% set firstPicture = trick.firstPicture ? trick.firstPicture.filename : (trick.pictures|length > 0 ? trick.pictures.first.filename : 'default.jpg') %}
 			{% set firstPictureAlt = trick.firstPicture ? trick.firstPicture.alt : null %}
 			<picture>
 				<source srcset="{{ asset('uploads/images/540/' ~ firstPicture) }}" media="(max-width: 578px)">
@@ -94,7 +67,7 @@
 										<p>	Ajouter une ou plusieurs photos pour pouvoir en mettre une à la une ;)</p>
 									{% endif %}
 									{% for picture in trick.pictures %}
-										<div>
+										<div id="first-image-radio-{{ picture.id }}">
 											<img width="120px" src="{{ asset('uploads/images/200/'~ picture.filename) }}" alt="{{ picture.alt }} pour illustrer le trick {{ trick.name }}">
 											<div class="custom-control custom-radio text-center">
 												<input type="radio" id="first_picture_{{ loop.index }}" 
@@ -121,101 +94,7 @@
 			</div>
 		</div>
 
-
-		{# MEDIAS #}
-
-		{# modal page to know where find the video code #}
-		{{ include('fragments/_help_video_code.html.twig') }}
-
-		{# modal pages to update a video #}
-		{% for video in form.videos %}
-			<div class="modal fade update-video-modal" id="updateVideoModal-{{ video.vars.value.id }}" tabindex="-1" aria-labelledby="videoModalLabel-{{ video.vars.value.id }}" aria-hidden="true"> 
-				<div class="modal-dialog modal-dialog-centered">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title" id="videoModalLabel-{{ video.vars.value.id }}">Modifier la vidéo :</h5>
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-						<div class="modal-body">
-							<div class="container-fluid">
-								<div class="form mb-3">
-									<div class="pl-3 text-left">
-										{{ form_label(video.service) }}
-										{{ form_widget(video.service, {'attr': {'class': 'update-service-video'}}) }}
-									</div>
-									<div class="px-3 mt-4 text-left">
-										{{ form_label(video.code) }}
-										<span class="modal-info-code" data-toggle="collapse" data-target="#collapse-help-code-video" 
-											aria-expanded="false" aria-controls="collapse-help-code-video">
-												<i class="fas fa-question-circle"></i>
-										</span>
-										{{ form_widget(video.code, {'attr': {'class': 'update-code-video'}}) }}
-									</div>
-								</div>
-								<hr>
-								<div class="row collapse" id="collapse-help-code-video">
-									<h5 class="col-12 font-weight-bold text-danger">Dans l'url de la vidéo :</h5>
-									<div class="col-12 mt-2">
-										<h6 class="badge badge-info">Sur YouTube :</h6>
-									</div>	
-									<img class="img-fluid mt-n2" src="{{ asset('images/help-code-youtube.png') }}" alt="Comment trouver le code de la video sur YouTube ? Le code dans l'URL après 'v='"/>
-									<div class="col-12 mt-1">
-										<h6 class="badge badge-info">Sur Vimeo :</h6>
-									</div>
-									<img class="img-fluid mt-n2" src="{{ asset('images/help-code-vimeo.png') }}" alt="Comment trouver le code de la video sur YouTube ? Dernière partie de l'URL, après le dernier slash '/'"/>
-									<div class="col-12 mt-1">
-										<h6 class="badge badge-info">Sur Dailymotion :</h6>
-									</div>
-									<img class="img-fluid mt-n2" src="{{ asset('images/help-code-dailymotion.png') }}" alt="Comment trouver le code de la video sur YouTube ? Dernière partie de l'URL, après le dernier slash '/'"/>
-								</div>
-							</div>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-							<a href="{{ path('trick_update_video', {slug: trick.slug, uuid: trick.uuid}) }}" type="button" 
-							class="btn btn-primary update-video-link" data-token="{{ csrf_token('update-video-token-' ~ trick.uuid) }}" 
-							data-service="{{ video.vars.value.service }}" data-code="{{ video.vars.value.code }}" 
-							data-videoid="{{ video.vars.value.id }}">
-								Enregistrer
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		{% endfor %}
-
-		{# modal pages to delete a video #}
-		{% for video in form.videos %}
-			<div class="modal fade" id="deleteVideoModal-{{ video.vars.value.id }}" tabindex="-1" 
-				aria-labelledby="deleteVideoModalLabel-{{ video.vars.value.id }}" aria-hidden="true">
-				<div class="modal-dialog modal-dialog-centered">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h5 class="modal-title font-weight-bold" id="deleteVideoModalLabel-{{ video.vars.value.id }}">Attention ! C'est action est définitive !</h5>
-							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-							</button>
-						</div>
-						<div class="modal-body">
-							<div class="row justify-content-center">
-								<h5> Est-vous sûr de vouloir supprimer cette vidéo ? </h5>
-								{{ include('fragments/_iframe.html.twig', {service: video.vars.value.service, code: video.vars.value.code, width: 210, height: 118}) }}
-							</div>
-							</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary " data-dismiss="modal">Fermer</button>
-							<a href="{{ path('trick_delete_video', {slug: trick.slug, uuid: trick.uuid}) }}" 
-								type="button" class="btn btn-primary delete-video-link" data-videoid="{{ video.vars.value.id }}"
-								data-token="{{ csrf_token('delete-video-token-' ~ trick.uuid) }}">
-								Supprimer
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		{% endfor %}
+		{# PICTURES #}
 
 		{# modal pages to update a picture #}
 		{% for picture in form.pictures %}
@@ -299,6 +178,133 @@
 			</div>
 		{% endfor %}
 
+		{{ form_start(form) }}
+
+		{# modale page to update trick name #}
+		<div class="modal fade" id="updateNameModal" tabindex="-1" aria-labelledby="updateNameModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title font-weight-bold" id="updateNameModalLabel">Corriger ou compléter le nom du trick :</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="container-fluid">
+							<div class="form-group row">
+								{{ form_label(form.name, 'Nom du trick : ') }}
+								{{ form_widget(form.name) }}
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal" >Fermer</button>
+						<a href="{{ path('trick_update_name', {slug: trick.slug, uuid: trick.uuid}) }}" type="button" 
+							id="update-trick-name" class="btn btn-primary" 
+							data-token="{{ csrf_token('update-name-token-' ~ trick.uuid) }}">
+							Enregistrer
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		{# VIDEOS #}
+
+		{# modal page to know where find the video code #}
+		{{ include('fragments/_help_video_code.html.twig') }}
+
+		{# modal pages to update a video #}
+		{% for video in form.videos %}
+			<div class="modal fade update-video-modal" id="updateVideoModal-{{ video.vars.value.id }}" tabindex="-1" aria-labelledby="videoModalLabel-{{ video.vars.value.id }}" aria-hidden="true"> 
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="videoModalLabel-{{ video.vars.value.id }}">Modifier la vidéo :</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<div class="container-fluid">
+								<div class="form mb-3">
+									<div class="pl-3 text-left">
+										{{ form_label(video.service) }}
+										{{ form_widget(video.service, {'attr': {'class': 'update-service-video'}}) }}
+									</div>
+									<div class="px-3 mt-4 text-left">
+										{{ form_label(video.code) }}
+										<span class="modal-info-code" data-toggle="collapse" data-target="#collapse-help-code-video" 
+											aria-expanded="false" aria-controls="collapse-help-code-video">
+												<i class="fas fa-question-circle"></i>
+										</span>
+										{{ form_widget(video.code, {'attr': {'class': 'update-code-video'}}) }}
+									</div>
+								</div>
+								<hr>
+								<div class="row collapse" id="collapse-help-code-video">
+									<h5 class="col-12 font-weight-bold text-danger">Dans l'url de la vidéo :</h5>
+									<div class="col-12 mt-2">
+										<h6 class="badge badge-info">Sur YouTube :</h6>
+									</div>
+									<img class="img-fluid mt-n2" src="{{ asset('images/help-code-youtube.png') }}" alt="Comment trouver le code de la video sur YouTube ? Le code dans l'URL après 'v='"/>
+									<div class="col-12 mt-1">
+										<h6 class="badge badge-info">Sur Vimeo :</h6>
+									</div>
+									<img class="img-fluid mt-n2" src="{{ asset('images/help-code-vimeo.png') }}" alt="Comment trouver le code de la video sur YouTube ? Dernière partie de l'URL, après le dernier slash '/'"/>
+									<div class="col-12 mt-1">
+										<h6 class="badge badge-info">Sur Dailymotion :</h6>
+									</div>
+									<img class="img-fluid mt-n2" src="{{ asset('images/help-code-dailymotion.png') }}" alt="Comment trouver le code de la video sur YouTube ? Dernière partie de l'URL, après le dernier slash '/'"/>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+							<a href="{{ path('trick_update_video', {slug: trick.slug, uuid: trick.uuid}) }}" type="button" 
+							class="btn btn-primary update-video-link" data-token="{{ csrf_token('update-video-token-' ~ trick.uuid) }}" 
+							data-service="{{ video.vars.value.service }}" data-code="{{ video.vars.value.code }}" 
+							data-videoid="{{ video.vars.value.id }}">
+								Enregistrer
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+
+		{# modal pages to delete a video #}
+		{% for video in form.videos %}
+			<div class="modal fade" id="deleteVideoModal-{{ video.vars.value.id }}" tabindex="-1" 
+				aria-labelledby="deleteVideoModalLabel-{{ video.vars.value.id }}" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title font-weight-bold" id="deleteVideoModalLabel-{{ video.vars.value.id }}">Attention ! C'est action est définitive !</h5>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<div class="row justify-content-center">
+								<h5> Est-vous sûr de vouloir supprimer cette vidéo ? </h5>
+								{{ include('fragments/_iframe.html.twig', {service: video.vars.value.service, code: video.vars.value.code, width: 210, height: 118}) }}
+							</div>
+							</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-secondary " data-dismiss="modal">Fermer</button>
+							<a href="{{ path('trick_delete_video', {slug: trick.slug, uuid: trick.uuid}) }}" 
+								type="button" class="btn btn-primary delete-video-link" data-videoid="{{ video.vars.value.id }}"
+								data-token="{{ csrf_token('delete-video-token-' ~ trick.uuid) }}">
+								Supprimer
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+
 		
 		{# DISPLAY MEDIAS #}
 		<div class="row d-flex mt-2">
@@ -307,11 +313,11 @@
 			<div class="d-none d-md-block col-sm-12 col-md-7 col-lg-6 text-left update-trick-pictures" 
 				data-prototype="{{ form_widget(form.pictures.vars.prototype)|e('html_attr') }}">
 				{# display pictures #}
-				{% for picture in form.pictures %}
-					{% set pictureId = picture.vars.value.id %}
+				{% for picture in trick.pictures %}
+					{% set pictureId = picture.id %}
 					<div class="d-inline-block mb-2">
-						<img width="160px" id="picture-display-{{ pictureId }}" src="{{ asset('uploads/images/200/' ~ picture.vars.value.filename) }}" 
-							alt="{{ picture.vars.value.alt }} photo pour illustrer le trick de snowboard {{ trick.name }}." class="img-thumbnail rounded"/>
+						<img width="160px" id="picture-display-{{ pictureId }}" src="{{ asset('uploads/images/200/' ~ picture.filename) }}" 
+							alt="{{ picture.alt }} photo pour illustrer le trick de snowboard {{ trick.name }}." class="img-thumbnail rounded"/>
 						<div class="d-flex flex-nowrap justify-content-center">
 							<button type="button" class="btn btn-outline-primary btn-sm mr-2" 
 								data-toggle="modal" data-target="#updatePictureModal-{{ pictureId }}"
@@ -451,12 +457,40 @@
 					{{ form_widget(form.groupTrick, {'attr': {'class': 'mb-4 mb-md-0 ml-4 col-6 col-sm-4'}}) }}
 				</div>
 				<div class="row justify-content-end mb-5 ">
-					<a href="{{ path('trick_delete', {uuid: trick.uuid}) }}" type="button" class="btn btn-delete mt-2 mr-2">Supprimer le Trick</a>
-					<button type="submit" class="btn btn-primary mr-2 mt-2">Enregistrer le modifications</button>
+					<button type="button" class="btn btn-delete mt-2 mr-2"
+						data-toggle="modal" data-target="#modalDeleteTrickFromUpdatePage-{{ trick.id }}">
+							Supprimer le Trick
+					</button>
+					{{ form_end(form) }}
+					<input type="submit" class="btn btn-primary mr-2 mt-2" id="submit-trick-update-form" value="Enregistrer les modifications"/>
 				</div>
 			</div>
 		</div>
+
+
 		{# Modal Page to delete the trick #}
+		<div class="modal fade" id="modalDeleteTrickFromUpdatePage-{{ trick.id }}" tabindex="-1" aria-labelledby="modalDeleteTrickFromUpdatePageLabel" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="modalDeleteTrickFromUpdatePageLabel">Attention ! Cette action est définitive !</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						Êtes-vous sûr.e de vouloir supprimer le trick <span class="font-weight-bold">{{ trick.name }}</span> ?
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+						<form action="{{ url('trick_delete', {uuid: trick.uuid}) }}" method="POST">
+							<input type="hidden" name="token" value="{{ csrf_token('delete-trick-'~ trick.id) }}"/>
+    						<button type="submit" class="btn btn-delete">Supprimer</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
 		{###################################}
 
 

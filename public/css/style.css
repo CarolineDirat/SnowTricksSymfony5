@@ -494,16 +494,16 @@ h2 {
                 UPDATE TRICK FORM
 **********************************************/
 
-#trick-update a.btn-delete {
+#trick-update button.btn-delete {
   background-color: #8B0000;
   color: #fff;
 }
 
-#trick-update a.btn-delete:hover {
+#trick-update button.btn-delete:hover {
   background-color: #CD5C5C;
 }
 
-#trick-update a.btn.btn-delete:focus {
+#trick-update button.btn.btn-delete:focus {
   box-shadow: none;
 }
 

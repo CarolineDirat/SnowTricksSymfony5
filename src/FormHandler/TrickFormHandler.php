@@ -2,9 +2,7 @@
 
 namespace App\FormHandler;
 
-use App\Entity\Picture;
 use App\Entity\Trick;
-use App\Entity\Video;
 use App\Service\ImageProcess;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -38,17 +36,6 @@ class TrickFormHandler extends AbstractFormHandler
     public function getEntityClass(): string
     {
         return Trick::class;
-    }
-
-    public function initialize(): Trick
-    {
-        $trick = new Trick();
-        $picture = new Picture();
-        $trick->addPicture($picture);
-        $video = new Video();
-        $trick->addVideo($video);
-
-        return $trick;
     }
 
     public function process(object $trick): void
