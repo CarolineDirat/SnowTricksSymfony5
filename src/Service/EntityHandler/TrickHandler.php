@@ -7,15 +7,13 @@ use App\Entity\Trick;
 use App\Repository\TrickRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
-class TrickHandler
+class TrickHandler extends AbstractEntityHandler
 {
-    private ManagerRegistry $managerRegistry;
-
     private TrickRepository $trickRepository;
 
     public function __construct(ManagerRegistry $managerRegistry, TrickRepository $trickRepository)
     {
-        $this->managerRegistry = $managerRegistry;
+        parent::__construct($managerRegistry);
         $this->trickRepository = $trickRepository;
     }
 
