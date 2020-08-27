@@ -214,10 +214,8 @@ $(function () {
                 'videoId': $(this).data('videoid')
             })
         }).done(function(data) {
-            console.log(data);
             deleteVideo(data);
         }).fail(function(data){
-            console.log(data);
             alert(data.responseJSON.message);
         });
     });
@@ -312,20 +310,16 @@ $(function () {
             cache: false,
             statusCode: {
                 409: function(error) {
-                    console.log(error);
                     alert(error.responseJSON.message);
                 },
                 403: function(error) {
-                    console.log(error);
                     alert(error.responseJSON.message);
                 },
                 500: function(error) {
-                    console.log(error);
                     alert(error.responseJSON.title);
                 }
             }
         }).done(function(data){
-            console.log(data);
             displayPictures(data);
         });
     });
@@ -357,10 +351,8 @@ $(function () {
                 'pictureId': $(this).data('pictureid')
             })
         }).done(function(data) {
-            console.log(data);
             deletePicture(data);
         }).fail(function(data){
-            console.log(data);
             alert(data.responseJSON.message);
         });
     });
