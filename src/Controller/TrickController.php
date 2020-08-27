@@ -8,7 +8,6 @@ use App\FormHandler\CommentFormHandler;
 use App\FormHandler\TrickFormHandler;
 use App\Repository\CommentRepository;
 use App\Repository\PictureRepository;
-use App\Repository\VideoRepository;
 use App\Service\ConstantsIni;
 use App\Service\EntityHandler\TrickHandler;
 use App\Service\EntityHandler\VideoHandler;
@@ -339,10 +338,9 @@ class TrickController extends AbstractController
     public function updateVideo(
         Trick $trick,
         Request $request,
-        VideoRepository $videoRepository
+        VideoHandler $videoHandler
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
-        dump($data);
         if ('' === $data['code']) {
             return $this->json(
                 ['message' => 'Attention ! Le code de la vidéo ne peut être vide.'],
@@ -351,13 +349,7 @@ class TrickController extends AbstractController
             );
         }
         if ($this->isCsrfTokenValid('update-video-token-'.$trick->getUuid(), $data['_token'])) {
-            $videoId = $data['videoId'];
-            $video = $videoRepository->find($videoId);
-            $video
-                ->setService($data['service'])
-                ->setCode($data['code'])
-            ;
-            $this->getDoctrine()->getManager()->flush();
+            $video = $videoHandler->update($data);
 
             return $this->json(
                 [
