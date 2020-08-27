@@ -53,10 +53,9 @@ class PictureHandler extends AbstractEntityHandler
         // validation
         list($width, $height) = getimagesize($file->getPathName());
         if (!in_array(
-                $file->getClientMimeType(),
-                ['image/png', 'image/jpeg', 'image/gif', 'image/webp']
-            )
-        ) {
+            $file->getClientMimeType(),
+            ['image/png', 'image/jpeg', 'image/gif', 'image/webp']
+        )) {
             return 'Le fichier n\'est pas accepté. 
                 Ses types mimes acceptés sont image/png, image/jpeg, image/gif et image/webp. 
                 (Et sa taille est limitée à 10M.)';
