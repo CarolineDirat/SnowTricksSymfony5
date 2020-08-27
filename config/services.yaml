@@ -5,7 +5,8 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     app.images_directory: '%kernel.project_dir%/public/uploads/images/'
-
+    app.images_folders_names: ['960', '720', '540', '200']
+    app.constants_ini: '%kernel.project_dir%/constants.ini'
 services:
     # default configuration for services in *this* file
     _defaults:

@@ -17,12 +17,11 @@ class PictureType extends AbstractType
     {
         $builder
             ->add('file', FileType::class, [
-                'label' => 'Choisir un fichier image.',
+                'label' => 'Choisir un fichier image (max 10Mo) :',
                 'mapped' => false,
                 'required' => false,
                 'constraints' => [
                     new Image([
-                        'maxSize' => '500k',
                         'maxSizeMessage' => 'Le fichier {{ name }} est trop gros. 
                             Il ne doit pas dépasser {{ limit }} {{ suffix }}.',
                         'notFoundMessage' => "Le fichier {{ file }} n'a pas été trouvé.",

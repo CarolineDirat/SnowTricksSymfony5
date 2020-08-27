@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\TrickRepository;
-use DateTime;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -15,7 +14,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=TrickRepository::class)
- * @UniqueEntity("name")
+ * @UniqueEntity(
+ *     fields={"name"},
+ *     message="Le nom de trick {{ value }} n'est pas accepté (il existe déjà)."
+ * )
  */
 class Trick
 {
@@ -79,7 +81,13 @@ class Trick
     private ?Collection $videos;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick", orphanRemoval=true, cascade={"persist","remove"})
+     * @ORM\OneToMany(
+     *      targetEntity=Comment::class,
+     *      mappedBy="trick",
+     *      orphanRemoval=true,
+     *      cascade={"persist","remove"},
+     *      fetch="EXTRA_LAZY"
+     * )
      */
     private ?Collection $comments;
 

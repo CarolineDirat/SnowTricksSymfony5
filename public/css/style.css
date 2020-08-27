@@ -91,6 +91,16 @@ nav {
   font-size: 60%;
 }
 
+.btn.btn-add {
+  background-color: #2576c3;
+  color: #fff;
+}
+
+.btn.btn-add:hover {
+  background-color: #71a2d1;
+  color: #fff;
+}
+
 .btn.btn-outline-primary {
   color: #346;
   border-color: #346;
@@ -150,6 +160,10 @@ nav {
   box-shadow: 0 0 0 0.2rem rgba(131, 173, 216, 0.25);
 }
 
+.card.tricks {
+  border: none;
+}
+
 .navbar-brand,
 h1,
 h2 {
@@ -175,7 +189,7 @@ h2 {
 
 @media (max-width: 1200px) {
   .navbar-brand {
-    margin-right: 380px;
+    margin-right: 350px;
   }
 }
 
@@ -428,18 +442,21 @@ h2 {
 }
 
 /*********************************************
-                TRICK FORM
+                NEW TRICK FORM
 **********************************************/
 
 @media (max-width: 400px) {
-  #trick-new h1 {
+  #trick-new h1,
+  #trick-update h1 {
     font-size: 1.9rem;
+    margin-top: 2rem !important;
   }
 }
 
-@media (max-width: 400px) {
-  #trick-new h1 {
-    font-size: 1.6rem;
+@media (max-width: 300px) {
+  #trick-new h1,
+  #trick-update h1 {
+    font-size: 1.4rem;
     margin-bottom: 1.5rem !important;
     margin-top: 2rem !important;
   }
@@ -471,4 +488,72 @@ h2 {
 
 .picture div.form-group {
   margin-bottom: 0.5rem;
+}
+
+/*********************************************
+                UPDATE TRICK FORM
+**********************************************/
+
+#trick-update button.btn-delete {
+  background-color: #8b0000;
+  color: #fff;
+}
+
+#trick-update button.btn-delete:hover {
+  background-color: #cd5c5c;
+}
+
+#trick-update button.btn.btn-delete:focus {
+  box-shadow: none;
+}
+
+#trick-update h1 {
+  font-size: 2rem;
+}
+
+#trick-update h2 {
+  color: #5a8bc0;
+}
+
+#first-image-icons {
+  position: relative;
+  z-index: 20;
+  right: 80px;
+  top: 8px;
+}
+
+#first-image-icons .btn.btn-outline-primary {
+  background-color: #fff;
+}
+
+.first-image {
+  position: relative;
+  z-index: 0;
+  left: 40px;
+}
+
+@media (max-width: 990px) {
+  #first-image-icons {
+    right: 70px;
+  }
+}
+
+@media (max-width: 400px) {
+  #trick-update h2 {
+    font-size: 1.9rem;
+    margin-top: 0.5rem !important;
+  }
+}
+
+@media (max-width: 300px) {
+  #trick-update h2 {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 300px) {
+  #trick-update h1 {
+    font-size: 1.4rem;
+    margin-bottom: 0 !important;
+  }
 }
