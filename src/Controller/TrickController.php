@@ -305,12 +305,12 @@ class TrickController extends AbstractController
      */
     public function deleteFirstImage(
         Trick $trick,
-        Request $request
+        Request $request,
+        TrickHandler $trickHandler
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         if ($this->isCsrfTokenValid('delete-first-image-token-'.$trick->getUuid(), $data['_token'])) {
-            $trick->setFirstPicture(null);
-            $this->getDoctrine()->getManager()->flush();
+            $trickHandler->deleteFirstImage($trick);
 
             return $this->json(
                 [

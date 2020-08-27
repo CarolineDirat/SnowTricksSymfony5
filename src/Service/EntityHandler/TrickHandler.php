@@ -25,4 +25,10 @@ class TrickHandler
         $entityManager->remove($trick);
         $entityManager->flush();
     }
+
+    public function deleteFirstImage(Trick $trick): void
+    {
+        $trick->setFirstPicture(null);
+        $this->managerRegistry->getManager()->flush();
+    }
 }
