@@ -97,7 +97,7 @@ nav {
 }
 
 .btn.btn-add:hover {
-  background-color: #71A2D1;
+  background-color: #71a2d1;
   color: #fff;
 }
 
@@ -495,12 +495,12 @@ h2 {
 **********************************************/
 
 #trick-update button.btn-delete {
-  background-color: #8B0000;
+  background-color: #8b0000;
   color: #fff;
 }
 
 #trick-update button.btn-delete:hover {
-  background-color: #CD5C5C;
+  background-color: #cd5c5c;
 }
 
 #trick-update button.btn.btn-delete:focus {
@@ -532,7 +532,7 @@ h2 {
   left: 40px;
 }
 
-@media(max-width: 990px) {
+@media (max-width: 990px) {
   #first-image-icons {
     right: 70px;
   }
@@ -557,5 +557,3 @@ h2 {
     margin-bottom: 0 !important;
   }
 }
-
-
