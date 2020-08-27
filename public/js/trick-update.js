@@ -9,8 +9,9 @@ $(function () {
         }
     });
 
-    // delete unless fields from form_end when the trick doesn't have pictures
+    // delete unless fields from form_end when the trick doesn't have pictures or video
     $('fieldset.form-group').has('div#trick_pictures').remove();
+    $('fieldset.form-group').has('div#trick_videos').remove();
 
     //////////////////////////////////////////////////////////////////////////////////////////
     //                                  UPDATE NAME
@@ -115,8 +116,6 @@ $(function () {
     //////////////////////////////////////////////////////////////////////////////////////////
     //                                  UPDATE VIDEO
     //////////////////////////////////////////////////////////////////////////////////////////
-
-    
     
     $('#modal-help-code-video div.modal-footer button').click(function(e){
         $(this).removeData('dismiss');

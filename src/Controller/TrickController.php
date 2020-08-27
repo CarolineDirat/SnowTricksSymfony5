@@ -8,9 +8,9 @@ use App\FormHandler\CommentFormHandler;
 use App\FormHandler\TrickFormHandler;
 use App\Repository\CommentRepository;
 use App\Repository\PictureRepository;
-use App\Repository\TrickRepository;
 use App\Repository\VideoRepository;
 use App\Service\ConstantsIni;
+use App\Service\EntityHandler\TrickHandler;
 use App\Service\FormFactory;
 use App\Service\ImageProcessInterface;
 use App\Service\ProcessTrickUpdateForm;
@@ -124,16 +124,13 @@ class TrickController extends AbstractController
     public function deleteFromAJAXRequest(
         Trick $trick,
         Request $request,
-        TrickRepository $trickRepository
+        TrickHandler $trickHandler
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         $trickName = $trick->getName();
         // 'delete-trick-token258941367' is the same value used in the template to generate the token
         if ($this->isCsrfTokenValid('delete-trick-token258941367', $data['_token'])) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $trickRepository->deletePicturesFiles($trick);
-            $entityManager->remove($trick);
-            $entityManager->flush();
+            $trickHandler->delete($trick);
 
             return $this->json(
                 ['message' => 'Le trick '.$trickName.' a bien été supprimé.'],
@@ -162,15 +159,12 @@ class TrickController extends AbstractController
     public function delete(
         Trick $trick,
         Request $request,
-        TrickRepository $trickRepository
+        TrickHandler $trickHandler
     ): Response {
         $trickName = $trick->getName();
         $submittedToken = $request->request->get('token');
         if ($this->isCsrfTokenValid('delete-trick-'.$trick->getId(), $submittedToken)) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $trickRepository->deletePicturesFiles($trick);
-            $entityManager->remove($trick);
-            $entityManager->flush();
+            $trickHandler->delete($trick);
             $this->addFlash(
                 'notice',
                 'Le trick "'.$trickName.'" a bien été supprimé.'
