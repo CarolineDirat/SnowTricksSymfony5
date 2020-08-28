@@ -2,13 +2,6 @@
 
 $(function () {
 
-    // disables the enter key which must not submit the form
-    $('form').bind('keypress', function (e) {
-        if (e.keyCode === 13) {
-            return false;
-        }
-    });
-
     // delete unless fields from form_end when the trick doesn't have pictures or video
     $('fieldset.form-group').has('div#trick_pictures').remove();
     $('fieldset.form-group').has('div#trick_videos').remove();
