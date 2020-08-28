@@ -10,10 +10,13 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity(fields={"username"}, message="Il existe déjà un compte avec ce nom d'utilisateur.")
+ * @UniqueEntity(fields={"email"}, message="Ce mail est déjà utilisé par un utilisateur inscrit sur le site.")
  */
 class User implements UserInterface
 {
@@ -27,7 +30,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
-    private ?string $username;
+    private ?string $username = null;
 
     /**
      * @ORM\Column(type="json")
@@ -45,7 +48,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=200, unique=true)
      */
-    private ?string $email;
+    private ?string $email = null;
 
     /**
      * @ORM\Column(type="datetime_immutable", name="created_at")
@@ -68,6 +71,11 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=100, nullable=true)
      */
     private ?string $profile;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isVerified = false;
 
     public function __construct()
     {
@@ -225,6 +233,18 @@ class User implements UserInterface
     public function setProfile(?string $profile): self
     {
         $this->profile = $profile;
+
+        return $this;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
 
         return $this;
     }
