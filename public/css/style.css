@@ -432,11 +432,16 @@ h2 {
 }
 
 /*********************************************
-                LOGIN PAGE
+                LOGIN & REGISTRATION PAGE
 **********************************************/
 
+#register a {
+  text-decoration-line: underline;
+}
+
 @media (max-width: 400px) {
-  #login h1 {
+  #login h1,
+  #register h1 {
     font-size: 2rem;
   }
 }

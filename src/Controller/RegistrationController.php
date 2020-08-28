@@ -16,7 +16,7 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
 {
-    private $emailVerifier;
+    private EmailVerifier $emailVerifier;
 
     public function __construct(EmailVerifier $emailVerifier)
     {
@@ -50,10 +50,12 @@ class RegistrationController extends AbstractController
                 (new TemplatedEmail())
                     ->from(new Address('mailer@snowtricks.test', 'Snowtricks'))
                     ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
+                    ->subject('Confirmation de votre Email')
                     ->htmlTemplate('registration/confirmation_email.html.twig')
             );
             // do anything else you need here, like send an email
+            $this->addFlash('success', "Votre compte a été créé. 
+            Il reste à l'activer depuis le mail de confirmation que nous vous avons envoyé.");
 
             return $this->redirectToRoute('home');
         }
@@ -80,8 +82,8 @@ class RegistrationController extends AbstractController
         }
 
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
-        $this->addFlash('success', 'Your email address has been verified.');
+        $this->addFlash('success', 'Votre addresse mail a validée, et votre compte est activé.');
 
-        return $this->redirectToRoute('app_register');
+        return $this->redirectToRoute('tricks');
     }
 }

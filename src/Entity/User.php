@@ -15,7 +15,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @UniqueEntity(fields={"username"}, message="There is already an account with this username")
+ * @UniqueEntity(fields={"username"}, message="Il existe déjà un compte avec ce nom d'utilisateur.")
+ * @UniqueEntity(fields={"email"}, message="Ce mail est déjà utilisé par un utilisateur inscrit sur le site.")
  */
 class User implements UserInterface
 {
@@ -29,7 +30,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
-    private ?string $username;
+    private ?string $username = null;
 
     /**
      * @ORM\Column(type="json")
@@ -47,7 +48,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=200, unique=true)
      */
-    private ?string $email;
+    private ?string $email = null;
 
     /**
      * @ORM\Column(type="datetime_immutable", name="created_at")
