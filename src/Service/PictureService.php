@@ -1,36 +1,60 @@
 <?php
 
-namespace App\Service\EntityHandler;
+namespace App\Service;
 
 use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Repository\PictureRepository;
-use App\Service\ImageProcessInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 
-class PictureHandler extends AbstractEntityHandler
+class PictureService implements PictureServiceInterface
 {
     private PictureRepository $pictureRepository;
 
+    private ManagerRegistry $managerRegistry;
+
     private ImageProcessInterface $imageProcess;
+
+    private ParameterBagInterface $container;
 
     public function __construct(
         ManagerRegistry $managerRegistry,
         PictureRepository $pictureRepository,
-        ImageProcessInterface $imageProcess
+        ImageProcessInterface $imageProcess,
+        ParameterBagInterface $container
     ) {
-        parent::__construct($managerRegistry);
+        $this->managerRegistry = $managerRegistry;
         $this->pictureRepository = $pictureRepository;
         $this->imageProcess = $imageProcess;
+        $this->container = $container;
+    }
+
+    /**
+     * deletePictureFiles.
+     *
+     * Method called when a picture is deleted or updated, to delete it's pictures files.
+     */
+    public function deletePictureFiles(Picture $picture): void
+    {
+        // the same picture is multiple, corresponding to different widths, in several folders
+        $filenames = [];
+        $imagesDirectories = $this->container->get('app.images_folders_names');
+        foreach ($imagesDirectories as $value) {
+            $filenames[] = $this->container->get('app.images_directory').$value.'/'.$picture->getFilename();
+        }
+        $filesystem = new Filesystem();
+        $filesystem->remove($filenames);
     }
 
     public function delete(Trick $trick, string $pictureId): void
     {
         $picture = $this->pictureRepository->find($pictureId);
         // delete files of the delete picture
-        $this->pictureRepository->deletePictureFiles($picture);
+        $this->deletePictureFiles($picture);
         // delete picture from database
         $trick->removePicture($picture);
         $this->managerRegistry->getManager()->flush();
@@ -90,7 +114,7 @@ class PictureHandler extends AbstractEntityHandler
         // and move files in their corresponding directory named with each width
         $fullFilename = $this->imageProcess->execute($file, $filename);
         // delete files of the replaced picture
-        $this->pictureRepository->deletePictureFiles($picture);
+        $this->deletePictureFiles($picture);
         // define new file name of picture
         $picture->setFilename($fullFilename);
         // process alt

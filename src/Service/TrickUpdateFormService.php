@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Trick;
+use App\Form\AppFormFactoryInterface;
 use App\Repository\PictureRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -13,7 +14,7 @@ use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 
-class ProcessTrickUpdateForm
+class TrickUpdateFormService implements TrickUpdateFormServiceInterface
 {
     private Session $session;
 
@@ -23,19 +24,19 @@ class ProcessTrickUpdateForm
 
     private ManagerRegistry $managerRegistry;
 
-    private FormFactory $formFactory;
+    private AppFormFactoryInterface $appFormFactory;
 
     public function __construct(
         ImageProcessInterface $imageProcess,
         PictureRepository $pictureRepository,
         ManagerRegistry $managerRegistry,
-        FormFactory $formFactory
+        AppFormFactoryInterface $appFormFactory
     ) {
         $this->session = new Session(new NativeSessionStorage(), new AttributeBag());
         $this->imageProcess = $imageProcess;
         $this->pictureRepository = $pictureRepository;
         $this->managerRegistry = $managerRegistry;
-        $this->formFactory = $formFactory;
+        $this->appFormFactory = $appFormFactory;
     }
 
     public function process(FormInterface $form): void
@@ -123,7 +124,7 @@ class ProcessTrickUpdateForm
             }
         }
         $trick = $this->recoverPictures($trick);
-        $form = $this->formFactory->createUpdateTrickForm($trick);
+        $form = $this->appFormFactory->create('up-trick', $trick);
         foreach ($errors as $error) {
             $form->addError($error);
         }

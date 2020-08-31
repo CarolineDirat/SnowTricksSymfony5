@@ -2,17 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Picture;
 use App\Entity\Trick;
+use App\Entity\Video;
+use App\Form\AppFormFactoryInterface;
 use App\FormHandler\CommentFormHandler;
 use App\FormHandler\TrickFormHandler;
 use App\Repository\CommentRepository;
 use App\Service\ConstantsIni;
-use App\Service\EntityHandler\PictureHandler;
-use App\Service\EntityHandler\TrickHandler;
-use App\Service\EntityHandler\VideoHandler;
-use App\Service\FormFactory;
-use App\Service\ProcessTrickUpdateForm;
+use App\Service\PictureServiceInterface;
+use App\Service\TrickServiceInterface;
+use App\Service\TrickUpdateFormServiceInterface;
+use App\Service\VideoServiceInterface;
+use DateTimeImmutable;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,11 +26,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TrickController extends AbstractController
 {
-    private FormFactory $formFactory;
+    private AppFormFactoryInterface $appFormFactory;
 
-    public function __construct(FormFactory $formFactory)
+    public function __construct(AppFormFactoryInterface $appFormFactory)
     {
-        $this->formFactory = $formFactory;
+        $this->appFormFactory = $appFormFactory;
     }
 
     /**
@@ -42,8 +45,7 @@ class TrickController extends AbstractController
         Trick $trick,
         string $slug,
         Request $request,
-        CommentFormHandler $commentFormHandler,
-        ConstantsIni $constantsIni
+        CommentFormHandler $commentFormHandler
     ): Response {
         // check slug
         if ($slug !== $trick->getSlug()) {
@@ -53,7 +55,12 @@ class TrickController extends AbstractController
             ]);
         }
         // create comment form
-        $commentForm = $this->formFactory->createCommentForm($trick, $this->getUser());
+        $comment = new Comment();
+        $comment
+            ->setTrick($trick)
+            ->setCreatedAt(new DateTimeImmutable())
+            ->setUser($this->getUser());
+        $commentForm = $this->appFormFactory->create('ad-comment', $comment);
         // process comment form
         if ($commentFormHandler->isHandled($request, $commentForm)) {
             return $this->redirectToRoute('display_trick', [
@@ -126,13 +133,13 @@ class TrickController extends AbstractController
     public function deleteFromAJAXRequest(
         Trick $trick,
         Request $request,
-        TrickHandler $trickHandler
+        TrickServiceInterface $trickService
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         $trickName = $trick->getName();
         // 'delete-trick-token258941367' is the same value used in the template to generate the token
         if ($this->isCsrfTokenValid('delete-trick-token258941367', $data['_token'])) {
-            $trickHandler->delete($trick);
+            $trickService->delete($trick);
 
             return $this->json(
                 ['message' => 'Le trick '.$trickName.' a bien été supprimé.'],
@@ -161,12 +168,12 @@ class TrickController extends AbstractController
     public function delete(
         Trick $trick,
         Request $request,
-        TrickHandler $trickHandler
+        TrickServiceInterface $trickService
     ): Response {
         $trickName = $trick->getName();
         $submittedToken = $request->request->get('token');
         if ($this->isCsrfTokenValid('delete-trick-'.$trick->getId(), $submittedToken)) {
-            $trickHandler->delete($trick);
+            $trickService->delete($trick);
             $this->addFlash(
                 'notice',
                 'Le trick "'.$trickName.'" a bien été supprimé.'
@@ -192,7 +199,14 @@ class TrickController extends AbstractController
      */
     public function new(Request $request, TrickFormHandler $trickFormHandler): Response
     {
-        $trickForm = $this->formFactory->createTrickForm();
+        $trick = new Trick();
+        $picture = new Picture();
+        $trick->addPicture($picture);
+        $video = new Video();
+        $trick->addVideo($video);
+
+        $trickForm = $this->appFormFactory->create('ad-trick', $trick);
+
         if ($trickFormHandler->isHandled($request, $trickForm)) {
             return $this->redirectToRoute('tricks');
         }
@@ -215,7 +229,7 @@ class TrickController extends AbstractController
         Trick $trick,
         string $slug,
         Request $request,
-        ProcessTrickUpdateForm $processTrickUpdateForm
+        TrickUpdateFormServiceInterface $trickUpdateForm
     ): Response {
         // check slug
         if ($slug !== $trick->getSlug()) {
@@ -225,10 +239,10 @@ class TrickController extends AbstractController
             ]);
         }
         // trick form
-        $form = $this->formFactory->createUpdateTrickForm($trick);
+        $form = $this->appFormFactory->create('up-trick', $trick);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $processTrickUpdateForm->process($form);
+            $trickUpdateForm->process($form);
 
             return $this->redirectToRoute('display_trick', [
                     'slug' => $trick->getSlug(),
@@ -236,7 +250,7 @@ class TrickController extends AbstractController
                 ]);
         }
         if ($form->isSubmitted()) {
-            $form = $processTrickUpdateForm->errorsHandler($form);
+            $form = $trickUpdateForm->errorsHandler($form);
         }
 
         return $this->render('trick/update.html.twig', [
@@ -270,11 +284,11 @@ class TrickController extends AbstractController
     public function updateFirstImage(
         Trick $trick,
         Request $request,
-        TrickHandler $trickHandler
+        TrickServiceInterface $trickService
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         if ($this->isCsrfTokenValid('update-first-image-token-'.$trick->getUuid(), $data['_token'])) {
-            $firstPicture = $trickHandler->updateFirstImage($trick, $data['pictureId']);
+            $firstPicture = $trickService->updateFirstImage($trick, $data['pictureId']);
 
             return $this->json(
                 [
@@ -305,11 +319,11 @@ class TrickController extends AbstractController
     public function deleteFirstImage(
         Trick $trick,
         Request $request,
-        TrickHandler $trickHandler
+        TrickServiceInterface $trickService
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         if ($this->isCsrfTokenValid('delete-first-image-token-'.$trick->getUuid(), $data['_token'])) {
-            $trickHandler->deleteFirstImage($trick);
+            $trickService->deleteFirstImage($trick);
 
             return $this->json(
                 [
@@ -340,7 +354,7 @@ class TrickController extends AbstractController
     public function updateVideo(
         Trick $trick,
         Request $request,
-        VideoHandler $videoHandler
+        VideoServiceInterface $videoService
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         if ('' === $data['code']) {
@@ -351,7 +365,7 @@ class TrickController extends AbstractController
             );
         }
         if ($this->isCsrfTokenValid('update-video-token-'.$trick->getUuid(), $data['_token'])) {
-            $video = $videoHandler->update($data);
+            $video = $videoService->update($data);
 
             return $this->json(
                 [
@@ -382,12 +396,12 @@ class TrickController extends AbstractController
     public function deleteVideo(
         Trick $trick,
         Request $request,
-        VideoHandler $videoHandler
+        VideoServiceInterface $videoService
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         if ($this->isCsrfTokenValid('delete-video-token-'.$trick->getUuid(), $data['_token'])) {
             $videoId = $data['videoId'];
-            $videoHandler->delete($trick, $videoId);
+            $videoService->delete($trick, $videoId);
 
             return $this->json(
                 [
@@ -416,11 +430,11 @@ class TrickController extends AbstractController
     public function updateName(
         Trick $trick,
         Request $request,
-        TrickHandler $trickHandler
+        TrickServiceInterface $trickService
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         if ($this->isCsrfTokenValid('update-name-token-'.$trick->getUuid(), $data['_token'])) {
-            $name = $trickHandler->updateName($trick, $data['newName']);
+            $name = $trickService->updateName($trick, $data['newName']);
 
             return $this->json(
                 [
@@ -451,11 +465,11 @@ class TrickController extends AbstractController
         Trick $trick,
         Picture $picture,
         Request $request,
-        PictureHandler $pictureHandler
+        PictureServiceInterface $pictureService
     ): JsonResponse {
         $token = $request->request->get('token');
         if ($this->isCsrfTokenValid('update-picture-token-'.$picture->getId(), $token)) {
-            $message = $pictureHandler->isDataPictureValid($request);
+            $message = $pictureService->isDataPictureValid($request);
             if (!empty($message)) {
                 return $this->json(
                     ['message' => $message],
@@ -463,7 +477,7 @@ class TrickController extends AbstractController
                     ['Content-Type' => 'application/json']
                 );
             }
-            $result = $pictureHandler->update($trick, $picture, $request);
+            $result = $pictureService->update($trick, $picture, $request);
             if (empty($result)) {
                 return $this->json(
                     ['message' => 'Echec de l\'upload.'],
@@ -502,12 +516,12 @@ class TrickController extends AbstractController
     public function deletePicture(
         Trick $trick,
         Request $request,
-        PictureHandler $pictureHandler
+        PictureServiceInterface $pictureService
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         $pictureId = $data['pictureId'];
         if ($this->isCsrfTokenValid('delete-picture-token-'.$pictureId, $data['_token'])) {
-            $pictureHandler->delete($trick, $pictureId);
+            $pictureService->delete($trick, $pictureId);
 
             return $this->json(
                 [
