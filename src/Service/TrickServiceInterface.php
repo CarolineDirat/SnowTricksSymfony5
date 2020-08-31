@@ -7,6 +7,8 @@ use App\Entity\Trick;
 
 interface TrickServiceInterface
 {
+    public function deletePicturesFiles(Trick $trick): void;
+
     public function delete(Trick $trick): void;
 
     public function deleteFirstImage(Trick $trick): void;

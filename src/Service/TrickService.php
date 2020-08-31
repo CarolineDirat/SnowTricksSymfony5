@@ -6,6 +6,8 @@ use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Repository\TrickRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 class TrickService implements TrickServiceInterface
 {
@@ -13,16 +15,41 @@ class TrickService implements TrickServiceInterface
 
     private ManagerRegistry $managerRegistry;
 
-    public function __construct(ManagerRegistry $managerRegistry, TrickRepository $trickRepository)
-    {
+    private ParameterBagInterface $container;
+
+    public function __construct(
+        ManagerRegistry $managerRegistry,
+        TrickRepository $trickRepository,
+        ParameterBagInterface $container
+    ) {
         $this->managerRegistry = $managerRegistry;
         $this->trickRepository = $trickRepository;
+        $this->container = $container;
+    }
+
+    /**
+     * deletePicturesFiles
+     * Method called when a trick is delete, to delete it's pictures files.
+     */
+    public function deletePicturesFiles(Trick $trick): void
+    {
+        $pictures = $trick->getPictures();
+        $filenames = [];
+        $imagesDirectories = $this->container->get('app.images_folders_names');
+        // the same picture is multiple, corresponding to different widths, in several folders
+        foreach ($imagesDirectories as $value) {
+            foreach ($pictures as $picture) {
+                $filenames[] = $this->container->get('app.images_directory').$value.'/'.$picture->getFilename();
+            }
+        }
+        $filesystem = new Filesystem();
+        $filesystem->remove($filenames);
     }
 
     public function delete(Trick $trick): void
     {
         $entityManager = $this->managerRegistry->getManager();
-        $this->trickRepository->deletePicturesFiles($trick);
+        $this->deletePicturesFiles($trick);
         $entityManager->remove($trick);
         $entityManager->flush();
     }

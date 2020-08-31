@@ -6,9 +6,6 @@ use App\Entity\Trick;
 use App\Service\ConstantsIni;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Ramsey\Uuid\Uuid;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * @method Trick|null find($id, $lockMode = null, $lockVersion = null)
@@ -20,18 +17,14 @@ class TrickRepository extends ServiceEntityRepository
 {
     private array $constants;
 
-    private ParameterBagInterface $container;
-
     private CommentRepository $commentRepository;
 
     public function __construct(
         ManagerRegistry $registry,
-        ParameterBagInterface $container,
         ConstantsIni $constantsIni,
         CommentRepository $commentRepository
     ) {
         parent::__construct($registry, Trick::class);
-        $this->container = $container;
         $this->constants = $constantsIni->getConstantsIni();
         $this->commentRepository = $commentRepository;
     }
@@ -154,25 +147,6 @@ class TrickRepository extends ServiceEntityRepository
         }
 
         return $trick;
-    }
-
-    /**
-     * deletePicturesFiles
-     * Method called when a trick is delete, to delete it's pictures files.
-     */
-    public function deletePicturesFiles(Trick $trick): void
-    {
-        $pictures = $trick->getPictures();
-        $filenames = [];
-        $imagesDirectories = $this->container->get('app.images_folders_names');
-        // the same picture is multiple, corresponding to different widths, in several folders
-        foreach ($imagesDirectories as $value) {
-            foreach ($pictures as $picture) {
-                $filenames[] = $this->container->get('app.images_directory').$value.'/'.$picture->getFilename();
-            }
-        }
-        $filesystem = new Filesystem();
-        $filesystem->remove($filenames);
     }
 
     // /**
