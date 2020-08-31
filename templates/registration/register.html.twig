@@ -19,9 +19,9 @@
             {{ form_start(registrationForm, {'attr': {'class': 'text-center'}}) }}
                 {{ form_row(registrationForm.username, {'label': 'Nom d\'utilisateur :'}) }}
                 {{ form_row(registrationForm.email) }}
-                {{ form_row(registrationForm.plainPassword, {
-                    label: 'Mot de passe'
-                }) }}
+                {{ form_label(registrationForm.plainPassword, 'Mot de passe') }}
+                <small class="d-flex col-12 text-center">Au moins 6 caractères dont 1 chiffre et 1 majuscule.</small>
+                {{ form_widget(registrationForm.plainPassword) }}
 
                 <button type="submit" class="btn btn-primary mt-4">Créer mon compte</button>
             {{ form_end(registrationForm) }}
