@@ -12,8 +12,8 @@ use App\FormHandler\TrickFormHandler;
 use App\Repository\CommentRepository;
 use App\Service\ConstantsIni;
 use App\Service\PictureServiceInterface;
-use App\Service\ProcessTrickUpdateForm;
 use App\Service\TrickServiceInterface;
+use App\Service\TrickUpdateFormServiceInterface;
 use App\Service\VideoServiceInterface;
 use DateTimeImmutable;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
@@ -229,7 +229,7 @@ class TrickController extends AbstractController
         Trick $trick,
         string $slug,
         Request $request,
-        ProcessTrickUpdateForm $processTrickUpdateForm
+        TrickUpdateFormServiceInterface $trickUpdateForm
     ): Response {
         // check slug
         if ($slug !== $trick->getSlug()) {
@@ -242,7 +242,7 @@ class TrickController extends AbstractController
         $form = $this->appFormFactory->create('up-trick', $trick);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $processTrickUpdateForm->process($form);
+            $trickUpdateForm->process($form);
 
             return $this->redirectToRoute('display_trick', [
                     'slug' => $trick->getSlug(),
@@ -250,7 +250,7 @@ class TrickController extends AbstractController
                 ]);
         }
         if ($form->isSubmitted()) {
-            $form = $processTrickUpdateForm->errorsHandler($form);
+            $form = $trickUpdateForm->errorsHandler($form);
         }
 
         return $this->render('trick/update.html.twig', [

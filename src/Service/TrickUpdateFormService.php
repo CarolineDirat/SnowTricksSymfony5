@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 
-class ProcessTrickUpdateForm
+class TrickUpdateFormService implements TrickUpdateFormServiceInterface
 {
     private Session $session;
 
