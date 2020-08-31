@@ -30,7 +30,7 @@ class ResetPasswordRequestRepository extends ServiceEntityRepository implements 
         DateTimeInterface $expiresAt,
         string $selector,
         string $hashedToken
-): ResetPasswordRequestInterface {
+    ): ResetPasswordRequestInterface {
         return new ResetPasswordRequest($user, $expiresAt, $selector, $hashedToken);
     }
 }
