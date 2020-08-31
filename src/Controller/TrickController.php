@@ -11,10 +11,10 @@ use App\FormHandler\CommentFormHandler;
 use App\FormHandler\TrickFormHandler;
 use App\Repository\CommentRepository;
 use App\Service\ConstantsIni;
-use App\Service\EntityHandler\PictureHandler;
-use App\Service\EntityHandler\TrickHandler;
-use App\Service\EntityHandler\VideoHandler;
+use App\Service\PictureServiceInterface;
 use App\Service\ProcessTrickUpdateForm;
+use App\Service\TrickServiceInterface;
+use App\Service\VideoServiceInterface;
 use DateTimeImmutable;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -133,13 +133,13 @@ class TrickController extends AbstractController
     public function deleteFromAJAXRequest(
         Trick $trick,
         Request $request,
-        TrickHandler $trickHandler
+        TrickServiceInterface $trickService
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         $trickName = $trick->getName();
         // 'delete-trick-token258941367' is the same value used in the template to generate the token
         if ($this->isCsrfTokenValid('delete-trick-token258941367', $data['_token'])) {
-            $trickHandler->delete($trick);
+            $trickService->delete($trick);
 
             return $this->json(
                 ['message' => 'Le trick '.$trickName.' a bien été supprimé.'],
@@ -168,12 +168,12 @@ class TrickController extends AbstractController
     public function delete(
         Trick $trick,
         Request $request,
-        TrickHandler $trickHandler
+        TrickServiceInterface $trickService
     ): Response {
         $trickName = $trick->getName();
         $submittedToken = $request->request->get('token');
         if ($this->isCsrfTokenValid('delete-trick-'.$trick->getId(), $submittedToken)) {
-            $trickHandler->delete($trick);
+            $trickService->delete($trick);
             $this->addFlash(
                 'notice',
                 'Le trick "'.$trickName.'" a bien été supprimé.'
@@ -284,11 +284,11 @@ class TrickController extends AbstractController
     public function updateFirstImage(
         Trick $trick,
         Request $request,
-        TrickHandler $trickHandler
+        TrickServiceInterface $trickService
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         if ($this->isCsrfTokenValid('update-first-image-token-'.$trick->getUuid(), $data['_token'])) {
-            $firstPicture = $trickHandler->updateFirstImage($trick, $data['pictureId']);
+            $firstPicture = $trickService->updateFirstImage($trick, $data['pictureId']);
 
             return $this->json(
                 [
@@ -319,11 +319,11 @@ class TrickController extends AbstractController
     public function deleteFirstImage(
         Trick $trick,
         Request $request,
-        TrickHandler $trickHandler
+        TrickServiceInterface $trickService
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         if ($this->isCsrfTokenValid('delete-first-image-token-'.$trick->getUuid(), $data['_token'])) {
-            $trickHandler->deleteFirstImage($trick);
+            $trickService->deleteFirstImage($trick);
 
             return $this->json(
                 [
@@ -354,7 +354,7 @@ class TrickController extends AbstractController
     public function updateVideo(
         Trick $trick,
         Request $request,
-        VideoHandler $videoHandler
+        VideoServiceInterface $videoService
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         if ('' === $data['code']) {
@@ -365,7 +365,7 @@ class TrickController extends AbstractController
             );
         }
         if ($this->isCsrfTokenValid('update-video-token-'.$trick->getUuid(), $data['_token'])) {
-            $video = $videoHandler->update($data);
+            $video = $videoService->update($data);
 
             return $this->json(
                 [
@@ -396,12 +396,12 @@ class TrickController extends AbstractController
     public function deleteVideo(
         Trick $trick,
         Request $request,
-        VideoHandler $videoHandler
+        VideoServiceInterface $videoService
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         if ($this->isCsrfTokenValid('delete-video-token-'.$trick->getUuid(), $data['_token'])) {
             $videoId = $data['videoId'];
-            $videoHandler->delete($trick, $videoId);
+            $videoService->delete($trick, $videoId);
 
             return $this->json(
                 [
@@ -430,11 +430,11 @@ class TrickController extends AbstractController
     public function updateName(
         Trick $trick,
         Request $request,
-        TrickHandler $trickHandler
+        TrickServiceInterface $trickService
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         if ($this->isCsrfTokenValid('update-name-token-'.$trick->getUuid(), $data['_token'])) {
-            $name = $trickHandler->updateName($trick, $data['newName']);
+            $name = $trickService->updateName($trick, $data['newName']);
 
             return $this->json(
                 [
@@ -465,11 +465,11 @@ class TrickController extends AbstractController
         Trick $trick,
         Picture $picture,
         Request $request,
-        PictureHandler $pictureHandler
+        PictureServiceInterface $pictureService
     ): JsonResponse {
         $token = $request->request->get('token');
         if ($this->isCsrfTokenValid('update-picture-token-'.$picture->getId(), $token)) {
-            $message = $pictureHandler->isDataPictureValid($request);
+            $message = $pictureService->isDataPictureValid($request);
             if (!empty($message)) {
                 return $this->json(
                     ['message' => $message],
@@ -477,7 +477,7 @@ class TrickController extends AbstractController
                     ['Content-Type' => 'application/json']
                 );
             }
-            $result = $pictureHandler->update($trick, $picture, $request);
+            $result = $pictureService->update($trick, $picture, $request);
             if (empty($result)) {
                 return $this->json(
                     ['message' => 'Echec de l\'upload.'],
@@ -516,12 +516,12 @@ class TrickController extends AbstractController
     public function deletePicture(
         Trick $trick,
         Request $request,
-        PictureHandler $pictureHandler
+        PictureServiceInterface $pictureService
     ): JsonResponse {
         $data = json_decode($request->getContent(), true);
         $pictureId = $data['pictureId'];
         if ($this->isCsrfTokenValid('delete-picture-token-'.$pictureId, $data['_token'])) {
-            $pictureHandler->delete($trick, $pictureId);
+            $pictureService->delete($trick, $pictureId);
 
             return $this->json(
                 [

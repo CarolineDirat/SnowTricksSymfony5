@@ -1,19 +1,21 @@
 <?php
 
-namespace App\Service\EntityHandler;
+namespace App\Service;
 
 use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Repository\TrickRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
-class TrickHandler extends AbstractEntityHandler
+class TrickService implements TrickServiceInterface
 {
     private TrickRepository $trickRepository;
 
+    private ManagerRegistry $managerRegistry;
+
     public function __construct(ManagerRegistry $managerRegistry, TrickRepository $trickRepository)
     {
-        parent::__construct($managerRegistry);
+        $this->managerRegistry = $managerRegistry;
         $this->trickRepository = $trickRepository;
     }
 

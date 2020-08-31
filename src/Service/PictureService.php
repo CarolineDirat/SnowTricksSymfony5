@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Service\EntityHandler;
+namespace App\Service;
 
 use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Repository\PictureRepository;
-use App\Service\ImageProcessInterface;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 
-class PictureHandler extends AbstractEntityHandler
+class PictureService implements PictureServiceInterface
 {
     private PictureRepository $pictureRepository;
+
+    private ManagerRegistry $managerRegistry;
 
     private ImageProcessInterface $imageProcess;
 
@@ -21,7 +22,7 @@ class PictureHandler extends AbstractEntityHandler
         PictureRepository $pictureRepository,
         ImageProcessInterface $imageProcess
     ) {
-        parent::__construct($managerRegistry);
+        $this->managerRegistry = $managerRegistry;
         $this->pictureRepository = $pictureRepository;
         $this->imageProcess = $imageProcess;
     }
