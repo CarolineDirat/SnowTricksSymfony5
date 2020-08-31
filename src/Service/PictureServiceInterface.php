@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 interface PictureServiceInterface
 {
+    public function deletePictureFiles(Picture $picture): void;
+
     public function delete(Trick $trick, string $pictureId): void;
 
     /**
