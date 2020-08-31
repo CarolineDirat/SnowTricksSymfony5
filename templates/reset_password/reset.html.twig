@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réinitialisation de mot de passe{% endblock %}
+
+{% block body %}
+    <section class="container">
+        <div id="reset-password-reset" class="row justify-content-center">
+            <h1 class="col-12 text-center mt-4 mt-sm-5">Réinitialisez <br> votre mot de passe</h1>
+
+            {{ form_start(resetForm, {'attr': {'class': 'mt-4 mt-sm-5 text-center'}}) }}
+                <small class="d-flex mb-2">Au moins 6 caractères dont 1 chiffre et 1 majuscule.</small>
+                {{ form_row(resetForm.plainPassword) }}
+                <button class="btn btn-primary">Réinitialisez le mot de passe</button>
+            {{ form_end(resetForm) }}
+
+        </div>
+    </section>
+{% endblock %}
