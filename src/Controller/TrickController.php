@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Picture;
 use App\Entity\Trick;
+use App\Entity\Video;
+use App\Form\AppFormFactoryInterface;
 use App\FormHandler\CommentFormHandler;
 use App\FormHandler\TrickFormHandler;
 use App\Repository\CommentRepository;
@@ -11,8 +14,8 @@ use App\Service\ConstantsIni;
 use App\Service\EntityHandler\PictureHandler;
 use App\Service\EntityHandler\TrickHandler;
 use App\Service\EntityHandler\VideoHandler;
-use App\Service\FormFactory;
 use App\Service\ProcessTrickUpdateForm;
+use DateTimeImmutable;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,11 +26,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class TrickController extends AbstractController
 {
-    private FormFactory $formFactory;
+    private AppFormFactoryInterface $appFormFactory;
 
-    public function __construct(FormFactory $formFactory)
+    public function __construct(AppFormFactoryInterface $appFormFactory)
     {
-        $this->formFactory = $formFactory;
+        $this->appFormFactory = $appFormFactory;
     }
 
     /**
@@ -42,8 +45,7 @@ class TrickController extends AbstractController
         Trick $trick,
         string $slug,
         Request $request,
-        CommentFormHandler $commentFormHandler,
-        ConstantsIni $constantsIni
+        CommentFormHandler $commentFormHandler
     ): Response {
         // check slug
         if ($slug !== $trick->getSlug()) {
@@ -53,7 +55,12 @@ class TrickController extends AbstractController
             ]);
         }
         // create comment form
-        $commentForm = $this->formFactory->createCommentForm($trick, $this->getUser());
+        $comment = new Comment();
+        $comment
+            ->setTrick($trick)
+            ->setCreatedAt(new DateTimeImmutable())
+            ->setUser($this->getUser());
+        $commentForm = $this->appFormFactory->create('ad-comment', $comment);
         // process comment form
         if ($commentFormHandler->isHandled($request, $commentForm)) {
             return $this->redirectToRoute('display_trick', [
@@ -192,7 +199,14 @@ class TrickController extends AbstractController
      */
     public function new(Request $request, TrickFormHandler $trickFormHandler): Response
     {
-        $trickForm = $this->formFactory->createTrickForm();
+        $trick = new Trick();
+        $picture = new Picture();
+        $trick->addPicture($picture);
+        $video = new Video();
+        $trick->addVideo($video);
+
+        $trickForm = $this->appFormFactory->create('ad-trick', $trick);
+
         if ($trickFormHandler->isHandled($request, $trickForm)) {
             return $this->redirectToRoute('tricks');
         }
@@ -225,7 +239,7 @@ class TrickController extends AbstractController
             ]);
         }
         // trick form
-        $form = $this->formFactory->createUpdateTrickForm($trick);
+        $form = $this->appFormFactory->create('up-trick', $trick);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $processTrickUpdateForm->process($form);
