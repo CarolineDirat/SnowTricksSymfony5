@@ -432,11 +432,24 @@ h2 {
 }
 
 /*********************************************
-                LOGIN & REGISTRATION PAGE
+  LOGIN - REGISTRATION PAGE - FORGOT PASSWORD
 **********************************************/
 
 #register a {
   text-decoration-line: underline;
+}
+
+#reset-password-reset h1 {
+  font-size: 2rem;
+}
+
+@media (max-width: 768px) {
+  #reset-password-request h1 {
+    font-size: 2rem;
+  }
+  #reset-password-reset h1 {
+    font-size: 1.5rem;
+  }
 }
 
 @media (max-width: 400px) {
