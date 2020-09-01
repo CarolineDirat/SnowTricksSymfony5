@@ -35,7 +35,7 @@ class TrickService implements TrickServiceInterface
     {
         $pictures = $trick->getPictures();
         $filenames = [];
-        $imagesDirectories = $this->container->get('app.images_folders_names');
+        $imagesDirectories = $this->container->get('app.images_folders_widths');
         // the same picture is multiple, corresponding to different widths, in several folders
         foreach ($imagesDirectories as $value) {
             foreach ($pictures as $picture) {
