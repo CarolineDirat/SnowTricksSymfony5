@@ -42,7 +42,7 @@ class PictureService implements PictureServiceInterface
     {
         // the same picture is multiple, corresponding to different widths, in several folders
         $filenames = [];
-        $imagesDirectories = $this->container->get('app.images_folders_widths');
+        $imagesDirectories = $this->container->get('app.pictures_folders_names');
         foreach ($imagesDirectories as $value) {
             $filenames[] = $this->container->get('app.images_directory').$value.'/'.$picture->getFilename();
         }
