@@ -64,7 +64,7 @@ class TrickUpdateFormService implements TrickUpdateFormServiceInterface
                 // Resize the picture file to severals widths (cf service.yaml),
                 // and move files in their corresponding directory named with each width
                 try {
-                    $fullFilename = $this->imageProcess->execute($file, $filename);
+                    $fullFilename = $this->imageProcess->executeForPictures($file, $filename);
                     $picture->setFilename($fullFilename)->setTrick($trick);
                     $trick->addPicture($picture);
                 } catch (FileException $e) {

@@ -42,7 +42,7 @@ class PictureService implements PictureServiceInterface
     {
         // the same picture is multiple, corresponding to different widths, in several folders
         $filenames = [];
-        $imagesDirectories = $this->container->get('app.images_folders_names');
+        $imagesDirectories = $this->container->get('app.pictures_folders_names');
         foreach ($imagesDirectories as $value) {
             $filenames[] = $this->container->get('app.images_directory').$value.'/'.$picture->getFilename();
         }
@@ -112,7 +112,7 @@ class PictureService implements PictureServiceInterface
         $filename = uniqid($trick->getSlug().'-', true); // file name without extension
         // Resize the picture file to severals widths (cf service.yaml),
         // and move files in their corresponding directory named with each width
-        $fullFilename = $this->imageProcess->execute($file, $filename);
+        $fullFilename = $this->imageProcess->executeForPictures($file, $filename);
         // delete files of the replaced picture
         $this->deletePictureFiles($picture);
         // define new file name of picture

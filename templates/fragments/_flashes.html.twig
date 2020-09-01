@@ -1,0 +1,20 @@
+{% for message in app.flashes('notice') %}
+	<div class="row justify-content-center">
+		<div class="alert alert-primary my-2 font-weight-bold col-11 col-sm-11 col-md-8 col-xl-4 text-center">
+			{{ message }}
+		</div>
+	</div>
+{% endfor %}
+{% for message in app.flashes('success') %}
+	<div class="row justify-content-center">
+		<div class="alert alert-primary my-2 font-weight-bold col-11 col-sm-11 col-md-8 col-xl-4 text-center">
+			{{ message }}
+		</div>
+	</div>
+{% endfor %}
+{% for message in app.flashes('upload') %}
+	<div class="alert alert-warning my-2 font-weight-bold row text-center">
+		{{ message }}
+		Vous pouvez réessayer avec un autre fichier.
+	</div>
+{% endfor %}

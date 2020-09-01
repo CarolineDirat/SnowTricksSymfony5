@@ -20,6 +20,7 @@ class AppFormFactory implements AppFormFactoryInterface
             'ad-comment' => CommentType::class,
             'ad-trick' => TrickType::class,
             'up-trick' => TrickType::class,
+            'up-profile' => ProfileType::class,
         ];
 
         $formType = $formTypes[$name];

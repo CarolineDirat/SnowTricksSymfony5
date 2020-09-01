@@ -4,26 +4,21 @@ namespace App\Service;
 
 use App\Entity\Picture;
 use App\Entity\Trick;
-use App\Repository\TrickRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
 class TrickService implements TrickServiceInterface
 {
-    private TrickRepository $trickRepository;
-
     private ManagerRegistry $managerRegistry;
 
     private ParameterBagInterface $container;
 
     public function __construct(
         ManagerRegistry $managerRegistry,
-        TrickRepository $trickRepository,
         ParameterBagInterface $container
     ) {
         $this->managerRegistry = $managerRegistry;
-        $this->trickRepository = $trickRepository;
         $this->container = $container;
     }
 
@@ -35,7 +30,7 @@ class TrickService implements TrickServiceInterface
     {
         $pictures = $trick->getPictures();
         $filenames = [];
-        $imagesDirectories = $this->container->get('app.images_folders_names');
+        $imagesDirectories = $this->container->get('app.pictures_folders_names');
         // the same picture is multiple, corresponding to different widths, in several folders
         foreach ($imagesDirectories as $value) {
             foreach ($pictures as $picture) {

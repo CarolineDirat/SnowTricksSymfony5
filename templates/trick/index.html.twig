@@ -7,34 +7,37 @@
 {% block body %}
 	<section id="trick-read" class="container">
 		{% for message in app.flashes('notice') %}
-        <div class="row justify-content-center">
-            <div class="alert alert-primary my-4 font-weight-bold col-11 col-sm-11 col-md-8 col-xl-4 text-center">
-                {{ message }}
-            </div>
-        </div>
-        {% endfor %}
+			<div class="row justify-content-center">
+				<div class="alert alert-primary my-4 font-weight-bold col-11 col-sm-11 col-md-8 col-xl-4 text-center">
+					{{ message }}
+				</div>
+			</div>
+		{% endfor %}
 		{# trick name and first picture #}
 		<div class="row d-flex">
 			<h1 class="col-12 text-center">{{ trick.name|upper }}</h1>
 			{% if app.user %}
-			<div class="col text-right">
-				<button id="scroll-to-comments" class="btn btn-primary btn-sm"> Aller aux commentaires <i class="fas fa-level-down-alt"></i> </button>
-			</div>
-			<div id="trick-read-icons" class="col-12 d-inline-flex justify-content-end">
-				<a href="{{ path('trick_update', {slug: trick.slug, uuid: trick.uuid}) }}" class="btn btn-outline-primary mr-2" data-toggle="tooltip" data-placement="bottom" title="Modifier le trick">
-					<i class="fas fa-pencil-alt"></i>
-				</a>
-				<button class="btn btn-outline-primary mr-2" data-delete data-trick="{{ trick.name }}" data-toggle="modal" data-target="#modalDeleteTrick" data-toggle="tooltip" data-placement="bottom" title="Supprimer le trick">
-					<i class="fas fa-trash-alt"></i>
-				</button>
-			</div>
-			{% endif %}	
+				<div class="col text-right">
+					<button id="scroll-to-comments" class="btn btn-primary btn-sm">
+						Aller aux commentaires
+						<i class="fas fa-level-down-alt"></i>
+					</button>
+				</div>
+				<div id="trick-read-icons" class="col-12 d-inline-flex justify-content-end">
+					<a href="{{ path('trick_update', {slug: trick.slug, uuid: trick.uuid}) }}" class="btn btn-outline-primary mr-2" data-toggle="tooltip" data-placement="bottom" title="Modifier le trick">
+						<i class="fas fa-pencil-alt"></i>
+					</a>
+					<button class="btn btn-outline-primary mr-2" data-delete data-trick="{{ trick.name }}" data-toggle="modal" data-target="#modalDeleteTrick" data-toggle="tooltip" data-placement="bottom" title="Supprimer le trick">
+						<i class="fas fa-trash-alt"></i>
+					</button>
+				</div>
+			{% endif %}
 			{% set firstPicture = trick.firstPicture ? trick.firstPicture.filename : (trick.pictures|length > 0 ? trick.pictures[0].filename : 'default.jpg') %}
 			{% set firstPictureAlt = trick.firstPicture ? trick.firstPicture.alt : null %}
 			<picture class="col-12 d-inline-flex justify-content-center">
 				<source srcset="{{ asset('uploads/images/540/' ~ firstPicture) }}" media="(max-width: 578px)">
 				<source srcset="{{ asset('uploads/images/720/' ~ firstPicture) }}" media="(max-width: 800px)">
-				<img src="{{ asset('uploads/images/960/' ~ firstPicture) }}" class="img-fluid" alt="{{ firstPicture }}  photo pour illustrer le trick de snowboard {{ trick.name }}"/>
+				<img src="{{ asset('uploads/images/960/' ~ firstPicture) }}" class="img-fluid" alt="{{ firstPicture }} photo pour illustrer le trick de snowboard {{ trick.name }}"/>
 			</picture>
 		</div>
 		{# Modal Page to delete the trick #}
@@ -44,24 +47,27 @@
 					<div class="modal-header">
 						<h5 class="modal-title" id="modalDeleteTrickLabel">Attention ! Cette action est définitive !</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
+							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
 					<div class="modal-body">
-						Êtes-vous sûr.e de vouloir supprimer le trick <span class="font-weight-bold">{{ trick.name }}</span> ?
+						Êtes-vous sûr.e de vouloir supprimer le trick
+						<span class="font-weight-bold">{{ trick.name }}</span>
+						?
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
 						<form action="{{ url('trick_delete', {uuid: trick.uuid}) }}" method="POST">
 							<input type="hidden" name="token" value="{{ csrf_token('delete-trick-'~ trick.id) }}"/>
-    						<button type="submit" class="btn btn-primary">Supprimer</button>
+							<button type="submit" class="btn btn-primary">Supprimer</button>
 						</form>
 					</div>
 				</div>
 			</div>
 		</div>
 		{# pictures and videos #}
-		<div class="row d-flex">
+		<div
+			class="row d-flex">
 			{# width > 540 px #}
 			{% if trick.pictures|length > 0 or trick.videos|length > 0 %}
 				<h2 class="d-none d-md-block col-sm-12 text-center">{{ trick.name }}</h2>
@@ -79,11 +85,11 @@
 			{# width < 540px #}
 			<div class="d-block d-md-none col-12 text-center mt-5">
 				{% if trick.pictures|length > 0 %}
-				<p>
-					<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapsePictures" aria-expanded="false" aria-controls="collapsePictures">
-						Photos
-					</button>
-				</p>
+					<p>
+						<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapsePictures" aria-expanded="false" aria-controls="collapsePictures">
+							Photos
+						</button>
+					</p>
 				{% endif %}
 				<div class="collapse mb-4" id="collapsePictures">
 					{% for picture in trick.pictures %}
@@ -93,11 +99,11 @@
 			</div>
 			<div class="d-block d-md-none col-12 text-center">
 				{% if trick.videos|length > 0 %}
-				<p>
-					<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseVideos" aria-expanded="false" aria-controls="collapseVideos">
-						Vidéos
-					</button>
-				</p>
+					<p>
+						<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseVideos" aria-expanded="false" aria-controls="collapseVideos">
+							Vidéos
+						</button>
+					</p>
 				{% endif %}
 				<div class="collapse" id="collapseVideos">
 					{% for video in trick.videos %}
@@ -123,7 +129,8 @@
 				</p>
 			</div>
 		</div>
-		<hr class="mb-5">
+		<hr
+		class="mb-5">
 		{# comments #}
 		{% if app.user %}
 			{{ form_start(form, {'method': 'POST'}) }}
@@ -147,7 +154,7 @@
 					<div class="row no-gutters">
 						{% set filename = comment.user.profile ? comment.user.profile : 'default.jpg' %}
 						<div class="col-2 col-lg-1 pt-3">
-							<img src="{{ asset('uploads/images/profile/' ~ filename) }}" class="card-img" alt="Image de profil de {{ comment.user.username }}">
+							<img src="{{ asset('uploads/images/100/' ~ filename) }}" class="card-img" alt="Image de profil de {{ comment.user.username }}">
 						</div>
 						<div class="col-10 col-lg-11">
 							<div class="card-body">

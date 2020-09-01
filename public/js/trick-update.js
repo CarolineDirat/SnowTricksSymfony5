@@ -262,12 +262,6 @@ $(function () {
     //                                  UPDATE PICTURE
     //////////////////////////////////////////////////////////////////////////////////////////
 
-    // FILE BROWSE : customizing the strings with HTML
-    var translateBrowse = function() {
-        $('label.custom-file-label').attr('data-browse', 'Parcourir mes fichiers');
-    };
-    translateBrowse();
-
     // functions to display new picture
     let updatePicture = function(data, id) {
         $(id)
@@ -349,20 +343,6 @@ $(function () {
             alert(data.responseJSON.message);
         });
     });
-
-     //////////////////////////////////////////////////////////////////////////////////////////
-    //                   DISPLAY CHOSEN FILE NAME IN IT'S INPUT TAG
-    //////////////////////////////////////////////////////////////////////////////////////////
-
-    let displayFilename = function () {
-        $('.custom-file-input').change(function () {
-            let $label = $(this).next();
-            $.each($(this.files), function (index, file) {
-                $label.text(file.name);
-            });
-        });
-    };
-    displayFilename();
 
     //////////////////////////////////////////////////////////////////////////////////////////
     //                                  ADD PICTURE FORM IN THE RIGHT PLACE ;)

@@ -3,7 +3,7 @@
 namespace App\FormHandler;
 
 use App\Entity\Trick;
-use App\Service\ImageProcess;
+use App\Service\ImageProcessInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -17,7 +17,7 @@ class TrickFormHandler extends AbstractFormHandler
 {
     private ManagerRegistry $managerRegistry;
 
-    private ImageProcess $imageProcess;
+    private ImageProcessInterface $imageProcess;
 
     private AsciiSlugger $slugger;
 
@@ -25,7 +25,7 @@ class TrickFormHandler extends AbstractFormHandler
 
     public function __construct(
         ManagerRegistry $managerRegistry,
-        ImageProcess $imageProcess
+        ImageProcessInterface $imageProcess
     ) {
         $this->managerRegistry = $managerRegistry;
         $this->slugger = new AsciiSlugger();
@@ -61,7 +61,7 @@ class TrickFormHandler extends AbstractFormHandler
                 // Resize the picture file to severals widths (cf service.yaml),
                 // and move files in their corresponding directory named with each width
                 try {
-                    $fullFilename = $this->getImageProcess()->execute($file, $filename);
+                    $fullFilename = $this->imageProcess->executeForPictures($file, $filename);
                     $picture->setFilename($fullFilename)->setTrick($trick);
                     $trick->addPicture($picture);
                 } catch (FileException $e) {
@@ -94,14 +94,6 @@ class TrickFormHandler extends AbstractFormHandler
     public function getSlugger(): SluggerInterface
     {
         return $this->slugger;
-    }
-
-    /**
-     * Get the value of imageProcess.
-     */
-    public function getImageProcess(): ImageProcess
-    {
-        return $this->imageProcess;
     }
 
     /**

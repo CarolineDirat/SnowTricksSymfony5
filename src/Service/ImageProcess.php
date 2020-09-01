@@ -15,21 +15,44 @@ class ImageProcess implements ImageProcessInterface
         'webp' => 'image/webp',
     ];
 
+    private ParameterBagInterface $parameterBag;
+
     /**
      * Different widths of images, corresponding to directories to move them.
      *
      * @var int[]
      */
-    private array $widths;
-
-    private ParameterBagInterface $parameterBag;
+    private array $widths = [];
 
     private ?string $type = null;
 
-    public function __construct(ParameterBagInterface $parameterBag, array $widths)
+    public function __construct(ParameterBagInterface $parameterBag)
     {
-        $this->widths = $widths;
         $this->parameterBag = $parameterBag;
+    }
+
+    /**
+     * executeForPictures.
+     *
+     * Process file for a trick picture and return filename.
+     */
+    public function executeForPictures(UploadedFile $file, string $filename): string
+    {
+        $this->widths = $this->parameterBag->get('app.pictures_widths');
+
+        return $this->execute($file, $filename);
+    }
+
+    /**
+     * executeForProfile.
+     *
+     * Process file for a user profile and return filename.
+     */
+    public function executeForProfile(UploadedFile $file, string $filename): string
+    {
+        $this->widths = $this->parameterBag->get('app.profile_width');
+
+        return $this->execute($file, $filename);
     }
 
     /**
