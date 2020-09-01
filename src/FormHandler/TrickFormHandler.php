@@ -61,7 +61,7 @@ class TrickFormHandler extends AbstractFormHandler
                 // Resize the picture file to severals widths (cf service.yaml),
                 // and move files in their corresponding directory named with each width
                 try {
-                    $fullFilename = $this->getImageProcess()->execute($file, $filename);
+                    $fullFilename = $this->getImageProcess()->executeForPictures($file, $filename);
                     $picture->setFilename($fullFilename)->setTrick($trick);
                     $trick->addPicture($picture);
                 } catch (FileException $e) {

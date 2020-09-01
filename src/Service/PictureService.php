@@ -112,7 +112,7 @@ class PictureService implements PictureServiceInterface
         $filename = uniqid($trick->getSlug().'-', true); // file name without extension
         // Resize the picture file to severals widths (cf service.yaml),
         // and move files in their corresponding directory named with each width
-        $fullFilename = $this->imageProcess->execute($file, $filename);
+        $fullFilename = $this->imageProcess->executeForPictures($file, $filename);
         // delete files of the replaced picture
         $this->deletePictureFiles($picture);
         // define new file name of picture

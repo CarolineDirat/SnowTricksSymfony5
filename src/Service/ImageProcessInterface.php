@@ -7,6 +7,20 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 interface ImageProcessInterface
 {
     /**
+     * executeForPictures.
+     *
+     * Process file for a trick picture and return filename.
+     */
+    public function executeForPictures(UploadedFile $file, string $filename): string;
+
+    /**
+     * executeForProfile.
+     *
+     * Process file for a user profile and return filename.
+     */
+    public function executeForProfile(UploadedFile $file, string $filename): string;
+
+    /**
      * execute.
      *
      * For each possible mime type of an uploaded image file,
