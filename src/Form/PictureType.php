@@ -33,7 +33,7 @@ class PictureType extends AbstractType
                             png, jpeg, jpg, gif, webp.",
                         'minRatio' => 0.67,
                         'minRatioMessage' => "Le ratio {{ ratio }} de l'image (largeur/hauteur) est ici trop petit. 
-                            Il doit être au moins de {{ max_ratio }}.",
+                            Il doit être au moins de {{ min_ratio }}.",
                     ]),
                 ],
             ])
