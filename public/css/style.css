@@ -581,10 +581,11 @@ h2 {
                 PROFILE
 **********************************************/
 
-@media(max-width: 500px) {
+@media (max-width: 500px) {
   #profile h1 {
     font-size: 1.8rem;
   }
+  
   #profile h3 {
     font-size: 1.5rem;
   }
