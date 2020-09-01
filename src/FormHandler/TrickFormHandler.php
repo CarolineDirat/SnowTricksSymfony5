@@ -4,6 +4,7 @@ namespace App\FormHandler;
 
 use App\Entity\Trick;
 use App\Service\ImageProcess;
+use App\Service\ImageProcessInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -17,7 +18,7 @@ class TrickFormHandler extends AbstractFormHandler
 {
     private ManagerRegistry $managerRegistry;
 
-    private ImageProcess $imageProcess;
+    private ImageProcessInterface $imageProcess;
 
     private AsciiSlugger $slugger;
 
@@ -25,7 +26,7 @@ class TrickFormHandler extends AbstractFormHandler
 
     public function __construct(
         ManagerRegistry $managerRegistry,
-        ImageProcess $imageProcess
+        ImageProcessInterface $imageProcess
     ) {
         $this->managerRegistry = $managerRegistry;
         $this->slugger = new AsciiSlugger();
