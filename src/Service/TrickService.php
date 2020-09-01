@@ -4,26 +4,21 @@ namespace App\Service;
 
 use App\Entity\Picture;
 use App\Entity\Trick;
-use App\Repository\TrickRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
 class TrickService implements TrickServiceInterface
 {
-    private TrickRepository $trickRepository;
-
     private ManagerRegistry $managerRegistry;
 
     private ParameterBagInterface $container;
 
     public function __construct(
         ManagerRegistry $managerRegistry,
-        TrickRepository $trickRepository,
         ParameterBagInterface $container
     ) {
         $this->managerRegistry = $managerRegistry;
-        $this->trickRepository = $trickRepository;
         $this->container = $container;
     }
 
