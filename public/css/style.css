@@ -172,7 +172,7 @@ h2 {
 }
 
 .navbar-brand {
-  margin-right: 450px;
+  margin-right: 420px;
 }
 
 .navbar-dark {
@@ -189,13 +189,13 @@ h2 {
 
 @media (max-width: 1200px) {
   .navbar-brand {
-    margin-right: 350px;
+    margin-right: 320px;
   }
 }
 
 @media (max-width: 1000px) {
   .navbar-brand {
-    margin-right: 100px;
+    margin-right: 80px;
   }
 }
 
@@ -574,5 +574,18 @@ h2 {
   #trick-update h1 {
     font-size: 1.4rem;
     margin-bottom: 0 !important;
+  }
+}
+
+/*********************************************
+                PROFILE
+**********************************************/
+
+@media(max-width: 500px) {
+  #profile h1 {
+    font-size: 1.8rem;
+  }
+  #profile h3 {
+    font-size: 1.5rem;
   }
 }

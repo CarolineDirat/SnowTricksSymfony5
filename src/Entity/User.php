@@ -66,11 +66,11 @@ class User implements UserInterface
     private ?Collection $comments;
 
     /**
-     * name of the profile picture file in public/uploads/images/profile.
+     * name of the profile picture file in public/uploads/images/100.
      *
      * @ORM\Column(type="string", length=100, nullable=true)
      */
-    private ?string $profile;
+    private ?string $profile = null;
 
     /**
      * @ORM\Column(type="boolean")

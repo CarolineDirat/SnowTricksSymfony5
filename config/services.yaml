@@ -6,6 +6,7 @@
 parameters:
     app.images_directory: '%kernel.project_dir%/public/uploads/images/'
     app.pictures_folders_names: ['960', '720', '540', '200']
+    app.profile_folder: '100'
     app.pictures_widths: [960, 720, 540, 200]
     app.profile_width: [100]
     app.constants_ini: '%kernel.project_dir%/constants.ini'
