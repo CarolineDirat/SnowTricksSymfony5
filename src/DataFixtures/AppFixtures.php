@@ -42,12 +42,13 @@ class AppFixtures extends Fixture
             $groups[] = $group;
         }
 
-        // create 2 Users
+        // create 3 Users
         $users = [];
-        for ($i = 0; $i < 2; ++$i) {
+        for ($i = 0; $i < 3; ++$i) {
             $user = new User();
             $user->setUsername('user'.($i + 1));
             $user->setRoles(['ROLE_USER']);
+            $user->setIsVerified(true);
             $user->setPassword($this->passwordEncoder->encodePassword($user, 'password'));
             $user->setEmail('user'.($i + 1).'@domain.com');
             $user->setCreatedAt(DateTimeImmutable::createFromMutable($faker->dateTimeThisMonth('now', 'Europe/Paris')));
@@ -55,7 +56,8 @@ class AppFixtures extends Fixture
             $users[] = $user;
             $manager->persist($user);
         }
-
+        // edit third user to not verified (his user account is not activated)
+        $users[2]->setIsVerified(false);
         // put a profile picture on one user
         $users[1]->setProfile('squirrel.jpg');
         $manager->persist($users[1]);
