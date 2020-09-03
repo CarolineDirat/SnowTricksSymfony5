@@ -13,17 +13,28 @@
 				</div>
 			</div>
 		{% endfor %}
+		{% if app.user %}
+			{% if not is_granted('ROLE_VERIFY') %}
+					<div class="row justify-content-center">
+						<div class="alert alert-primary my-4 font-weight-bold">
+							Attention {{ app.user.username }} ! Votre compte n'est pas encore activé. 
+							Pour activer votre compte, veuillez cliquer sur le lien dans le mail de confirmation que nous vous avons envoyé.
+						</div>
+					</div>
+			{% endif %}
+		{% endif %}
+		
 		{# trick name and first picture #}
 		<div class="row d-flex">
 			<h1 class="col-12 text-center">{{ trick.name|upper }}</h1>
-			{% if app.user %}
+			{% if is_granted('ROLE_VERIFY') %}
 				<div class="col text-right">
 					<button id="scroll-to-comments" class="btn btn-primary btn-sm">
 						Aller aux commentaires
 						<i class="fas fa-level-down-alt"></i>
 					</button>
 				</div>
-				<div id="trick-read-icons" class="col-12 d-inline-flex justify-content-end">
+			    <div id="trick-read-icons" class="col-12 d-inline-flex justify-content-end">
 					<a href="{{ path('trick_update', {slug: trick.slug, uuid: trick.uuid}) }}" class="btn btn-outline-primary mr-2" data-toggle="tooltip" data-placement="bottom" title="Modifier le trick">
 						<i class="fas fa-pencil-alt"></i>
 					</a>
@@ -31,7 +42,7 @@
 						<i class="fas fa-trash-alt"></i>
 					</button>
 				</div>
-			{% endif %}
+			{% endif %}				
 			{% set firstPicture = trick.firstPicture ? trick.firstPicture.filename : (trick.pictures|length > 0 ? trick.pictures[0].filename : 'default.jpg') %}
 			{% set firstPictureAlt = trick.firstPicture ? trick.firstPicture.alt : null %}
 			<picture class="col-12 d-inline-flex justify-content-center">
@@ -40,6 +51,7 @@
 				<img src="{{ asset('uploads/images/960/' ~ firstPicture) }}" class="img-fluid" alt="{{ firstPicture }} photo pour illustrer le trick de snowboard {{ trick.name }}"/>
 			</picture>
 		</div>
+
 		{# Modal Page to delete the trick #}
 		<div class="modal fade" id="modalDeleteTrick" tabindex="-1" aria-labelledby="modalDeleteTrickLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-centered">
@@ -65,6 +77,7 @@
 				</div>
 			</div>
 		</div>
+
 		{# pictures and videos #}
 		<div
 			class="row d-flex">
@@ -112,6 +125,7 @@
 				</div>
 			</div>
 		</div>
+
 		{# trick description #}
 		<div class="row">
 			<h2 class="col-md-12 text-center">{{ trick.name }}</h2>
@@ -129,10 +143,10 @@
 				</p>
 			</div>
 		</div>
-		<hr
-		class="mb-5">
+		<hr class="mb-5">
+
 		{# comments #}
-		{% if app.user %}
+		{% if is_granted('ROLE_VERIFY') %}
 			{{ form_start(form, {'method': 'POST'}) }}
 			<div id="comments-for-scroll" class="form-row align-items-center mt-4">
 				<div class="col-12 col-sm-8 col-md-9">

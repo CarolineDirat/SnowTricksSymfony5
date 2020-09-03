@@ -38,12 +38,12 @@
             </a>
             <div class="collapse navbar-collapse" id="navbarToggler">
                 <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                  {% if app.user %}
-                    <li class="nav-item">
-                        <a class="nav-link font-weight-bold btn btn-outline-primary mr-3" href="{{ path('trick_new') }}">
-                          <i class="fas fa-plus-circle mr-1"></i>Ajouter un trick
-                        </a>
-                    </li>
+                  {% if is_granted('ROLE_VERIFY') %}
+                      <li class="nav-item">
+                          <a class="nav-link font-weight-bold btn btn-outline-primary mr-3" href="{{ path('trick_new') }}">
+                            <i class="fas fa-plus-circle mr-1"></i>Ajouter un trick
+                          </a>
+                      </li>
                   {% endif %}
                   <li class="nav-item active">
                       <a class="nav-link" href="{{ path("home") }}">
@@ -56,11 +56,13 @@
                       </a>
                   </li>
                   {% if app.user %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path("user_profile") }}">
-                          <i class="fas fa-user"></i>
-                        </a>
-                    </li>
+                    {% if is_granted('ROLE_VERIFY') %}
+                      <li class="nav-item">
+                          <a class="nav-link" href="{{ path("user_profile") }}">
+                            <i class="fas fa-user"></i>
+                          </a>
+                      </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ path("app_logout") }}">
                           Se déconnecter
@@ -97,9 +99,9 @@
           </div>
           <div class="col-6 text-center">
             {% if app.user %}
-              <a href="{{ path("app_logout") }}">
-                <i class="fas fa-sign-out-alt"></i>
-              </a>
+                <a href="{{ path("app_logout") }}">
+                  <i class="fas fa-sign-out-alt"></i>
+                </a>
             {% else %}
               <a href="{{ path("app_login") }}">
                 <i class="fas fa-sign-in-alt"></i>
