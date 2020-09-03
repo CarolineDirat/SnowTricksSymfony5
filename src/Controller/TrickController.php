@@ -128,7 +128,7 @@ class TrickController extends AbstractController
      *      name="trick_delete_ajax",
      *      methods={"DELETE"}
      * )
-     * @isGranted("ROLE_USER")
+     * @isGranted("ROLE_VERIFY")
      */
     public function deleteFromAJAXRequest(
         Trick $trick,
@@ -163,7 +163,7 @@ class TrickController extends AbstractController
      *      name="trick_delete",
      *      methods={"POST"}
      * )
-     * @isGranted("ROLE_USER")
+     * @isGranted("ROLE_VERIFY")
      */
     public function delete(
         Trick $trick,
@@ -195,7 +195,7 @@ class TrickController extends AbstractController
      *      "/ajouter/trick",
      *      name="trick_new"
      * )
-     * @isGranted("ROLE_USER")
+     * @isGranted("ROLE_VERIFY")
      */
     public function new(Request $request, TrickFormHandler $trickFormHandler): Response
     {
@@ -223,7 +223,7 @@ class TrickController extends AbstractController
      *      "/modifier/trick/{slug}/{uuid}",
      *      name="trick_update"
      * )
-     * @isGranted("ROLE_USER")
+     * @isGranted("ROLE_VERIFY")
      */
     public function update(
         Trick $trick,
@@ -264,7 +264,7 @@ class TrickController extends AbstractController
      *
      * @Route("modifier/trick/{slug}", name="trick_update_by_slug")
      *
-     * @isGranted("ROLE_USER")
+     * @isGranted("ROLE_VERIFY")
      */
     public function redirectBySlugUpdate(Trick $trick): Response
     {
@@ -279,7 +279,7 @@ class TrickController extends AbstractController
      *
      * @Route("modifier/trick-image/{slug}/{uuid}", name="trick_update_first_image", methods={"POST"})
      *
-     * @isGranted("ROLE_USER")
+     * @isGranted("ROLE_VERIFY")
      */
     public function updateFirstImage(
         Trick $trick,
@@ -314,7 +314,7 @@ class TrickController extends AbstractController
      *
      * @Route("supprimer/trick-image/{slug}/{uuid}", name="trick_delete_first_image", methods={"DELETE"})
      *
-     * @isGranted("ROLE_USER")
+     * @isGranted("ROLE_VERIFY")
      */
     public function deleteFirstImage(
         Trick $trick,
@@ -349,7 +349,7 @@ class TrickController extends AbstractController
      *
      * @Route("modifier/trick-video/{slug}/{uuid}", name="trick_update_video", methods={"POST"})
      *
-     * @isGranted("ROLE_USER")
+     * @isGranted("ROLE_VERIFY")
      */
     public function updateVideo(
         Trick $trick,
@@ -391,7 +391,7 @@ class TrickController extends AbstractController
      *
      * @Route("supprimer/trick-video/{slug}/{uuid}", name="trick_delete_video", methods={"DELETE"})
      *
-     * @isGranted("ROLE_USER")
+     * @isGranted("ROLE_VERIFY")
      */
     public function deleteVideo(
         Trick $trick,
@@ -425,7 +425,7 @@ class TrickController extends AbstractController
      *
      * @Route("modifier/trick-name/{slug}/{uuid}", name="trick_update_name", methods={"POST"})
      *
-     * @isGranted("ROLE_USER")
+     * @isGranted("ROLE_VERIFY")
      */
     public function updateName(
         Trick $trick,
@@ -459,7 +459,7 @@ class TrickController extends AbstractController
      * @Route("modifier/trick-picture/{slug}/{uuid}/{picture_id}", name="trick_update_picture", methods={"POST"})
      * @Entity("picture", expr="repository.find(picture_id)")
      *
-     * @isGranted("ROLE_USER")
+     * @isGranted("ROLE_VERIFY")
      */
     public function updatePicture(
         Trick $trick,
@@ -511,7 +511,7 @@ class TrickController extends AbstractController
      *
      * @Route("supprimer/trick-picture/{slug}/{uuid}", name="trick_delete_picture", methods={"DELETE"})
      *
-     * @isGranted("ROLE_USER")
+     * @isGranted("ROLE_VERIFY")
      */
     public function deletePicture(
         Trick $trick,

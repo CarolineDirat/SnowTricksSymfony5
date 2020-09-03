@@ -47,7 +47,7 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < 3; ++$i) {
             $user = new User();
             $user->setUsername('user'.($i + 1));
-            $user->setRoles(['ROLE_USER']);
+            $user->setRoles(['ROLE_VERIFY']);
             $user->setIsVerified(true);
             $user->setPassword($this->passwordEncoder->encodePassword($user, 'password'));
             $user->setEmail('user'.($i + 1).'@domain.com');
@@ -58,6 +58,7 @@ class AppFixtures extends Fixture
         }
         // edit third user to not verified (his user account is not activated)
         $users[2]->setIsVerified(false);
+        $users[2]->setRoles(['ROLE_USER']);
         // put a profile picture on one user
         $users[1]->setProfile('squirrel.jpg');
         $manager->persist($users[1]);

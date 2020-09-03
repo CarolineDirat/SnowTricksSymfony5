@@ -22,7 +22,7 @@ class UserController extends AbstractController
     /**
      * @Route("/compte/profil", name="user_profile")
      *
-     * @isGranted("ROLE_USER")
+     * @isGranted("ROLE_VERIFY")
      */
     public function profile(
         Request $request,
