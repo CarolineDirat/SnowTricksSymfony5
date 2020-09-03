@@ -246,6 +246,10 @@ class User implements UserInterface
     {
         $this->isVerified = $isVerified;
 
+        if (true === $isVerified) {
+            $this->setRoles(['ROLE_VERIFY']);
+        }
+
         return $this;
     }
 }

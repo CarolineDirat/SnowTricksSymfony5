@@ -14,15 +14,15 @@
 							{{ trick.name|upper }}
 						</a>
 					</h2>
-					{% if app.user %}
-					<div>
-						<a href="{{ path('trick_update', {slug: trick.slug, uuid: trick.uuid}) }}" class="btn btn-outline-primary btn-sm mr-1 ml-2" data-toggle="tooltip" data-placement="bottom" title="Modifier le trick">
-							<i class="fas fa-pencil-alt"></i>
-						</a>
-						<a role="button" href="{{ path('trick_delete_ajax', {uuid: trick.uuid}) }}" class="btn btn-outline-primary btn-sm" data-delete data-trick="{{ trick.name }}" data-toggle="modal" data-target="#modalDelete" data-toggle="tooltip" data-placement="bottom" title="Supprimer le trick">
-							<i class="fas fa-trash-alt"></i>
-						</a>
-					</div>
+					{% if is_granted('ROLE_VERIFY') %}
+						<div>
+							<a href="{{ path('trick_update', {slug: trick.slug, uuid: trick.uuid}) }}" class="btn btn-outline-primary btn-sm mr-1 ml-2" data-toggle="tooltip" data-placement="bottom" title="Modifier le trick">
+								<i class="fas fa-pencil-alt"></i>
+							</a>
+							<a role="button" href="{{ path('trick_delete_ajax', {uuid: trick.uuid}) }}" class="btn btn-outline-primary btn-sm" data-delete data-trick="{{ trick.name }}" data-toggle="modal" data-target="#modalDelete" data-toggle="tooltip" data-placement="bottom" title="Supprimer le trick">
+								<i class="fas fa-trash-alt"></i>
+							</a>
+						</div>
 					{% endif %}
 				</div>
 			</div>
@@ -69,12 +69,12 @@
 			Voir plus de tricks
 		</a>
 	</div>
-	{% if app.user %}
-	<div class="col-12 text-center mb-5">
-		<a href="{{ path('trick_new') }}" class="btn btn-secondary mb-4 add-trick-btn d-none">
-			<i class="fas fa-plus-circle"></i> Ajouter un trick
-		</a>
-	</div>
+	{% if is_granted('ROLE_VERIFY') %}
+		<div class="col-12 text-center mb-5">
+			<a href="{{ path('trick_new') }}" class="btn btn-secondary mb-4 add-trick-btn d-none">
+				<i class="fas fa-plus-circle"></i> Ajouter un trick
+			</a>
+		</div>
 	{% endif %}
 </div>
 
