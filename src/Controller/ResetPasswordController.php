@@ -144,13 +144,15 @@ class ResetPasswordController extends AbstractController
             'email' => $emailFormData,
         ]);
 
-        // Marks that you are allowed to see the app_check_email page.
-        $this->setCanCheckEmailInSession();
-
         // Do not reveal whether a user account was found or not.
         if (!$user) {
+            $this->addFlash('reset_password_error', 'Cet email n\'existe pas dans la base de données');
+
             return $this->redirectToRoute('app_check_email');
         }
+
+        // Marks that you are allowed to see the app_check_email page.
+        $this->setCanCheckEmailInSession();
 
         try {
             $resetToken = $this->resetPasswordHelper->generateResetToken($user);
