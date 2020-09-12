@@ -21,6 +21,7 @@ class AppFormFactory implements AppFormFactoryInterface
             'ad-trick' => TrickType::class,
             'up-trick' => TrickType::class,
             'up-profile' => ProfileType::class,
+            'registration' => RegistrationFormType::class,
         ];
 
         $formType = $formTypes[$name];

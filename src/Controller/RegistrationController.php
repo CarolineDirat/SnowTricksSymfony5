@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\AppFormFactoryInterface;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -18,9 +19,14 @@ class RegistrationController extends AbstractController
 {
     private EmailVerifier $emailVerifier;
 
-    public function __construct(EmailVerifier $emailVerifier)
-    {
+    private AppFormFactoryInterface $appFormFactory;
+
+    public function __construct(
+        EmailVerifier $emailVerifier,
+        AppFormFactoryInterface $appFormFactory
+    ) {
         $this->emailVerifier = $emailVerifier;
+        $this->appFormFactory = $appFormFactory;
     }
 
     /**
@@ -29,7 +35,7 @@ class RegistrationController extends AbstractController
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
     {
         $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form = $this->appFormFactory->create('registration', $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -82,8 +88,6 @@ class RegistrationController extends AbstractController
 
             return $this->redirectToRoute('app_register');
         }
-
-        // @TODO Change the redirect on success and handle or remove the flash message in your templates
         $this->addFlash('success', 'Votre addresse mail a validée, et votre compte est activé.');
 
         return $this->redirectToRoute('tricks');
