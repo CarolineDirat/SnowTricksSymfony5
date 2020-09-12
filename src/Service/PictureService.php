@@ -5,7 +5,7 @@ namespace App\Service;
 use App\Entity\Picture;
 use App\Entity\Trick;
 use App\Repository\PictureRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;

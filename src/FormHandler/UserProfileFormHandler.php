@@ -4,7 +4,7 @@ namespace App\FormHandler;
 
 use App\Entity\User;
 use App\Service\ImageProcessInterface;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag;

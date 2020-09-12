@@ -6,7 +6,7 @@ use App\Entity\Trick;
 use App\Form\AppFormFactoryInterface;
 use App\Repository\PictureRepository;
 use DateTimeImmutable;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
