@@ -98,7 +98,7 @@ class ResetPasswordController extends AbstractController
             $user = $this->resetPasswordHelper->validateTokenAndFetchUser($token);
         } catch (ResetPasswordExceptionInterface $e) {
             $this->addFlash('reset_password_error', sprintf(
-                'There was a problem validating your reset request - %s',
+                'Il y a eut un problème validation de votre demande de réinitilaisation - %s',
                 $e->getReason()
             ));
 
@@ -125,6 +125,11 @@ class ResetPasswordController extends AbstractController
             // The session is cleaned up after the password has been changed.
             $this->cleanSessionAfterReset();
 
+            $this->addFlash(
+                'success',
+                'La réinitialisation de votre mot de passe a réussi. Vous pouvez maintenant vous connecter.'
+            );
+
             return $this->redirectToRoute('home');
         }
 
@@ -139,13 +144,15 @@ class ResetPasswordController extends AbstractController
             'email' => $emailFormData,
         ]);
 
-        // Marks that you are allowed to see the app_check_email page.
-        $this->setCanCheckEmailInSession();
-
         // Do not reveal whether a user account was found or not.
         if (!$user) {
+            $this->addFlash('reset_password_error', 'Cet email n\'existe pas dans la base de données');
+
             return $this->redirectToRoute('app_check_email');
         }
+
+        // Marks that you are allowed to see the app_check_email page.
+        $this->setCanCheckEmailInSession();
 
         try {
             $resetToken = $this->resetPasswordHelper->generateResetToken($user);
