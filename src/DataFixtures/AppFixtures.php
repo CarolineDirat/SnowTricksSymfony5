@@ -11,7 +11,7 @@ use App\Entity\Video;
 use DateInterval;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Faker\Generator;
 use Ramsey\Uuid\Uuid;
