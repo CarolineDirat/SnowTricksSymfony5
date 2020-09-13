@@ -14,7 +14,7 @@ class AppFormFactory implements AppFormFactoryInterface
         $this->formFactory = $formFactory;
     }
 
-    public function create(string $name, object $entity, array $options = []): ?FormInterface
+    public function create(string $name, ?object $entity, array $options = []): ?FormInterface
     {
         $formTypes = [
             'ad-comment' => CommentType::class,
@@ -22,6 +22,8 @@ class AppFormFactory implements AppFormFactoryInterface
             'up-trick' => TrickType::class,
             'up-profile' => ProfileType::class,
             'registration' => RegistrationFormType::class,
+            'reset-password-request' => ResetPasswordRequestFormType::class,
+            'change-password' => ChangePasswordFormType::class,
         ];
 
         $formType = $formTypes[$name];
