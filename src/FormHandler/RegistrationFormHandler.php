@@ -61,8 +61,6 @@ class RegistrationFormHandler extends AbstractFormHandler
 
     /**
      * sendEmailConfirmation : generate a signed url and email it to the user.
-     *
-     * @return void
      */
     public function sendEmailConfirmation(User $user): void
     {
