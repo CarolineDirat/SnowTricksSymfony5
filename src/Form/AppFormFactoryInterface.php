@@ -6,5 +6,5 @@ use Symfony\Component\Form\FormInterface;
 
 interface AppFormFactoryInterface
 {
-    public function create(string $name, object $entity, array $options = []): ?FormInterface;
+    public function create(string $name, ?object $entity, array $options = []): ?FormInterface;
 }

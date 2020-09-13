@@ -5,7 +5,7 @@ namespace App\Service;
 use App\Entity\Trick;
 use App\Entity\Video;
 use App\Repository\VideoRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 class VideoService implements VideoServiceInterface
 {
