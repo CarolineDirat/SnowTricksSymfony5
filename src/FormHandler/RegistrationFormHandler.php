@@ -51,7 +51,21 @@ class RegistrationFormHandler extends AbstractFormHandler
         $entityManager = $this->manager->getManager();
         $entityManager->persist($user);
         $entityManager->flush();
-        // generate a signed url and email it to the user
+
+        $this->sendEmailConfirmation($user);
+
+        // add a flash message to notify confirmation success
+        $this->session->getFlashBag()->add('success', "Votre compte a été créé. 
+            Il reste à l'activer depuis le mail de confirmation que nous vous avons envoyé.");
+    }
+
+    /**
+     * sendEmailConfirmation : generate a signed url and email it to the user.
+     *
+     * @return void
+     */
+    public function sendEmailConfirmation(User $user): void
+    {
         $this->emailVerifier->sendEmailConfirmation(
             'app_verify_email',
             $user,
@@ -61,8 +75,5 @@ class RegistrationFormHandler extends AbstractFormHandler
                 ->subject('Confirmation de votre Email')
                 ->htmlTemplate('registration/confirmation_email.html.twig')
         );
-        // add a flash message to notify confirmation success
-        $this->session->getFlashBag()->add('success', "Votre compte a été créé. 
-            Il reste à l'activer depuis le mail de confirmation que nous vous avons envoyé.");
     }
 }
