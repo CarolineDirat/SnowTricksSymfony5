@@ -8,7 +8,7 @@ $(function () {
 
     // **************************************************************************************************************
     //
-    //                                             LOAD MORE COMMENTS BUTTON         
+    //                                             LOAD MORE COMMENTS         
     //
     // **************************************************************************************************************
 
@@ -50,7 +50,7 @@ $(function () {
         
         let profileElement = document.createElement('div');
         $(profileElement).addClass('col-2 col-lg-1 pt-3');
-        $(profileElement).append(`<img src="/../uploads/images/profile/${filename}" class="card-img" alt="Image de profil de ${comment.user.username}">`);
+        $(profileElement).append(`<img src="/../uploads/images/100/${filename}" class="card-img" alt="Image de profil de ${comment.user.username}">`);
 
         let contentElement = document.createElement('div');
         $(contentElement).addClass('col-10 col-lg-11');
