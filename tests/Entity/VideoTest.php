@@ -19,9 +19,17 @@ class VideoTest extends TestCase
     public function testService(): void
     {
         $video = new Video();
-        $service = 'Youtube';
+        $service = strtolower('Youtube');
         $video->setService($service);
         $this->assertEquals($service, $video->getService());
+    }
+
+    public function testServiceWithWrongValue(): void
+    {
+        $video = new Video();
+        $service = strtolower('Facebook');
+        $video->setService($service);
+        $this->assertEquals(null, $video->getService());
     }
 
     public function testTrick(): void
