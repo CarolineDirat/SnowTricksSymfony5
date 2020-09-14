@@ -56,6 +56,9 @@ class TrickFormHandler extends AbstractFormHandler
         $picturesForm = $this->getForm()->get('pictures');
         foreach ($pictures as $key => $picture) {
             $file = $picturesForm[$key]->get('file')->getData();
+            if (!($file instanceof UploadedFile)) {
+                $trick->removePicture($picture);
+            }
             if ($file instanceof UploadedFile) {
                 $filename = uniqid($trick->getSlug().'-', true); // file name without extension
                 // Resize the picture file to severals widths (cf service.yaml),
@@ -69,8 +72,6 @@ class TrickFormHandler extends AbstractFormHandler
                     $this->session->getFlashBag()->add('upload', $e->getMessage());
                     $trick->removePicture($picture);
                 }
-            } else {
-                $trick->removePicture($picture);
             }
         }
     }

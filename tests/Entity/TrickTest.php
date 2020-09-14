@@ -10,8 +10,8 @@ use App\Entity\Video;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
-use Ramsey\Uuid\Rfc4122\UuidInterface;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class TrickTest extends TestCase
