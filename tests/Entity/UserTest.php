@@ -87,4 +87,19 @@ class UserTest extends TestCase
         $user->setProfile($profile);
         $this->assertEquals($profile, $user->getProfile());
     }
+
+    public function testIsNotVerified(): void
+    {
+        $user = new User();
+        $this->assertEquals(false, $user->isVerified());
+        $this->assertFalse(in_array('ROLE_VERIFY', $user->getRoles(), true));
+    }
+
+    public function testIsVerified(): void
+    {
+        $user = new User();
+        $user->setIsVerified(true);
+        $this->assertEquals(true, $user->isVerified());
+        $this->assertTrue(in_array('ROLE_VERIFY', $user->getRoles(), true));
+    }
 }
