@@ -7,7 +7,7 @@ $(function () {
     //
     // **************************************************************************************************************
     
-    let deleteTrick = function(e, deleteLink) {
+    const deleteTrick = function(e, deleteLink) {
         e.preventDefault();
         $('#modalDelete div.modal-body').html('Êtes-vous sûr.e de vouloir supprimer le trick <span class="font-weight-bold">' + deleteLink.data('trick') + '</span> ?');
         $('#confirmDeleteTrickModal').one('click', function(e){
@@ -28,7 +28,7 @@ $(function () {
         });
     };
 
-    let deleteLinks = $('[data-delete]');
+    const deleteLinks = $('[data-delete]');
     deleteLinks.click(function(e){
         deleteTrick(e, $(this));
     });
@@ -62,9 +62,9 @@ $(function () {
     //
     // **************************************************************************************************************
 
-    let loadTricks = $('#load-more-tricks');
+    const loadTricks = $('#load-more-tricks');
 
-    var displayTrick = function(trick) {
+    const displayTrick = function(trick) {
 
         let firstPicture = trick.firstPicture ? trick.firstPicture.filename : (trick.pictures.length ? trick.pictures[0].filename : 'default.jpg');
 
@@ -103,7 +103,7 @@ $(function () {
                 // then delete "load-more" button on trick page
                 loadTricks.hide('slow', 'linear');
             } else {
-                // else add comments on trick page
+                // else add tricks on trick page
                 $.each(data, function (index, trick) {
                     displayTrick(trick);
                     $('html,body').animate({scrollTop: $('#load-more-tricks').offset().top}, 'slow');

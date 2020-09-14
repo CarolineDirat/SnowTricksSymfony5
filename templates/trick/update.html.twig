@@ -411,7 +411,7 @@
 				<div class="row collapse justify-content-center" id="collapseVideosUpdate">
 					{% for video in form.videos %}
 						{# display video #}
-						<div id="video-display-mobile-{{ video.vars.value.id }}" class="d-inline-block mb-2">
+						<div id=" mobile-{{ video.vars.value.id }}" class="d-inline-block mb-2">
 							{{ include('fragments/_iframe.html.twig', {service: video.vars.value.service, code: video.vars.value.code, width: 210, height: 118}) }}
 							{# icons : pencil and trash #}
 							<div class="d-flex flex-nowrap justify-content-center">
@@ -499,5 +499,6 @@
 {% endblock %}
 
 {% block javascripts %}
+	<script src="{{ asset('js/custom-input-file.js') }}"></script>
 	<script src="{{ asset('js/trick-update.js') }}"></script>
 {% endblock %}

@@ -12,10 +12,10 @@ $(function () {
     //
     // **************************************************************************************************************
 
-    let loadComments = $('#load-more-comments');
+    const loadComments = $('#load-more-comments');
 
     /** Create a Javascript Date from the string return in JSON data : 2020-08-08T18:10:55+00:00 */
-    var createDateJS = function(dateString) {
+    const createDateJS = function(dateString) {
         let dateJS = new Date(dateString); /** Sat Aug=7 08 2020 20:10:55 GMT+0200 (heure d’été d’Europe centrale) */
         /** month = [0,11] */
         let month = dateJS.getMonth();
@@ -28,7 +28,7 @@ $(function () {
     };
 
     /** function witch add zero on front of the month digit and the day digit, when it's lower than ten */
-    var createDateToDisplay = function(dateJS) {
+    const createDateToDisplay = function(dateJS) {
         let day = dateJS.getDate();
         let month = dateJS.getMonth();
         let date = (day < 10 ? ('0' + day) : day) + '/' + (month < 10 ? ('0' + month) : month) + '/' + dateJS.getFullYear();
@@ -37,7 +37,7 @@ $(function () {
     };
 
     /** function witch build the HTML to display an additional comment. */
-    var displayComment = function(comment) {
+    const displayComment = function(comment) {
         
         let filename = comment.user.profile ? comment.user.profile : 'default.jpg';
         

@@ -7,29 +7,6 @@ $(function () {
     $('fieldset.form-group').has('div#trick_videos').remove();
 
     //////////////////////////////////////////////////////////////////////////////////////////
-    //                   FILE BROWSE : customizing the strings with HTML
-    //////////////////////////////////////////////////////////////////////////////////////////
-    
-    let translateBrowse = function() {
-        $('label.custom-file-label').attr('data-browse', 'Parcourir mes fichiers');
-    };
-    translateBrowse();
-
-    //////////////////////////////////////////////////////////////////////////////////////////
-    //                   DISPLAY CHOSEN FILE NAME IN IT'S INPUT TAG
-    //////////////////////////////////////////////////////////////////////////////////////////
-
-    let displayFilename = function () {
-        $('.custom-file-input').change(function () {
-            let $label = $(this).next();
-            $.each($(this.files), function (index, file) {
-                $label.text(file.name);
-            });
-        });
-    };
-    displayFilename();
-
-    //////////////////////////////////////////////////////////////////////////////////////////
     //                                  UPDATE NAME
     //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -38,9 +15,9 @@ $(function () {
         $('#updateNameModal input').val($('#trick-update h2 span').text());
     });
     
-    let updateTrickName = $('#update-trick-name');
+    const updateTrickName = $('#update-trick-name');
 
-    let displayNewName = function(data) {
+    const displayNewName = function(data) {
         $('#updateNameModal input').val(data.newName);
         $('#trick-update h2 span').text((data.newName).toUpperCase());
     };
@@ -74,14 +51,14 @@ $(function () {
     //                                  UPDATE FIRST IMAGE
     //////////////////////////////////////////////////////////////////////////////////////////
     
-    let updateFirstImage = $('#update-first-image');
+    const updateFirstImage = $('#update-first-image');
 
     $('.input-radio-first-picture').click(function() {
         let $this = $(this);
         updateFirstImage.data('value', $this.attr('value'));
     });
 
-    let displayNewFirstPicture = function(data){
+    const displayNewFirstPicture = function(data){
         $('#trick-update picture source:first-child').attr('srcset', '/../uploads/images/540/' + data.filename);
         $('#trick-update picture source:nth-child(2)').attr('srcset', '/../uploads/images/720/' + data.filename);
         $('#trick-update picture img').attr('src', '/../uploads/images/960/' + data.filename);
@@ -110,7 +87,7 @@ $(function () {
     //                                  DELETE FIRST IMAGE
     //////////////////////////////////////////////////////////////////////////////////////////
 
-    let deleteFirstImage = $('#delete-first-image');
+    const deleteFirstImage = $('#delete-first-image');
 
     deleteFirstImage.click(function(e) {
         e.preventDefault();    
@@ -137,9 +114,9 @@ $(function () {
         e.preventDefault();
     });
 
-    let updateVideoLinks = $('.update-video-link');
+    const updateVideoLinks = $('.update-video-link');
 
-    // data for AJAX request are on data attributes of the link witch send AJAX request
+    // data for AJAX request are on data attributes of the link which send AJAX request
     // when input values change, these data attribute must change too
     $('.update-service-video input').change(function(){
         let $this = $(this);
@@ -161,7 +138,7 @@ $(function () {
     });
 
     // function to update display of the video with new data
-    let updateVideo = function(data) {
+    const updateVideo = function(data) {
         let address = 'www.youtube.com/embed/';
         if ('vimeo' === data.service.toLowerCase()) {
             address = 'player.vimeo.com/video/';
@@ -171,6 +148,7 @@ $(function () {
         }
         $('#video-display-' + data.videoId + ' iframe').attr('src', 'https://' + address + data.code);
         $('#video-display-mobile-' + data.videoId + ' iframe').attr('src', 'https://' + address + data.code);
+        $('#deleteVideoModal-' + data.videoId + ' iframe').attr('src', 'https://' + address + data.code);
     };
 
     // AJAX request
@@ -207,9 +185,9 @@ $(function () {
     //                                  DELETE VIDEO 
     //////////////////////////////////////////////////////////////////////////////////////////
 
-    let deleteVideoLinks = $('.delete-video-link');
+    const deleteVideoLinks = $('.delete-video-link');
 
-    let deleteVideo = function(data) {
+    const deleteVideo = function(data) {
         // screen > 720px
         $('#video-display-' + data.videoId).remove();
         // screen < 720px
@@ -240,15 +218,15 @@ $(function () {
     //                                  ADD VIDEO FORM IN THE RIGHT PLACE ;)
     //////////////////////////////////////////////////////////////////////////////////////////
 
-    let collectionHolderVideosUpdatePage = $('.update-trick-videos');
-    let addVideoButtonUpdatePage = $('.add_video_link button');
+    const collectionHolderVideosUpdatePage = $('.update-trick-videos');
+    const addVideoButtonUpdatePage = $('.add_video_link button');
 
     // count the current form inputs we have (e.g. 2), use that as the new
     // index when inserting a new item (e.g. 2)
     collectionHolderVideosUpdatePage.data('index', $('.update-video-modal').length);
 
     // function to add a new video form
-    let addVideoFormUpdatePage = function(collectionHolder, screen) {
+    const addVideoFormUpdatePage = function(collectionHolder, screen) {
         // Get the data-prototype
         let prototype = collectionHolder.data('prototype');
         // get the new index
@@ -286,13 +264,13 @@ $(function () {
     //////////////////////////////////////////////////////////////////////////////////////////
 
     // functions to display new picture
-    let updatePicture = function(data, id) {
+    const updatePicture = function(data, id) {
         $(id)
             .attr('src', '/../uploads/images/200/' + data.filename)
             .attr('alt', data.alt + ' photo pour illustrer le trick de snowboard ' + data.trick)
         ;
     };
-    let displayPictures = function(data) {
+    const displayPictures = function(data) {
         updatePicture(data, '#picture-display-' + data.pictureId);
         updatePicture(data, '#picture-display-mobile-' + data.pictureId);
         updatePicture(data, '#updatePictureModal-' + data.pictureId + ' img');
@@ -300,7 +278,7 @@ $(function () {
     };
     
     // AJAX REQUEST to update a picture
-    let updatePictureLinks = $('.update-picture-link');
+    const updatePictureLinks = $('.update-picture-link');
 
     updatePictureLinks.click(function(e) {
         e.preventDefault();
@@ -338,9 +316,9 @@ $(function () {
     //                                  DELETE PICTURE 
     //////////////////////////////////////////////////////////////////////////////////////////
 
-    let deletePictureLinks = $('.delete-picture-link');
+    const deletePictureLinks = $('.delete-picture-link');
 
-    let deletePicture = function(data) {
+    const deletePicture = function(data) {
         // screen > 720px
         $('#picture-display-' + data.pictureId).closest('div').remove();
         // screen < 720px
@@ -371,15 +349,15 @@ $(function () {
     //                                  ADD PICTURE FORM IN THE RIGHT PLACE ;)
     //////////////////////////////////////////////////////////////////////////////////////////
 
-    let collectionHolderPicturesUpdatePage = $('.update-trick-pictures');
-    let addPictureButtonUpdatePage = $('.add-picture-link button');
+    const collectionHolderPicturesUpdatePage = $('.update-trick-pictures');
+    const addPictureButtonUpdatePage = $('.add-picture-link button');
 
     // count the current form inputs we have (e.g. 2), use that as the new
     // index when inserting a new item (e.g. 2)
     collectionHolderPicturesUpdatePage.data('index', $('.update-picture-modal').length);
 
     // function to add a new video form
-    let addPictureFormUpdatePage = function(collectionHolder, screen) {
+    const addPictureFormUpdatePage = function(collectionHolder, screen) {
         // Get the data-prototype
         let prototype = collectionHolder.data('prototype');
         // get the new index
