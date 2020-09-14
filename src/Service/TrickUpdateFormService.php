@@ -59,6 +59,9 @@ class TrickUpdateFormService implements TrickUpdateFormServiceInterface
         $addedPicturesForm = $form->get('pictures');
         foreach ($addedPictures as $key => $picture) {
             $file = $addedPicturesForm[$key]->get('file')->getData();
+            if (!($file instanceof UploadedFile)) {
+                $trick->removePicture($picture);
+            }
             if ($file instanceof UploadedFile) {
                 $filename = uniqid($trick->getSlug().'-', true); // file name without extension
                 // Resize the picture file to severals widths (cf service.yaml),
@@ -72,8 +75,6 @@ class TrickUpdateFormService implements TrickUpdateFormServiceInterface
                     $this->session->getFlashBag()->add('upload', $e->getMessage());
                     $trick->removePicture($picture);
                 }
-            } else {
-                $trick->removePicture($picture);
             }
         }
     }
