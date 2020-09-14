@@ -5,11 +5,11 @@ Collaborative snowboard site - Symfony 5.1 - student project n°6 - OpenClassroo
 
 ## Requirements
 
-### SnowTricks installation needs in command line:
+### SnowTricks installation needs in command line
   - **composer**:  [getcomposer.org/](https://getcomposer.org/)
   - **Git**: [git-scm.com/](https://git-scm.com/) to clone the project
 
-### SnowTricks use:
+### SnowTricks use
 
   - **PHP** version: 7.4.* (server and terminal),[www.php.net/](https://www.php.net/).
 
@@ -35,7 +35,7 @@ Collaborative snowboard site - Symfony 5.1 - student project n°6 - OpenClassroo
       - opcache.enable=On
       - opcache.enable_cli=On
 
-## Installation on a local server :
+## Installation on a local server
 
 The following instructions guide you to install the project locally, on HTTP server Apache (for example : Wampserver). [See Symfony documentation](https://symfony.com/doc/current/setup.html#setting-up-an-existing-symfony-project) 
 
