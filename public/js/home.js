@@ -74,7 +74,9 @@ $(function () {
 
         let imageTrickContainer = $(document.createElement('div'));
         imageTrickContainer.addClass('div-card-img d-flex align-items-center justify-content-center');
-        imageTrickContainer.append('<img src="/../uploads/images/200/'+ firstPicture +'" class="card-img-top" alt="Picture to illustrate '+ trick.name +' snowboard trick.">');
+        imageTrickContainer.append(
+            '<a href="/trick/'+ trick.slug + '/'+ trick.uuid +'"><img src="/../uploads/images/200/'+ firstPicture +'" class="card-img-top" alt="Picture to illustrate '+ trick.name +' snowboard trick." title="'+ trick.name +'"></a>'
+        );
 
         let cardBodyTrick = $(document.createElement('div'));
         cardBodyTrick.addClass('card-body p-0 text-center');
