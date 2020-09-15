@@ -152,11 +152,9 @@ class AppFixtures extends Fixture
         $description = 'Flip agrémentés d\'une vrille.
         Un grand classique des rotations tête en bas qui se fait en backside, sur un mur backside de pipe. 
         Le Mc Twist est généralement fait en japan, un grab très tweaké (action d\'accentuer un grab en se contorsionnant).
-        https://www.futura-sciences.com/sante/questions-reponses/sport-lexique-snowboard-10-termes-mieux-comprendre-8422/
         Rien à voir avec un menu d\'une enseigne de restauration rapide. Le Mc Twist est une rotation verticale avec une vrille. 
         Les champions réalisent des « double Mc Twist » tout en y ajoutant des rotations horizontales.
         Double Mc Twist 1260 :
-        https://www.mennenfrance.fr/article/les-figures-de-snowboard-les-plus-spectaculaires_a473/1
         Le Mc Twist est un flip (rotation verticale) agrémenté d\'une vrille. 
         Un saut très périlleux réservé aux professionnels. 
         Le champion précoce Shaun White s\'est illustré par un Double Mc Twist 1260 lors de sa session de Half-Pipe aux Jeux Olympiques de Vancouver en 2010. 
