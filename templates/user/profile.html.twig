@@ -15,7 +15,7 @@
 				<span class="font-weight-bold">{{ form.vars.value.username }}</span>
 			</h3>
 			{% set filename = form.vars.value.profile ? form.vars.value.profile : 'default.jpg' %}
-			<img class="img-fluid" src="{{ asset('uploads/images/100/' ~ filename) }}" alt="Photo de profil de l'utilisateur"/>
+			<img class="img-fluid" src="{{ asset('uploads/images/100/' ~ filename) }}" alt="Photo de profil de l'utilisateur" title="{{ form.vars.value.username }}"/>
 		</div>
 
 		{{ include('fragments/_flashes.html.twig') }}
