@@ -19,18 +19,18 @@ class PictureService implements PictureServiceInterface
 
     private ImageProcessInterface $imageProcess;
 
-    private ParameterBagInterface $container;
+    private ParameterBagInterface $parameterBag;
 
     public function __construct(
         ManagerRegistry $managerRegistry,
         PictureRepository $pictureRepository,
         ImageProcessInterface $imageProcess,
-        ParameterBagInterface $container
+        ParameterBagInterface $parameterBag
     ) {
         $this->managerRegistry = $managerRegistry;
         $this->pictureRepository = $pictureRepository;
         $this->imageProcess = $imageProcess;
-        $this->container = $container;
+        $this->parameterBag = $parameterBag;
     }
 
     /**
@@ -42,9 +42,9 @@ class PictureService implements PictureServiceInterface
     {
         // the same picture is multiple, corresponding to different widths, in several folders
         $filenames = [];
-        $imagesDirectories = $this->container->get('app.pictures_folders_names');
+        $imagesDirectories = $this->parameterBag->get('app.pictures_folders_names');
         foreach ($imagesDirectories as $value) {
-            $filenames[] = $this->container->get('app.images_directory').$value.'/'.$picture->getFilename();
+            $filenames[] = $this->parameterBag->get('app.images_directory').$value.'/'.$picture->getFilename();
         }
         $filesystem = new Filesystem();
         $filesystem->remove($filenames);

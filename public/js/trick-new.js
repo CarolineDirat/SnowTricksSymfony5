@@ -1,41 +1,18 @@
 /*eslint quotes: ["error", "single", { "avoidEscape": true }]*/
 
 $(function () {
-    
-    //////////////////////////////////////////////////////////////////////////////////////////
-    //                   FILE BROWSE : customizing the strings with HTML
-    //////////////////////////////////////////////////////////////////////////////////////////
-    
-    let translateBrowse = function() {
-        $('label.custom-file-label').attr('data-browse', 'Parcourir mes fichiers');
-    };
-    translateBrowse();
-
-    //////////////////////////////////////////////////////////////////////////////////////////
-    //                   DISPLAY CHOSEN FILE NAME IN IT'S INPUT TAG
-    //////////////////////////////////////////////////////////////////////////////////////////
-
-    let displayFilename = function () {
-        $('.custom-file-input').change(function () {
-            let $label = $(this).next();
-            $.each($(this.files), function (index, file) {
-                $label.text(file.name);
-            });
-        });
-    };
-    displayFilename();
 
     //////////////////////////////////////////////////////////////////////////////////////////
     //                            ADD A FORMS PICTURE
     //////////////////////////////////////////////////////////////////////////////////////////
 
-    let collectionHolderPictures = $('div.pictures');
-    let addPictureButton = $('#add_picture_link');
+    const collectionHolderPictures = $('div.pictures');
+    const addPictureButton = $('#add_picture_link');
     // count the current form inputs we have, use that as the new
     // index when inserting a new item
     collectionHolderPictures.data('index', collectionHolderPictures.find('.picture').length);
 
-    let addPictureForm = function(collectionHolderPictures) {
+    const addPictureForm = function(collectionHolderPictures) {
         // Get the data-prototype explained earlier
         let prototype = collectionHolderPictures.data('prototype');
         // get the new index
@@ -72,13 +49,13 @@ $(function () {
     //                            ADD A FORM VIDEO
     //////////////////////////////////////////////////////////////////////////////////////////
 
-    let collectionHolderVideos = $('div.videos');
-    let addVideoButton = $('#add_video_link');
+    const collectionHolderVideos = $('div.videos');
+    const addVideoButton = $('#add_video_link');
     // count the current form inputs we have, use that as the new
     // index when inserting a new item
     collectionHolderVideos.data('index', collectionHolderVideos.find('.video').length);
 
-    let addVideoForm = function(collectionHolderVideos) {
+    const addVideoForm = function(collectionHolderVideos) {
         // Get the data-prototype explained earlier
         let prototype = collectionHolderVideos.data('prototype');
         // get the new index

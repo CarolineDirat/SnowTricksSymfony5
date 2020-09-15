@@ -12,14 +12,14 @@ class TrickService implements TrickServiceInterface
 {
     private ManagerRegistry $managerRegistry;
 
-    private ParameterBagInterface $container;
+    private ParameterBagInterface $parameterBag;
 
     public function __construct(
         ManagerRegistry $managerRegistry,
-        ParameterBagInterface $container
+        ParameterBagInterface $parameterBag
     ) {
         $this->managerRegistry = $managerRegistry;
-        $this->container = $container;
+        $this->parameterBag = $parameterBag;
     }
 
     /**
@@ -30,11 +30,11 @@ class TrickService implements TrickServiceInterface
     {
         $pictures = $trick->getPictures();
         $filenames = [];
-        $imagesDirectories = $this->container->get('app.pictures_folders_names');
+        $imagesDirectories = $this->parameterBag->get('app.pictures_folders_names');
         // the same picture is multiple, corresponding to different widths, in several folders
         foreach ($imagesDirectories as $value) {
             foreach ($pictures as $picture) {
-                $filenames[] = $this->container->get('app.images_directory').$value.'/'.$picture->getFilename();
+                $filenames[] = $this->parameterBag->get('app.images_directory').$value.'/'.$picture->getFilename();
             }
         }
         $filesystem = new Filesystem();
