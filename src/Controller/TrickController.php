@@ -39,7 +39,7 @@ class TrickController extends AbstractController
      * @Route("/trick/{slug}/{uuid}", name="display_trick")
      * @Entity("trick", expr="repository.findOneWithNLastComments(uuid)")
      *
-     * Entity("trick", expr="repository.findOneWithCommentsOrderByDesc(uuid)")
+     * [Entity("trick", expr="repository.findOneWithCommentsOrderByDesc(uuid)")] alternative method
      */
     public function display(
         Trick $trick,
@@ -63,10 +63,15 @@ class TrickController extends AbstractController
         $commentForm = $this->appFormFactory->create('ad-comment', $comment);
         // process comment form
         if ($commentFormHandler->isHandled($request, $commentForm)) {
-            return $this->redirectToRoute('display_trick', [
-                'slug' => $trick->getSlug(),
-                'uuid' => $trick->getUuid(),
-            ]);
+            return $this->redirect(
+                $this->generateUrl(
+                    'display_trick',
+                    [
+                        'slug' => $trick->getSlug(),
+                        'uuid' => $trick->getUuid(),
+                    ]
+                ).'#comments'
+            );
         }
 
         return $this->render('trick/index.html.twig', [
