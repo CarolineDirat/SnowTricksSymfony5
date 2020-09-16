@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<section class="container">
+    <div class="row">
+        <h1 class="col-12 mt-5 h3 text-danger text-center">Ooups ! Une erreur est survenue !</h1>
+
+        <p class="col-12 mt-3 text-center">
+            Vous n'avez pas les droits pour voir cette page</a>.
+        </p>
+         <p class="col-12 text-center">
+            <small><a href="{{ path('home') }}">Reour à l'accueil</a></small>
+        </p>
+    </div>
+</section>
+{% endblock %}
