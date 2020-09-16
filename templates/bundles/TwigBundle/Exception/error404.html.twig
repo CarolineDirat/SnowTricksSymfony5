@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<section class="container">
+    <div class="row">
+        <h1 class="col-12 mt-5 h3 text-danger text-center">La page demandée n'existe pas !</h1>
+
+        <p class="col-12 mt-3 text-center">
+            Vérifiez l'URL ou <a href="{{ path('home') }}">retournez sur la page d'accueil</a>.
+        </p>
+    </div>
+</section>
+{% endblock %}
