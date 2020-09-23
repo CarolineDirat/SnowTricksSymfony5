@@ -50,7 +50,10 @@ class TrickUpdateFormService implements TrickUpdateFormServiceInterface
         $this->processAddedVideos($trick);
         // save changes
         $this->managerRegistry->getManager()->flush();
-        $this->session->getFlashBag()->add('notice', 'Le trick "'.strtoupper($trick->getName()).'" vient d\'être modifié');
+        $this->session->getFlashBag()->add(
+            'notice',
+            'Le trick "'.strtoupper($trick->getName()).'" vient d\'être modifié'
+        );
     }
 
     public function processAddedPictures(FormInterface $form, Trick $trick): void

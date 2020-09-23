@@ -47,7 +47,10 @@ class TrickFormHandler extends AbstractFormHandler
         $entityManager = $this->getManagerRegistry()->getManager();
         $entityManager->persist($trick);
         $entityManager->flush();
-        $this->session->getFlashBag()->add('notice', 'Le trick "'.strtoupper($trick->getName()).'" vient d\'être ajouté');
+        $this->session->getFlashBag()->add(
+            'notice',
+            'Le trick "'.strtoupper($trick->getName()).'" vient d\'être ajouté'
+        );
     }
 
     public function processPictures(Trick $trick): void
