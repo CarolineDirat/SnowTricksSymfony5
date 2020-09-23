@@ -147,7 +147,7 @@ class TrickController extends AbstractController
             $trickService->delete($trick);
 
             return $this->json(
-                ['message' => 'Le trick '.$trickName.' a bien été supprimé.'],
+                ['message' => 'Le trick "'.strtoupper($trickName).'" a bien été supprimé.'],
                 200,
                 ['Content-Type' => 'application/json']
             );
@@ -181,7 +181,7 @@ class TrickController extends AbstractController
             $trickService->delete($trick);
             $this->addFlash(
                 'notice',
-                'Le trick "'.$trickName.'" a bien été supprimé.'
+                'Le trick "'.strtoupper($trickName).'" a bien été supprimé.'
             );
 
             return $this->redirectToRoute('tricks');
