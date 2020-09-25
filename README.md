@@ -48,6 +48,7 @@ If you don't use it, the project is cloned in *SnowTricksSymfony5* directory. An
 
 --------
 2. Create your **virtualhost** on Wampserver.
+
 Be careful, virtualhost must point to the public directory
 **_For example:_** C:/wamp/www/SnowTricksSymfony5/public
 
@@ -61,6 +62,7 @@ Be careful, virtualhost must point to the public directory
 Create a **.env.dev.local** file, at the root of the project directory, to define (see .env file) :
 - DATABASE_URL value ([see Symfony documentation](https://symfony.com/doc/current/doctrine.html#configuring-the-database))
 - MAILER_DSN value (if you need)
+
 _For example:_
   - DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name_dev?serverVersion=5.7" (see .env file)
   - If you use **[MailHog](https://github.com/mailhog/MailHog)**: MAILER_DSN=smtp://loaclhost:1025
@@ -83,7 +85,7 @@ Then, you can [create the database **tables**/schema](https://symfony.com/doc/cu
 
 **Answer _yes_ to the question**: _Careful, database "db_name_dev" will be purged. Do you want to continue? (yes/no) [no]:"_
 
-There is 3 users (and 10 tricks with some comments, pictures and videos):
+There is **3 users** (and **10 tricks** with some comments, pictures and videos):
   - user1 | user1@domain.com | password | with ROLE_VERIFY
   - user2 | user2@domain.com | password | with ROLE_VERIFY
   - user3 | user3@domain.com | password | **without** ROLE_VERIFY (So he can't edit or delete tricks, photos and videos, or comment a trick)
