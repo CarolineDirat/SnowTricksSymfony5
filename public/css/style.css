@@ -465,19 +465,16 @@ h2 {
 **********************************************/
 
 @media (max-width: 400px) {
-  #trick-new h1,
-  #trick-update h1 {
-    font-size: 1.9rem;
-    margin-top: 2rem !important;
+  #trick-new h1 {
+    font-size: 1.4rem;
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
   }
 }
 
 @media (max-width: 300px) {
-  #trick-new h1,
-  #trick-update h1 {
-    font-size: 1.4rem;
-    margin-bottom: 1.5rem !important;
-    margin-top: 2rem !important;
+  #trick-new h1 {
+    font-size: 1.2rem;
   }
 }
 
@@ -558,22 +555,14 @@ h2 {
 }
 
 @media (max-width: 400px) {
-  #trick-update h2 {
-    font-size: 1.9rem;
-    margin-top: 0.5rem !important;
-  }
-}
-
-@media (max-width: 300px) {
-  #trick-update h2 {
-    font-size: 1.4rem;
-  }
-}
-
-@media (max-width: 300px) {
   #trick-update h1 {
+    margin-top: 0.5rem !important;
+    font-size: 1.3rem;
+  }
+  
+  #trick-update h2 {
     font-size: 1.4rem;
-    margin-bottom: 0 !important;
+    margin-top: 1rem !important;
   }
 }
 
