@@ -3,6 +3,14 @@ Collaborative snowboard site - Symfony 5.1 - student project n°6 - OpenClassroo
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/7ee9cfc490a74bc78aa4a9e35937cec2)](https://www.codacy.com/manual/CarolineDirat/SnowTricksSymfony5?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=CarolineDirat/SnowTricksSymfony5&amp;utm_campaign=Badge_Grade)
 
+#### A site to learn snowboard tricks. 
+
+A trick is describe by a name, a description, the group to which he belongs, and eventually by photos and videos.
+
+Only registered and verified users can:
+  - add, edit or delete a trick
+  - participate in the discussion around a trick
+
 ## Requirements
 
 ### SnowTricks installation needs in command line
